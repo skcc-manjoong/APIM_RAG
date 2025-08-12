@@ -1,3 +1,6 @@
+import os
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+
 import uvicorn
 from fastapi import FastAPI
 from contextlib import asynccontextmanager

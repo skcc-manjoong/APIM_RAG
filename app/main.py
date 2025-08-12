@@ -95,6 +95,10 @@ def process_streaming_response(response, question):
                 agent_label = "<small style='color:#666;'>📚 문서 검색 완료</small><br>"
             elif resp["chunk_type"] == "table":
                 agent_label = "<small style='color:#666;'>📊 결과 분석 완료</small><br>"
+            elif resp["chunk_type"] == "navigation":
+                agent_label = "<small style='color:#666;'>🔍 페이지 탐색 완료</small><br>"
+            elif resp["chunk_type"] == "interactive":
+                agent_label = "<small style='color:#666;'>🤖 자동 클릭 완료</small><br>"
             elif resp["chunk_type"] == "screenshot":
                 agent_label = "<small style='color:#666;'>📸 스크린샷 캡처 완료</small><br>"
             elif resp["chunk_type"] == "response":
@@ -137,9 +141,18 @@ def process_streaming_response(response, question):
             elif "table" in event_data and "response" in event_data["table"]:
                 new_chunk_type = "table"
                 new_chunk_text = event_data["table"]["response"]
+            elif "navigation" in event_data and "response" in event_data["navigation"]:
+                new_chunk_type = "navigation"
+                new_chunk_text = event_data["navigation"]["response"]
+            elif "interactive" in event_data and "response" in event_data["interactive"]:
+                new_chunk_type = "interactive"
+                new_chunk_text = event_data["interactive"]["response"]
             elif "screenshot" in event_data and "response" in event_data["screenshot"]:
                 new_chunk_type = "screenshot"
                 new_chunk_text = event_data["screenshot"]["response"]
+                # 스크린샷 결과 데이터도 함께 저장
+                if "screenshot_result" in event_data["screenshot"]:
+                    current_response["screenshot_data"] = event_data["screenshot"]["screenshot_result"]
             elif "response" in event_data:
                 new_chunk_type = "response"
                 new_chunk_text = event_data["response"]
@@ -300,6 +313,10 @@ def main():
                     agent_label = "<small style='color:#666;'>📚 문서 검색 완료</small><br>"
                 elif chunk_type == "table":
                     agent_label = "<small style='color:#666;'>📊 결과 분석 완료</small><br>"
+                elif chunk_type == "navigation":
+                    agent_label = "<small style='color:#666;'>🔍 페이지 탐색 완료</small><br>"
+                elif chunk_type == "interactive":
+                    agent_label = "<small style='color:#666;'>🤖 자동 클릭 완료</small><br>"
                 elif chunk_type == "screenshot":
                     agent_label = "<small style='color:#666;'>📸 스크린샷 캡처 완료</small><br>"
                 elif chunk_type == "response":
@@ -315,40 +332,93 @@ def main():
                     # 스크린샷 표시 시도
                     image_displayed = False
                     
-                    # 방법 1: Base64 데이터 사용 (스트리밍 응답에서)
-                    if "data:image/png;base64," in content:
+                    # 방법 0: screenshot_data의 filename을 최우선으로 사용
+                    if "screenshot_data" in msg and msg["screenshot_data"] and not image_displayed:
                         try:
-                            # Base64 부분 추출
-                            base64_start = content.find("data:image/png;base64,") + len("data:image/png;base64,")
-                            base64_data = content[base64_start:].split()[0]  # 공백 전까지
-                            
-                            if len(base64_data) > 100:  # 유효한 길이인지 확인
+                            screenshot_data = msg["screenshot_data"]
+                            filename = screenshot_data.get("filename")
+                            if filename:
+                                # 경로 후보 생성
+                                app_path = f"screenshots/{filename}"
+                                local_path = f"../screenshots/{filename}"
+                                server_path = f"../server/screenshots/{filename}"
+                                abs_path = f"/Users/manjoongkim/Documents/GitHub/cloud_bot/screenshots/{filename}"
+                                for path in [app_path, abs_path, local_path, server_path]:
+                                    try:
+                                        if os.path.exists(path):
+                                            from PIL import Image
+                                            image = Image.open(path)
+                                            width, height = image.size
+                                            image = image.resize((width // 2, height // 2))
+                                            col1, col2, col3 = st.columns([1, 2, 1])
+                                            with col2:
+                                                st.image(image, caption=f"📸 {path}", use_container_width=True)
+                                            image_displayed = True
+                                            break
+                                    except Exception as e:
+                                        continue
+                        except Exception as e:
+                            pass
+                    
+                    # 방법 1: Base64 데이터 사용 (스트리밍 응답에서)
+                    if not image_displayed and "screenshot_data" in msg and msg["screenshot_data"]:
+                        try:
+                            screenshot_data = msg["screenshot_data"]
+                            if "image_base64" in screenshot_data:
                                 import base64
-                                import io
                                 from PIL import Image
+                                import io
                                 
                                 # Base64 디코딩
-                                image_data = base64.b64decode(base64_data)
+                                image_data = base64.b64decode(screenshot_data["image_base64"])
                                 image = Image.open(io.BytesIO(image_data))
                                 
-                                st.image(image, caption="📸 캡처된 스크린샷", use_container_width=True)
+                                # 이미지 크기를 반으로 줄이기
+                                width, height = image.size
+                                image = image.resize((width // 2, height // 2))
+                                
+                                # 가운데 정렬을 위한 컬럼 사용
+                                col1, col2, col3 = st.columns([1, 2, 1])
+                                with col2:
+                                    st.image(image, caption="📸 캡처된 스크린샷", use_container_width=True)
                                 image_displayed = True
                                 st.success("✅ Base64로 이미지 표시 성공!")
                         except Exception as e:
-                            st.error(f"Base64 이미지 처리 실패: {str(e)}")
+                            st.error(f"❌ Base64 이미지 표시 오류: {str(e)}")
                     
-                    # 방법 2: 파일명에서 이미지 찾기 (Base64 실패시)
-                    if not image_displayed and "screenshot_" in content:
+                    # 방법 2: 파일명에서 이미지 찾기 (백업 방법)
+                    if not image_displayed and "screenshots/screenshot_" in content:
                         import re
-                        filename_match = re.search(r'screenshot_\d+_\d+\.png', content)
+                        filename_match = re.search(r'screenshots/(screenshot_\d+_\d+\.png)', content)
                         if filename_match:
-                            filename = filename_match.group()
-                            abs_path = f"/Users/manjoongkim/Documents/GitHub/cloud_bot/screenshots/{filename}"
+                            filename = filename_match.group(1)
                             
-                            if os.path.exists(abs_path):
-                                st.image(abs_path, caption="📸 캡처된 스크린샷", use_container_width=True)
-                                image_displayed = True
-                                st.success(f"✅ 파일로 이미지 표시 성공: {filename}")
+                            # Paths to try (항상 screenshots/ 접두사 포함)
+                            rel_path = f"screenshots/{filename}"
+                            app_path = rel_path  # 앱 디렉토리 내
+                            local_path = f"../{rel_path}"  # app 기준 상위
+                            server_path = f"../server/{rel_path}"  # app 기준 server 경로
+                            abs_path = f"/Users/manjoongkim/Documents/GitHub/cloud_bot/{rel_path}"  # 절대 경로
+                            
+                            image_loaded = False
+                            for path in [app_path, abs_path, local_path, server_path]:  # Order of attempts
+                                st.write(f"🔍 시도 중인 경로: {path} (존재: {os.path.exists(path)})")  # 디버그
+                                try:
+                                    if os.path.exists(path):
+                                        from PIL import Image
+                                        image = Image.open(path)
+                                        width, height = image.size
+                                        image = image.resize((width // 2, height // 2))
+                                        col1, col2, col3 = st.columns([1, 2, 1])
+                                        with col2:
+                                            st.image(image, caption=f"📸 {path}", use_container_width=True)
+                                        st.success(f"✅ 이미지 로드 성공: {path}")  # 디버그
+                                        image_loaded = True
+                                        image_displayed = True
+                                        break
+                                except Exception as e:
+                                    st.error(f"❌ 경로 {path} 실패: {str(e)}")  # 디버그
+                                    continue
                     
                     # 방법 3: 최신 스크린샷 파일 찾기 (위 방법들 실패시)
                     if not image_displayed:
@@ -361,7 +431,17 @@ def main():
                                 files = glob.glob(pattern)
                                 if files:
                                     latest_file = max(files, key=os.path.getctime)
-                                    st.image(latest_file, caption="📸 캡처된 스크린샷", use_container_width=True)
+                                    from PIL import Image
+                                    image = Image.open(latest_file)
+                                    
+                                    # 이미지 크기를 반으로 줄이기
+                                    width, height = image.size
+                                    image = image.resize((width // 2, height // 2))
+                                    
+                                    # 가운데 정렬을 위한 컬럼 사용
+                                    col1, col2, col3 = st.columns([1, 2, 1])
+                                    with col2:
+                                        st.image(image, caption="📸 캡처된 스크린샷", use_container_width=True)
                                     image_displayed = True
                                     st.success(f"✅ 최신 파일로 이미지 표시 성공: {os.path.basename(latest_file)}")
                         except Exception as e:

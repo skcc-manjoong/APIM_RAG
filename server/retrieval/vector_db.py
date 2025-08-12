@@ -281,6 +281,21 @@ def init_global_vector_db(pdf_dir: str, vector_data_path: str, index_path: str) 
 def get_global_vector_db() -> VectorDB | None:
     return GLOBAL_VECTOR_DB
 
+def search_texts(query: str, k: int = 5) -> str:
+    """전역 벡터 DB에서 상위 k개 결과의 텍스트를 합쳐 반환합니다."""
+    vdb = get_global_vector_db()
+    if vdb is None or vdb.index is None:
+        return ""
+    results = vdb.search(query, k=k)
+    snippets: list[str] = []
+    for r in results:
+        doc = r.get('document') or {}
+        txt = doc.get('search_text') or ""
+        if txt:
+            snippets.append(txt[:1200])  # 과도한 길이 방지
+    return "\n---\n".join(snippets)
+
+
 def main():
     """
     벡터 DB 생성 및 테스트 (APIM 문서 기반)
