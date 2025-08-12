@@ -1,0 +1,12 @@
+AOAI_API_KEY=ba93d9b20f6447ad9ce71878e7e83bf3
+AOAI_DEPLOY_GPT4O=aicore-gpt4o
+AOAI_ENDPOINT=https://ai-core-openai-llm.openai.azure.com/
+AOAI_API_VERSION=2024-05-01-preview
+AOAI_EMBEDDING_DEPLOYMENT=text-embedding-3-large
+
+DB_PATH = "history.db"
+LANGFUSE_PUBLIC_KEY=pk-lf-1aa5bc7f-3ad4-4033-8986-e5ac6f4d30d8
+LANGFUSE_SECRET_KEY=sk-lf-b999ccb1-1103-4cff-9bd2-b1de785f9291
+LANGFUSE_HOST=https://cloud.langfuse.com
+
+API_BASE_URL="http://localhost:8001/api/v1"

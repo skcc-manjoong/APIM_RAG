@@ -1,0 +1,702 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>JWT Policy</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.highlight-default_background {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.highlight-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.block-color-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-default { background-color: rgba(84, 72, 49, 0.08); }
+.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
+.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
+.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
+.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
+.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
+.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
+.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
+.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
+.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1f1b7135-d33b-80ad-9be8-d7a8b589bf81" class="page sans"><header><h1 class="page-title">JWT Policy</h1><p class="page-description"></p></header><div class="page-body"><h2 id="1f1b7135-d33b-8019-917b-c12021e6242a" class="">Overview</h2><p id="1f1b7135-d33b-802c-8d7d-e1b93bbfa17b" class="">JWT (JSON Web Token) policy is used to validate the token included in API requests. It ensures that only users with valid tokens, generated using the correct JWT KEY and SECRET of the project, can access the API.</p><p id="1f1b7135-d33b-802e-80df-eecd1e458dd8" class="">This policy supports token validation based on selected paths using either RequiredPath or NotRequiredPath mode. Additionally, it can be combined with the tokenBlacklistLogoutPath function to invalidate tokens upon logout.</p><p id="1f1b7135-d33b-80a3-ad60-dd4786295548" class="">Supported Algorithms:</p><ul id="1f1b7135-d33b-808d-ab06-f1fb765ccc2a" class="bulleted-list"><li style="list-style-type:disc">HS256 (HMAC SHA-256)</li></ul><ul id="1f1b7135-d33b-80d2-94d3-f626ffaa3e47" class="bulleted-list"><li style="list-style-type:disc">RS256 (RSA SHA-256)</li></ul><p id="1f1b7135-d33b-8061-b96f-cb887abeeebe" class="">
+</p><h2 id="1f1b7135-d33b-80dc-9d60-f690bc117ecb" class="">JWT Token Rules</h2><p id="1f1b7135-d33b-8083-bbc4-dbccf805e69f" class="">To successfully authenticate a JWT token in APIM:</p><ul id="1f1b7135-d33b-8071-ab41-cc69fe759e71" class="bulleted-list"><li style="list-style-type:disc">The JWT Token must be included in the Authorization header:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f1b7135-d33b-807e-b0d5-e348289ce261" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">Authorization: bearer JWT_TOKEN</code></pre><ul id="1f1b7135-d33b-809e-a26c-f5ebb06b5221" class="bulleted-list"><li style="list-style-type:disc">The token’s payload must contain:<ul id="1f1b7135-d33b-80f9-9799-e0b1ee08f136" class="bulleted-list"><li style="list-style-type:circle">&quot;<strong>apim_key_claim_name</strong>&quot; with the project’s JWT KEY.</li></ul><ul id="1f1b7135-d33b-805e-ba76-ffe40a6004ac" class="bulleted-list"><li style="list-style-type:circle">&quot;<strong>exp</strong>&quot; field to indicate token expiration time.</li></ul></li></ul><p id="1f1b7135-d33b-8066-a081-fd9fd03f2117" class="">Example Payload:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f1b7135-d33b-8084-a094-dd73b4d804aa" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">&quot;apim_key_claim_name&quot;: &quot;64c44d593be841bcec7fe768184e4c7e&quot;,
+&quot;exp&quot;: 1900000000</code></pre><p id="1f1b7135-d33b-804e-b64d-f24ba11d69d3" class="">Example Header:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f1b7135-d33b-80af-93a8-e31d70478e7b" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">&quot;alg&quot;: &quot;HS256&quot;,
+&quot;typ&quot;: &quot;JWT&quot;</code></pre><p id="1f1b7135-d33b-80c0-9b1b-d892c82f5635" class="">JWT Sample Token:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f1b7135-d33b-8098-95d6-cd9248bdea42" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGltX2tleV9jbGFpbV9uYW1lIjoiNjRjNDRkNTkzYmU4NDFiY2VjN2ZlNzY4MTg0ZTRjN2UiLCJleHAiOjE5MDAwMDAwMDB9.1kB5k-vM2Cef7ZYTyJUQ-LsDUmG4K7sJUfrJ3FqgYxQ</code></pre><p id="1f1b7135-d33b-803c-b2dd-d766f01617e3" class="">
+</p><h2 id="1f1b7135-d33b-80d2-88d1-d29e181977fa" class="">Configuration Details </h2><h3 id="1f1b7135-d33b-8061-bde5-cee3fe76e002" class="">JWT Path Matching</h3><p id="1f1b7135-d33b-8064-987f-c206c0fb4253" class="">JWT verification can be applied to selected paths using two modes:</p><table id="1f1b7135-d33b-8087-a2c6-d604fed4df81" class="simple-table"><tbody><tr id="1f1b7135-d33b-80ed-9287-efcaf7321c8d"><td id="=&lt;~P" class=""><strong>Option </strong></td><td id="Fugt" class=""><strong>Description</strong></td></tr><tr id="1f1b7135-d33b-80ba-a971-f87aa6fdd9ee"><td id="=&lt;~P" class="">RequiredPath </td><td id="Fugt" class="">Apply JWT authentication only to the listed method/path pairs. All other paths will not require JWT.</td></tr><tr id="1f1b7135-d33b-809c-af7c-d54562a178be"><td id="=&lt;~P" class="">NotRequiredPath </td><td id="Fugt" class="">Apply JWT authentication to all paths except the ones listed.</td></tr></tbody></table><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1f1b7135-d33b-808a-b2a9-e4ba3f0a2ab6"><div style="width:100%"><p id="1f1b7135-d33b-807b-aff6-e42878670abd" class="">Only one mode (RequiredPath or NotRequiredPath) can be used at a time. Switching modes will reset previous settings.</p></div></figure><p id="1f1b7135-d33b-8040-9608-ec84ab4e1afc" class="">Input Format:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f1b7135-d33b-808c-8b5a-eb56a5e7a5c7" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">Method_Path</code></pre><p id="1f1b7135-d33b-8092-ba39-d749b01a191f" class="">Examples:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f1b7135-d33b-80fb-8fb3-e4fa90c9074c" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">GET_/v1/test
+Applies to GET requests at /v1/test</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f1b7135-d33b-80e3-a0ba-e9083de176c0" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">POST_/v1/example
+Applies to POST at /v1/example</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f1b7135-d33b-80ee-900b-cda1b1342335" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">ANY_/v1/apis
+Applies to all HTTP methods at /v1/apis</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f1b7135-d33b-807e-a402-e8855167637d" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">GET_/v1/apis*
+Applies to all subpaths under /v1/apis (e.g., /v1/apis/a)</code></pre><p id="1f1b7135-d33b-80d4-9ed4-fe4da6b4e298" class="">
+</p><figure id="1f1b7135-d33b-800a-8276-ef97115a3440" class="image"><a href="JWT%20Policy%201f1b7135d33b80ad9be8d7a8b589bf81/image.png"><img style="width:710px" src="JWT%20Policy%201f1b7135d33b80ad9be8d7a8b589bf81/image.png"/></a></figure><p id="1f1b7135-d33b-80e9-84be-df9a2aeee61f" class="">
+</p><h3 id="1f1b7135-d33b-80bb-9e74-c59de2f0fcb3" class="">tokenBlacklistLogoutPath</h3><p id="1f1b7135-d33b-807b-8498-e03d90f6ec1f" class="">
+</p><figure id="1f1b7135-d33b-804f-aaf9-d1025e995169" class="image"><a href="JWT%20Policy%201f1b7135d33b80ad9be8d7a8b589bf81/image%201.png"><img style="width:709.984375px" src="JWT%20Policy%201f1b7135d33b80ad9be8d7a8b589bf81/image%201.png"/></a></figure><p id="1f1b7135-d33b-804f-9b59-f716fd97d774" class="">
+</p><p id="1f1b7135-d33b-80fb-ae86-c39b421c4ead" class="">This feature allows APIM to blacklist a JWT token when a logout request is made and successfully returns HTTP 200 from the API Gateway.</p><p id="1f1b7135-d33b-8020-81eb-c880e748ba15" class="">Toggle Field:</p><p id="1f1b7135-d33b-80be-8cba-de72cd55de14" class="">
+</p><table id="1f1b7135-d33b-80bf-872b-ef5b9164ef19" class="simple-table"><tbody><tr id="1f1b7135-d33b-8082-9657-c4c50ffc1d42"><td id="Cg;x" class="">Field </td><td id="gYE&gt;" class="">Description</td></tr><tr id="1f1b7135-d33b-8035-bee0-dda5c4ae07eb"><td id="Cg;x" class="">useJWTBlacklistRevoking</td><td id="gYE&gt;" class="">When enabled, JWT tokens will be added to the blacklist storage upon logout response. This prevents further use of the same token.</td></tr></tbody></table><p id="1f1b7135-d33b-807e-bc67-ee4fd3ae94a2" class="">
+</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1f1b7135-d33b-80da-b12f-f984bc78ecc7"><div style="width:100%"><p id="1f1b7135-d33b-8073-980e-d0101e840cdf" class="">Cannot be changed: Toggle to prevent this policy from being removed.</p><p id="1f1b7135-d33b-80e2-a3d2-cc05800825e6" class="">Cannot change the setting value: Toggle to prevent changes to the configuration values after setup.</p></div></figure><p id="1f1b7135-d33b-8038-adc7-ec9944d0bf02" class="">
+</p><figure id="1f1b7135-d33b-8027-8932-d6628c01df1f" class="image"><a href="JWT%20Policy%201f1b7135d33b80ad9be8d7a8b589bf81/image%202.png"><img style="width:710px" src="JWT%20Policy%201f1b7135d33b80ad9be8d7a8b589bf81/image%202.png"/></a></figure><p id="1f1b7135-d33b-8078-bde7-e21d64d21186" class="">
+</p><h3 id="1f1b7135-d33b-80a5-a8ef-cc3888af4157" class="">Redis Configuration (used to store blacklisted tokens)</h3><p id="1f1b7135-d33b-80af-bd24-d38f026c4b5c" class="">Option 1: APIMRedis - Default system Redis; no manual configuration needed.</p><p id="1f1b7135-d33b-8099-8d42-e6f29a1d19ef" class="">Option 2: CustomRedis</p><p id="1f1b7135-d33b-8046-8734-e41842e11b75" class="">
+</p><table id="1f1b7135-d33b-8083-888a-fbf965952b43" class="simple-table"><tbody><tr id="1f1b7135-d33b-800e-974b-ff72bee1a4eb"><td id="yy^]" class="" style="width:159px"><strong>Configuration Field</strong></td><td id=":CkF" class="" style="width:546px"><strong>Description</strong></td></tr><tr id="1f1b7135-d33b-8011-95bc-eecd73ea8c76"><td id="yy^]" class="" style="width:159px"><strong>Redis Host</strong></td><td id=":CkF" class="" style="width:546px">Address of the Redis server (e.g., 127.0.0.1).</td></tr><tr id="1f1b7135-d33b-8079-bd49-dc1492efb284"><td id="yy^]" class="" style="width:159px"><strong>Redis Port</strong></td><td id=":CkF" class="" style="width:546px">Port number of the Redis server (e.g., 6379).</td></tr><tr id="1f1b7135-d33b-805a-9f57-c19aaa055692"><td id="yy^]" class="" style="width:159px"><strong>Redis Password</strong></td><td id=":CkF" class="" style="width:546px">Password for authentication.</td></tr><tr id="1f1b7135-d33b-806a-b38f-cbdc2e8615d5"><td id="yy^]" class="" style="width:159px"><strong>Redis Database</strong></td><td id=":CkF" class="" style="width:546px">Specifies which database index to use (e.g., 1).</td></tr><tr id="1f1b7135-d33b-80e0-bb28-dae9694cbe04"><td id="yy^]" class="" style="width:159px"><strong>Redis Pool Size</strong></td><td id=":CkF" class="" style="width:546px">Maximum number of connections in the Redis connection pool (default: 1000).</td></tr><tr id="1f1b7135-d33b-807f-a2ed-eeb0c229b74e"><td id="yy^]" class="" style="width:159px"><strong>Redis Pool Backlog</strong></td><td id=":CkF" class="" style="width:546px">Maximum number of requests waiting for an available connection (default: 30).</td></tr></tbody></table><p id="1f1b7135-d33b-801e-8b9b-e3b2ede5ba9b" class="">
+</p><figure id="1f1b7135-d33b-807f-8717-ea87b1ab43b4" class="image"><a href="JWT%20Policy%201f1b7135d33b80ad9be8d7a8b589bf81/image%203.png"><img style="width:710px" src="JWT%20Policy%201f1b7135d33b80ad9be8d7a8b589bf81/image%203.png"/></a></figure><p id="1f1b7135-d33b-80d0-aad1-e7307a2456ec" class="">
+</p><p id="1f1b7135-d33b-8022-b7a5-dfc388fe6eac" class="">Option 3: RedisCluster</p><p id="1f1b7135-d33b-80b1-80a3-fcf7f77087f3" class="">
+</p><table id="1f1b7135-d33b-808c-983b-d5570ae3a956" class="simple-table"><tbody><tr id="1f1b7135-d33b-8035-9923-e00141ec483d"><td id="w@?I" class=""><strong>Configuration Field</strong></td><td id="]q|v" class="" style="width:514px"><strong>Description</strong></td></tr><tr id="1f1b7135-d33b-80dc-a6a8-d3c910e62a50"><td id="w@?I" class=""><strong>Redis Cluster Nodes</strong></td><td id="]q|v" class="" style="width:514px">The cluster node addresses (e.g., redis-cluster.apim:6379).</td></tr><tr id="1f1b7135-d33b-8027-9467-fe27b6c8c3d6"><td id="w@?I" class=""><strong>Redis Cluster Password</strong></td><td id="]q|v" class="" style="width:514px">Password for authentication.</td></tr><tr id="1f1b7135-d33b-8061-b1b3-e0241891ae78"><td id="w@?I" class=""><strong>Redis Cluster Name</strong></td><td id="]q|v" class="" style="width:514px">Specifies the cluster name (e.g., kong_redis_cluster).</td></tr><tr id="1f1b7135-d33b-8073-93e7-f35720a89896"><td id="w@?I" class=""><strong>Redis Connect Timeout</strong></td><td id="]q|v" class="" style="width:514px">Timeout for establishing a Redis connection (default: 1000ms).</td></tr><tr id="1f1b7135-d33b-8059-b6ed-d19c5ec7bbd4"><td id="w@?I" class=""><strong>Redis Read Timeout</strong></td><td id="]q|v" class="" style="width:514px">Timeout for reading data from Redis (default: 1000ms).</td></tr><tr id="1f1b7135-d33b-801a-b819-e5908c559c9b"><td id="w@?I" class=""><strong>Redis Send Timeout</strong></td><td id="]q|v" class="" style="width:514px">Timeout for sending data to Redis (default: 1000ms).</td></tr><tr id="1f1b7135-d33b-8031-b12c-f34f5126d05c"><td id="w@?I" class=""><strong>Redis Pool Size</strong></td><td id="]q|v" class="" style="width:514px">Maximum number of connections in the Redis connection pool (default: 1000).</td></tr><tr id="1f1b7135-d33b-8063-bf8b-d9b6a3bd9365"><td id="w@?I" class=""><strong>Redis Pool Backlog</strong></td><td id="]q|v" class="" style="width:514px">Maximum number of pending connections (default: 30).</td></tr><tr id="1f1b7135-d33b-80f2-a344-d7df6bccc8dd"><td id="w@?I" class=""><strong>Redis Keepalive Timeout</strong></td><td id="]q|v" class="" style="width:514px">Maximum idle time before Redis connection is closed (default: 55000ms).</td></tr></tbody></table><p id="1f1b7135-d33b-80e1-a8ed-f084749bf9fb" class="">
+</p><figure id="1f1b7135-d33b-8080-ad6c-cbbbe4104888" class="image"><a href="JWT%20Policy%201f1b7135d33b80ad9be8d7a8b589bf81/image%204.png"><img style="width:709.984375px" src="JWT%20Policy%201f1b7135d33b80ad9be8d7a8b589bf81/image%204.png"/></a></figure><p id="1f1b7135-d33b-802c-af98-f0d0a6be8692" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

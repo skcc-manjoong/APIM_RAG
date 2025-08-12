@@ -1,0 +1,41 @@
+# Requires Python >=3.11,<3.12
+
+# --- 프론트엔드/백엔드 ---
+streamlit==1.42.2
+fastapi==0.115.1
+uvicorn==0.34.0
+
+# --- LLM/에이전트/그래프 ---
+langchain==0.3.19
+langchain-openai==0.3.7
+langchain-community==0.3.18
+langgraph==0.4.5
+openai==1.68.2
+
+# --- 환경/설정/DB ---
+python-dotenv==1.0.1
+pydantic==2.7.4
+pydantic-settings==2.5.2
+
+# --- 데이터/임베딩/토큰화 ---
+faiss-cpu==1.10.0
+tiktoken==0.9.0
+pandas==2.2.2
+sentence-transformers==2.3.1
+pypdf==4.2.0
+tqdm==4.66.2
+protobuf==5.26.0 # streamlit 1.42.2와 호환되는 버전 (3.20 이상, 6 미만)
+
+# --- 기타 유틸 ---
+requests==2.32.3
+sseclient==0.0.27
+networkx==3.4.2
+langfuse==2.59.7
+beautifulsoup4==4.13.3
+
+# --- 외부 검색/파싱 (옵션) ---
+wikipedia==1.4.0
+duckduckgo_search==7.5.4
+
+# --- 시각화 (옵션) ---
+matplotlib==3.10.1

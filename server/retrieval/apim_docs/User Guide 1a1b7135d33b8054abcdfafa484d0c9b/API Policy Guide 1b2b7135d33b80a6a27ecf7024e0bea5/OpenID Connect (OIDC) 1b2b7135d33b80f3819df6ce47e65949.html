@@ -1,0 +1,696 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>OpenID Connect (OIDC)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.highlight-default_background {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.highlight-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.block-color-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-default { background-color: rgba(84, 72, 49, 0.08); }
+.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
+.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
+.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
+.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
+.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
+.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
+.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
+.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
+.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1b2b7135-d33b-80f3-819d-f6ce47e65949" class="page sans"><header><h1 class="page-title"><strong>OpenID Connect (OIDC)</strong></h1><p class="page-description"></p></header><div class="page-body"><h2 id="1b3b7135-d33b-80e7-929f-c0e2a50e17eb" class="">Overview</h2><p id="1b3b7135-d33b-804b-8cac-e8598d8fbe5a" class="">The <strong>OIDC (OpenID Connect) Policy</strong> enables authentication and authorization for APIs by integrating with an OIDC Provider. This ensures that only authenticated users can access the API, either through a token-based approach or an authorization flow.</p><h2 id="1b3b7135-d33b-80b6-96f9-ce9649a93f10" class="">Configuration Details</h2><h3 id="1b3b7135-d33b-80d1-b700-caa89b06da82" class="">Required Path / Not Required Path</h3><ul id="1b3b7135-d33b-809d-9347-ccb156188bb7" class="bulleted-list"><li style="list-style-type:disc"><strong>Required Path</strong>: OIDC authentication is enforced only for the listed paths.</li></ul><ul id="1b3b7135-d33b-8078-a6ae-caff8f336854" class="bulleted-list"><li style="list-style-type:disc"><strong>Not Required Path</strong>: OIDC authentication is skipped for the listed paths, but enforced for all others.</li></ul><ul id="1b3b7135-d33b-80d6-b924-e88a35831bfd" class="bulleted-list"><li style="list-style-type:disc">If no path is specified, OIDC authentication applies to all paths.</li></ul><ul id="1f1b7135-d33b-8055-bd19-ffae0677b18c" class="bulleted-list"><li style="list-style-type:disc">Switching between path options will require confirmation</li></ul><p id="1f1b7135-d33b-80fd-9691-f81273ca58bd" class="">
+</p><figure id="1f1b7135-d33b-8029-ad18-f953a281378d" class="image"><a href="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image.png"><img style="width:709.984375px" src="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image.png"/></a></figure><p id="1f1b7135-d33b-80d7-b10c-f5dabc3b5dad" class="">
+</p><figure id="1f1b7135-d33b-8084-ba84-db4e6392476d" class="image"><a href="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image%201.png"><img style="width:709.984375px" src="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image%201.png"/></a></figure><p id="1bcb7135-d33b-8018-9f8b-d1271c5e80de" class="">
+</p><h3 id="1b3b7135-d33b-80b0-806b-d687421d6cad" class="">Grant Type Configuration</h3><p id="1b3b7135-d33b-806c-a220-fecf8bedc1e8" class="">The OIDC policy supports two <strong>Grant Types</strong>, which determine the authentication flow:</p><ul id="1b3b7135-d33b-8091-be12-faf690afb708" class="bulleted-list"><li style="list-style-type:disc"><strong>Authorization Code Grant</strong>: Redirects users to the OIDC provider for authentication.</li></ul><ul id="1b3b7135-d33b-80bc-8325-daf4417c52be" class="bulleted-list"><li style="list-style-type:disc"><strong>Password Grant</strong>: Directly exchanges user credentials for an ID token.</li></ul><p id="1b3b7135-d33b-8051-aafb-f69c9e8b1a05" class="">Each grant type has its own set of configurations:</p><p id="1b3b7135-d33b-800d-a598-ed975fcf83af" class=""><strong>Authorization Code Grant:</strong></p><p id="1b3b7135-d33b-8017-9da9-d9377bd51dce" class="">This flow is primarily used for <strong>web applications</strong>, where users authenticate via a login page.</p><table id="1b3b7135-d33b-80ce-8c1e-dae94db5497f" class="simple-table"><tbody><tr id="1b3b7135-d33b-805d-9fc0-db05477fa4ed"><td id="~&gt;V[" class=""><strong>Configuration Field</strong></td><td id="&gt;f~q" class="" style="width:543.0000152587891px"><strong>Description</strong></td></tr><tr id="1b3b7135-d33b-806a-8723-f658c163b92a"><td id="~&gt;V[" class="">Realm</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">The name of the authentication realm. Example: realms_name</td></tr><tr id="1b3b7135-d33b-804e-8d75-f41d2b29c85f"><td id="~&gt;V[" class="">Client ID</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">The unique identifier assigned by the OIDC provider.</td></tr><tr id="1b3b7135-d33b-8016-9f99-ce4233486d9d"><td id="~&gt;V[" class="">Client Secret</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">The client secret required for authentication.</td></tr><tr id="1b3b7135-d33b-801f-b738-f945f1a27ef5"><td id="~&gt;V[" class="">Discovery</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">The URL to the provider’s discovery endpoint (e.g., <a href="https://oidcprovider/.well-known/openid-configuration">https://oidcprovider/.well-known/openid-configuration</a>).</td></tr><tr id="1b3b7135-d33b-80e2-ba2e-db8f2bd6df07"><td id="~&gt;V[" class="">Logout Path</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">The logout endpoint for users (e.g., /logout).</td></tr><tr id="1f1b7135-d33b-80ba-b8e8-f137b41ed0fb"><td id="~&gt;V[" class="">Redirect URI After Logout</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">The redirect URI parameter and value for logout path</td></tr><tr id="1b3b7135-d33b-8001-a947-e08f369322f9"><td id="~&gt;V[" class="">Bearer Only</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">Defines if bearer tokens are required: yes (only token authentication) or no (allows both token and login redirection).</td></tr><tr id="1b3b7135-d33b-8010-911e-cb37e99ac7f3"><td id="~&gt;V[" class="">Scope</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">Specifies access levels (default: openid).</td></tr><tr id="1b3b7135-d33b-8093-9168-d3157573f735"><td id="~&gt;V[" class="">Introspection Endpoint</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">URL for token validation.</td></tr><tr id="1b3b7135-d33b-8000-9d47-e70a5309b7b5"><td id="~&gt;V[" class="">Login URL</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">API endpoint for user login.</td></tr><tr id="1b3b7135-d33b-8003-8b79-d4b339aa407e"><td id="~&gt;V[" class="">Cookie Domain</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">The domain associated with authentication cookies (e.g., <a href="http://skapim.com/">skapim.com</a>).</td></tr><tr id="1b3b7135-d33b-80ab-a8e0-f5c772dad647"><td id="~&gt;V[" class="">Bypass Header Name</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">Allows skipping authentication for specific requests using a header key (e.g., x-oidc-api-key).</td></tr><tr id="1b3b7135-d33b-80ec-869c-f4250443fe2d"><td id="~&gt;V[" class="">Bypass Key</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">The actual bypass key value.</td></tr><tr id="1b3b7135-d33b-80b5-958e-cc315e235c95"><td id="~&gt;V[" class="">Refresh Token Expiration</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">Token expiration time (default: 3600 seconds).</td></tr><tr id="1b3b7135-d33b-801c-8275-c8061da91510"><td id="~&gt;V[" class="">SameSite</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">Cookie setting to control cross-site request handling. Options: Lax, Strict, or None.</td></tr><tr id="1b3b7135-d33b-809c-bdb7-d5485055041a"><td id="~&gt;V[" class="">Secure</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">Enables or disables secure cookies (default: false).</td></tr><tr id="1b3b7135-d33b-8044-ae6a-f508a8c78fed"><td id="~&gt;V[" class="">Unauth Action</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">Defines behavior when authentication fails. Options: Redirect to Login Page or Return 401 (Deny).</td></tr><tr id="1b3b7135-d33b-8014-a982-c50ca48e24dc"><td id="~&gt;V[" class="">Allow IP / Deny IP</td><td id="&gt;f~q" class="" style="width:543.0000152587891px">Allows or blocks specific IPs from OIDC authentication.</td></tr></tbody></table><p id="1f1b7135-d33b-80bb-932f-f0e09b1f4b2d" class="">
+</p><figure id="1f1b7135-d33b-807e-8ba3-d023e3a56b18" class="image"><a href="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image%202.png"><img style="width:709.984375px" src="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image%202.png"/></a><figcaption>Authorization Code Grant</figcaption></figure><p id="1bcb7135-d33b-80d0-ac82-fa7315b77902" class="">
+</p><p id="1b3b7135-d33b-805b-b709-f5a06303c420" class=""><strong>Password Grant:</strong></p><p id="1b3b7135-d33b-8062-b36c-c440d8cd1f06" class="">This flow is typically used for <strong>machine-to-machine authentication</strong> or trusted clients.</p><table id="1b3b7135-d33b-80fe-b1f7-d44d7949d3a0" class="simple-table"><tbody><tr id="1b3b7135-d33b-8041-96a4-d635921c3c9c"><td id="IYWZ" class=""><strong>Configuration Field</strong></td><td id="cDye" class="" style="width:522.0000152587891px"><strong>Description</strong></td></tr><tr id="1b3b7135-d33b-8075-add0-c0046456adba"><td id="IYWZ" class="">Realm</td><td id="cDye" class="" style="width:522.0000152587891px">The name of the authentication realm. Example: auth</td></tr><tr id="1b3b7135-d33b-8038-8326-de3fb1c41953"><td id="IYWZ" class="">Client ID</td><td id="cDye" class="" style="width:522.0000152587891px">The unique identifier assigned by the OIDC provider (e.g., account).</td></tr><tr id="1b3b7135-d33b-8040-8c19-ec44d131a256"><td id="IYWZ" class="">Client Secret</td><td id="cDye" class="" style="width:522.0000152587891px">The client secret required for authentication.</td></tr><tr id="1b3b7135-d33b-808b-a90a-d1242db14f64"><td id="IYWZ" class="">Discovery</td><td id="cDye" class="" style="width:522.0000152587891px">The URL to the provider’s discovery endpoint (e.g., <a href="https://oidcprovider/.well-known/openid-configuration">https://oidcprovider/.well-known/openid-configuration</a>).</td></tr><tr id="1b3b7135-d33b-80e5-8c9a-c25c7caec167"><td id="IYWZ" class="">Logout Path</td><td id="cDye" class="" style="width:522.0000152587891px">The logout endpoint for users (e.g., /Logout).</td></tr><tr id="1b3b7135-d33b-80e7-b701-d4b7987aa99e"><td id="IYWZ" class="">Redirect URI path</td><td id="cDye" class="" style="width:522.0000152587891px">The endpoint for redirecting users after login (e.g., /auth/api/login).</td></tr><tr id="1b3b7135-d33b-80bf-ba6d-c15331f212b1"><td id="IYWZ" class="">Scope</td><td id="cDye" class="" style="width:522.0000152587891px">Specifies access levels (default: openid).</td></tr><tr id="1b3b7135-d33b-8052-95cd-ec1769495197"><td id="IYWZ" class="">SameSite</td><td id="cDye" class="" style="width:522.0000152587891px">Cookie setting to control cross-site request handling. Options: Lax, Strict, or None.</td></tr><tr id="1f1b7135-d33b-8019-a4a0-f926e83eed84"><td id="IYWZ" class="">Secure</td><td id="cDye" class="" style="width:522.0000152587891px">Toggle to turn on / off secure option</td></tr><tr id="1f1b7135-d33b-801f-a05b-f3ef5b8d1496"><td id="IYWZ" class="">Refresh Token Expiration</td><td id="cDye" class="" style="width:522.0000152587891px">Token expiration time (default: 3600 seconds).</td></tr><tr id="1f1b7135-d33b-808a-9748-cdb688dbda7d"><td id="IYWZ" class="">Login URL</td><td id="cDye" class="" style="width:522.0000152587891px">API endpoint for user login.</td></tr><tr id="1b3b7135-d33b-8096-a897-fe34d87f4d4f"><td id="IYWZ" class="">Session Name</td><td id="cDye" class="" style="width:522.0000152587891px">Defines the session storage name (e.g., apim_prod_session).</td></tr><tr id="1b3b7135-d33b-8006-ba7b-e17bbb43ef7c"><td id="IYWZ" class="">Cookie Domain</td><td id="cDye" class="" style="width:522.0000152587891px">The domain associated with authentication cookies (e.g., <a href="http://skapim.com/">skapim.com</a>).</td></tr><tr id="1b3b7135-d33b-8052-9bd5-f220d93a98ae"><td id="IYWZ" class="">Bypass Header Name</td><td id="cDye" class="" style="width:522.0000152587891px">Allows skipping authentication for specific requests using a header key (e.g., x-oidc-api-key).</td></tr><tr id="1b3b7135-d33b-803a-b721-decbf755b3b8"><td id="IYWZ" class="">Bypass Key</td><td id="cDye" class="" style="width:522.0000152587891px">The actual bypass key value.</td></tr><tr id="1b3b7135-d33b-807c-a70c-f3bb75b1386e"><td id="IYWZ" class="">Redirect After Login URI</td><td id="cDye" class="" style="width:522.0000152587891px">URL to redirect users after a successful login.</td></tr><tr id="1b3b7135-d33b-80bd-ae21-c994271fc3af"><td id="IYWZ" class="">Redirect After Logout URI</td><td id="cDye" class="" style="width:522.0000152587891px">URL to redirect users after logout.</td></tr></tbody></table><p id="1f1b7135-d33b-80aa-a028-ef299e34d98c" class="">
+</p><figure id="1f1b7135-d33b-8077-a3a6-d7961f0510e5" class="image"><a href="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image%203.png"><img style="width:709.984375px" src="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image%203.png"/></a></figure><p id="1bcb7135-d33b-80e9-a876-d22453374784" class="">
+</p><p id="1b3b7135-d33b-804f-90cb-d62abb2a97b4" class="">Note:</p><ul id="1b3b7135-d33b-8006-a2a5-c156d6695620" class="bulleted-list"><li style="list-style-type:disc"><strong>Authorization Code Grant</strong> requires a login page redirection, whereas <strong>Password Grant</strong> is a direct API request.</li></ul><ul id="1b3b7135-d33b-8003-b2fe-c09892531318" class="bulleted-list"><li style="list-style-type:disc"><strong>Bearer Only Mode</strong>:<ul id="1b3b7135-d33b-80ef-a2d0-da4b06b31ed1" class="bulleted-list"><li style="list-style-type:circle">If set to yes, only token-based authentication is allowed.</li></ul><ul id="1b3b7135-d33b-8034-81e0-e0a4cc955680" class="bulleted-list"><li style="list-style-type:circle">If set to no, both login redirection and token authentication are supported.</li></ul></li></ul><h3 id="1b3b7135-d33b-8078-8700-d46665171cf7" class="">Redis Database Selection</h3><p id="1b3b7135-d33b-80a8-9bb2-febe293df938" class="">Session data can be stored in different types of Redis databases. The selected <strong>Redis type</strong> determines which configurations need to be set.</p><p id="1b3b7135-d33b-8090-98da-cde49a72e8a7" class=""><strong>APIM Redis (Default)</strong></p><ul id="1b3b7135-d33b-8062-8261-e1d9f35dd6cd" class="bulleted-list"><li style="list-style-type:disc">Uses the built-in APIM Redis for session storage.</li></ul><ul id="1b3b7135-d33b-808c-ae68-e7694274d94f" class="bulleted-list"><li style="list-style-type:disc">No additional configuration is required.</li></ul><p id="1b3b7135-d33b-803f-9553-c80d25d5cff8" class=""><strong>Custom Redis</strong></p><ul id="1b3b7135-d33b-8076-bf94-d7cddff8b1d0" class="bulleted-list"><li style="list-style-type:disc">Allows connecting to an external Redis instance.</li></ul><p id="1bcb7135-d33b-80f8-80b4-c9d457a429c7" class="">
+</p><table id="1b3b7135-d33b-804e-911e-f25f44385f35" class="simple-table"><tbody><tr id="1b3b7135-d33b-805b-8fa8-d94792cff22b"><td id="a{]H" class=""><strong>Configuration Field</strong></td><td id="JKKl" class="" style="width:586.0000152587891px"><strong>Description</strong></td></tr><tr id="1b3b7135-d33b-806d-b52d-fd09a1ee179d"><td id="a{]H" class=""><strong>Redis Host</strong></td><td id="JKKl" class="" style="width:586.0000152587891px">Address of the Redis server (e.g., 127.0.0.1).</td></tr><tr id="1b3b7135-d33b-80ad-bcbe-ff90007431c3"><td id="a{]H" class=""><strong>Redis Port</strong></td><td id="JKKl" class="" style="width:586.0000152587891px">Port number of the Redis server (e.g., 6379).</td></tr><tr id="1b3b7135-d33b-802d-9f44-f00cc3485f39"><td id="a{]H" class=""><strong>Redis Password</strong></td><td id="JKKl" class="" style="width:586.0000152587891px">Password for authentication.</td></tr><tr id="1b3b7135-d33b-801a-a466-c80caba7dafb"><td id="a{]H" class=""><strong>Redis Database</strong></td><td id="JKKl" class="" style="width:586.0000152587891px">Specifies which database index to use (e.g., 1).</td></tr><tr id="1b3b7135-d33b-80c6-bd4a-f835eb850cb6"><td id="a{]H" class=""><strong>Redis Pool Size</strong></td><td id="JKKl" class="" style="width:586.0000152587891px">Maximum number of connections in the Redis connection pool (default: 1000).</td></tr><tr id="1b3b7135-d33b-80bf-9646-f17b39ef1860"><td id="a{]H" class=""><strong>Redis Pool Backlog</strong></td><td id="JKKl" class="" style="width:586.0000152587891px">Maximum number of requests waiting for an available connection (default: 30).</td></tr></tbody></table><p id="1f1b7135-d33b-80ad-ba17-f53a2404bef0" class="">
+</p><figure id="1f1b7135-d33b-80d5-91cd-d586b0ed4ab4" class="image"><a href="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image%204.png"><img style="width:709.96875px" src="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image%204.png"/></a></figure><p id="1bcb7135-d33b-80dd-9505-e2b5e0f0e5a1" class="">
+</p><p id="1b3b7135-d33b-80d5-956a-e8e118cf546d" class=""><strong>Redis Cluster</strong></p><ul id="1b3b7135-d33b-809b-8f8d-d45a7da187c0" class="bulleted-list"><li style="list-style-type:disc">Uses a distributed Redis setup for session storage.</li></ul><p id="1bcb7135-d33b-808c-bc33-c7a88cc0cf12" class="">
+</p><table id="1b3b7135-d33b-80f2-92c8-d9de3f056ca4" class="simple-table"><tbody><tr id="1b3b7135-d33b-8096-b0d8-f1e55fa3abca"><td id="cBAA" class="" style="width:147.00000762939453px"><strong>Configuration Field</strong></td><td id="@e[L" class="" style="width:556.9931030273438px"><strong>Description</strong></td></tr><tr id="1b3b7135-d33b-80e2-a772-ded873bc90c9"><td id="cBAA" class="" style="width:147.00000762939453px"><strong>Redis Cluster Nodes</strong></td><td id="@e[L" class="" style="width:556.9931030273438px">The cluster node addresses (e.g., redis-cluster.apim:6379).</td></tr><tr id="1b3b7135-d33b-80ea-ade8-e6edf4eaa5e4"><td id="cBAA" class="" style="width:147.00000762939453px"><strong>Redis Cluster Password</strong></td><td id="@e[L" class="" style="width:556.9931030273438px">Password for authentication.</td></tr><tr id="1b3b7135-d33b-80c4-841b-e26f970be1ab"><td id="cBAA" class="" style="width:147.00000762939453px"><strong>Redis Cluster Name</strong></td><td id="@e[L" class="" style="width:556.9931030273438px">Specifies the cluster name (e.g., kong_redis_cluster).</td></tr><tr id="1b3b7135-d33b-80f1-ad40-edf94f148199"><td id="cBAA" class="" style="width:147.00000762939453px"><strong>Redis Connect Timeout</strong></td><td id="@e[L" class="" style="width:556.9931030273438px">Timeout for establishing a Redis connection (default: 1000ms).</td></tr><tr id="1b3b7135-d33b-802a-b1e4-f3c8e6cafd26"><td id="cBAA" class="" style="width:147.00000762939453px"><strong>Redis Read Timeout</strong></td><td id="@e[L" class="" style="width:556.9931030273438px">Timeout for reading data from Redis (default: 1000ms).</td></tr><tr id="1b3b7135-d33b-808f-8630-e20c1c102afd"><td id="cBAA" class="" style="width:147.00000762939453px"><strong>Redis Send Timeout</strong></td><td id="@e[L" class="" style="width:556.9931030273438px">Timeout for sending data to Redis (default: 1000ms).</td></tr><tr id="1b3b7135-d33b-80c5-b4e9-e63b4edc6f02"><td id="cBAA" class="" style="width:147.00000762939453px"><strong>Redis Pool Size</strong></td><td id="@e[L" class="" style="width:556.9931030273438px">Maximum number of connections in the Redis connection pool (default: 1000).</td></tr><tr id="1b3b7135-d33b-8097-ab66-fc8c5e487035"><td id="cBAA" class="" style="width:147.00000762939453px"><strong>Redis Pool Backlog</strong></td><td id="@e[L" class="" style="width:556.9931030273438px">Maximum number of pending connections (default: 30).</td></tr><tr id="1b3b7135-d33b-806f-819a-d6d31841b46b"><td id="cBAA" class="" style="width:147.00000762939453px"><strong>Redis Keepalive Timeout</strong></td><td id="@e[L" class="" style="width:556.9931030273438px">Maximum idle time before Redis connection is closed (default: 55000ms).</td></tr></tbody></table><p id="1f1b7135-d33b-80c0-9bc6-c2acbb398e42" class="">
+</p><figure id="1f1b7135-d33b-8050-a0ab-d9b0c16fc34a" class="image"><a href="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image%205.png"><img style="width:709.96875px" src="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image%205.png"/></a></figure><p id="1f1b7135-d33b-805c-8d5c-d9ad00ce85be" class="">
+</p><h2 id="1f1b7135-d33b-8009-a33c-d6ee2ebe775e" class="">Additional Notes on OIDC Authentication Behavior</h2><p id="1f1b7135-d33b-8083-b29c-fda4dc2b8ad3" class="">OIDC (OpenID Connect) enables client applications to authenticate users via an external OIDC Provider.</p><h3 id="1f1b7135-d33b-80c3-8d0f-ecfed9228666" class="">Logout Path and Redirect URI Behavior</h3><p id="1f1b7135-d33b-8046-83ac-dd2970f02ffa" class="">When configuring the Logout Path and Redirect URI After Logout, behavior depends on the structure of your API Gateway:</p><ul id="1f1b7135-d33b-8009-9df2-d196ffe12e8c" class="bulleted-list"><li style="list-style-type:disc">Suppose your Gateway URL is <a href="https://your.domain.com/">https://your.domain.com</a> and the Base Path of the API is /basePath.</li></ul><ul id="1f1b7135-d33b-800b-b304-cce2fad551a7" class="bulleted-list"><li style="list-style-type:disc">If you set Logout Path in the OIDC policy as /logout, then the full logout URL becomes:<br/><a href="https://your.domain.com/basePath/logout">https://your.domain.com/basePath/logout</a></li></ul><ul id="1f1b7135-d33b-8075-bd26-cfee8704fbb8" class="bulleted-list"><li style="list-style-type:disc">When this URL is called, the logout is handled internally by the OIDC Provider.</li></ul><ul id="1f1b7135-d33b-80cb-91ab-e9222d632b23" class="bulleted-list"><li style="list-style-type:disc">After logout, the browser is redirected to the Redirect URI After Logout (i.e., the redirect_uri value), which must be explicitly defined in the request.</li></ul><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1f1b7135-d33b-80fd-a651-e6fb7ea6b072"><div style="width:100%"><p id="1f1b7135-d33b-801c-aa4e-f410195f49e7" class="">If the full logout URL and redirect_uri are not properly set, the logout process may not redirect as expected.</p></div></figure><h3 id="1f1b7135-d33b-80e5-9fd6-fd699b4b5e6e" class="">Two Authentication Methods Supported</h3><p id="1f1b7135-d33b-800b-9287-d95688f6a363" class="">OIDC allows two ways to perform authentication:</p><ol type="1" id="1f1b7135-d33b-8070-b2f3-e39f0196135c" class="numbered-list" start="1"><li>Browser-redirected login screen: The browser is redirected to the OIDC login page for user authentication.</li></ol><ol type="1" id="1f1b7135-d33b-8088-8b9c-e2be54f0731f" class="numbered-list" start="2"><li>ID token in request: The client sends the ID token directly via HTTP without redirecting the user.</li></ol><p id="1f1b7135-d33b-80c2-abd0-dff36d3cdb63" class="">The behavior of these methods depends on the bearerOnly setting:</p><table id="1f1b7135-d33b-8082-ad5f-ca3ae10eb4a2" class="simple-table"><tbody><tr id="1f1b7135-d33b-8061-94fe-f65a9a897a58"><td id="JoY=" class="" style="width:163px">bearerOnly Value</td><td id="B;iD" class="" style="width:539px">Behavior</td></tr><tr id="1f1b7135-d33b-80fc-a423-ed3ba815c8bc"><td id="JoY=" class="" style="width:163px">no</td><td id="B;iD" class="" style="width:539px">Both (1) and (2) methods are allowed.</td></tr><tr id="1f1b7135-d33b-8028-9c7b-ee0704ec8c76"><td id="JoY=" class="" style="width:163px">yes</td><td id="B;iD" class="" style="width:539px">Only method (2) is allowed. The system does not redirect to a login page.</td></tr></tbody></table><p id="1f1b7135-d33b-80e8-9c00-d8d8ebf842c1" class="">
+</p><h3 id="1f1b7135-d33b-80ee-85a2-e828d406a092" class="">Token Validation and Header Format</h3><ul id="1f1b7135-d33b-800b-9d36-c4c18d0754c8" class="bulleted-list"><li style="list-style-type:disc">To validate ID tokens using method (2), you must configure the Introspection Endpoint — the endpoint that checks the token validity.</li></ul><ul id="1f1b7135-d33b-80fd-9b90-f50e37dc8654" class="bulleted-list"><li style="list-style-type:disc">When calling APIs with an ID token, include the token in the request header using the following format:</li></ul><p id="1f1b7135-d33b-8076-a341-ea7e8ccca75b" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f1b7135-d33b-8002-bd0b-feb8f8071353" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">Authorization: bearer your_ID_token</code></pre><p id="1f1b7135-d33b-80c9-ba56-e7caba0043d9" class="">
+</p><figure id="1f1b7135-d33b-805f-abc3-f5bd35a823bd" class="image"><a href="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image%206.png"><img style="width:709.984375px" src="OpenID%20Connect%20(OIDC)%201b2b7135d33b80f3819df6ce47e65949/image%206.png"/></a></figure></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

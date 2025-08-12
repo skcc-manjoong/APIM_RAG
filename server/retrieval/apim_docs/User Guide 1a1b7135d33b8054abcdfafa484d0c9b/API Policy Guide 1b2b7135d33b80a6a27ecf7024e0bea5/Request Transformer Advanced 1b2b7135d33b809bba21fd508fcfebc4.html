@@ -1,0 +1,696 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Request Transformer Advanced</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.highlight-default_background {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.highlight-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.block-color-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-default { background-color: rgba(84, 72, 49, 0.08); }
+.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
+.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
+.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
+.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
+.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
+.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
+.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
+.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
+.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1b2b7135-d33b-809b-ba21-fd508fcfebc4" class="page sans"><header><h1 class="page-title"><strong>Request Transformer Advanced</strong></h1><p class="page-description"></p></header><div class="page-body"><h2 id="1b3b7135-d33b-8007-96cd-cc46cd53bb46" class="">Overview</h2><p id="1b3b7135-d33b-80c7-8ad8-dd5afe4ac07c" class="">The <strong>Request Transformer Advanced</strong> policy allows API requests to be modified dynamically before reaching the backend. This policy provides transformation capabilities through <strong>five tag operations</strong>, ensuring requests conform to desired structures:</p><ul id="1b3b7135-d33b-80d4-93ad-f8a6e7470e87" class="bulleted-list"><li style="list-style-type:disc"><strong>Remove Tag</strong>: Deletes specific headers, query parameters, or body fields.</li></ul><ul id="1b3b7135-d33b-80e0-896d-c5c4201248cf" class="bulleted-list"><li style="list-style-type:disc"><strong>Rename Tag</strong>: Changes the name of a field while preserving its value.</li></ul><ul id="1b3b7135-d33b-80d1-a2a8-f9852faf8788" class="bulleted-list"><li style="list-style-type:disc"><strong>Replace Tag</strong>: Modifies existing values using templates, strings, or functions.</li></ul><ul id="1b3b7135-d33b-8083-8de5-dd33600ee03b" class="bulleted-list"><li style="list-style-type:disc"><strong>Add Tag</strong>: Introduces new fields in headers, query parameters, or the body.</li></ul><ul id="1b3b7135-d33b-80b1-8a78-e332794f41d0" class="bulleted-list"><li style="list-style-type:disc"><strong>Append Tag</strong>: Adds data to existing fields instead of replacing them.</li></ul><p id="1b3b7135-d33b-80b7-8a48-d93de468400d" class="">This policy is particularly useful for <strong>structuring, securing, and optimizing</strong> API requests before forwarding them to the backend.</p><h2 id="1b3b7135-d33b-80a3-80ca-ef866056bf25" class="">Configuration Details</h2><h3 id="1b3b7135-d33b-806b-b49a-ed60d33c2d9c" class="">Parameter configuration</h3><p id="1b3b7135-d33b-80be-b6c1-e2bb53e8972d" class="">Upon adding a tag, user can use these templates as values:</p><p id="1b3b7135-d33b-808d-a1db-e17f19b3fbc2" class="">You can use any of the current request headers, query parameters, and captured URI groups as templates to populate supported configuration fields.</p><ul id="1bab7135-d33b-8036-9048-f39b6a2b4473" class="bulleted-list"><li style="list-style-type:disc"><strong>Request Parameter: </strong>header</li></ul><ul id="1bab7135-d33b-8059-92bc-c580d46ada3e" class="bulleted-list"><li style="list-style-type:disc"><strong>Template:</strong></li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1bab7135-d33b-8019-8bd3-c147066c9c46" class="code code-wrap"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">$(headers.&lt;header_name&gt;), $(headers[&quot;&lt;Header-Name&gt;&quot;]) or $(headers[&quot;&lt;header-name&gt;&quot;])</code></pre><ul id="1bab7135-d33b-8023-b46a-c6a5360fe7f8" class="bulleted-list"><li style="list-style-type:disc"><strong>Request Parameter: </strong>query string</li></ul><ul id="1bab7135-d33b-8042-8401-c53cb51c6986" class="bulleted-list"><li style="list-style-type:disc"><strong>Template:</strong></li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1bab7135-d33b-80b5-8380-d33cb4dc727e" class="code code-wrap"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">$(query_params.&lt;query-param-name&gt;) or $(query_params[&quot;&lt;query-param-name&gt;&quot;])</code></pre><ul id="1bab7135-d33b-8095-9463-ee828d577e3a" class="bulleted-list"><li style="list-style-type:disc"><strong>Request Parameter: </strong>captured URIs</li></ul><ul id="1bab7135-d33b-803f-bcc7-d629a62faff8" class="bulleted-list"><li style="list-style-type:disc"><strong>Template:</strong></li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1bab7135-d33b-8032-9f48-ce0268cbeafd" class="code code-wrap"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">$(uri_captures.&lt;group-name&gt;) or $(uri_captures[&quot;&lt;group-name&gt;&quot;])</code></pre><ul id="1bab7135-d33b-80f1-acde-f20a04bfc657" class="bulleted-list"><li style="list-style-type:disc"><strong>Request Parameter: </strong>shared variables</li></ul><ul id="1bab7135-d33b-801c-901c-d729d51e2d63" class="bulleted-list"><li style="list-style-type:disc"><strong>Template:</strong></li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1bab7135-d33b-80dd-a55c-fb9b0b0b60cd" class="code code-wrap"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">$(shared.&lt;variable-name&gt;) or $(shared[&quot;&lt;variable-name&gt;&quot;])</code></pre><p id="1b3b7135-d33b-8060-bb27-d0acd2a738b9" class="">To escape a template, wrap it inside quotes and pass inside another template. For example:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1b3b7135-d33b-80ff-a608-d4e0d44fe450" class="code code-wrap"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">$(&#x27;$(something_that_needs_to_escaped)&#x27;)</code></pre><p id="1b3b7135-d33b-80b9-b7da-c3188a59b04b" class=""><strong>Note: </strong>The plugin creates a non-mutable table of request headers, query strings, and captured URIs before transformation. Therefore, any update or removal of parameters used in a template does not affect the rendered value of a template.</p><p id="1b3b7135-d33b-8027-97f4-ece4e0f4a9ce" class="">A complete Lambda example for prefixing a header value with “Basic” if not already there:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1b3b7135-d33b-8019-93c0-f15116a9c149" class="code code-wrap"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">Authorization:$((function()
+    local value = headers.Authorization
+    if not value then
+      return
+    end
+    if value:sub(1, 6) == &quot;Basic &quot; then
+      return value            -- was already properly formed
+    end
+    return &quot;Basic &quot; .. value  -- added proper prefix
+  end)())</code></pre><p id="1b3b7135-d33b-8034-8d65-dead5a178bca" class=""><strong>Note:</strong> Especially in multi-line templates like the example above, make sure not to add any trailing white space or new lines. Because these would be outside the placeholders, they would be considered part of the template, and hence would be appended to the generated value. The environment is sandboxed, meaning that Lambdas will not have access to any library functions, except for the string methods (like sub() in the example above).</p><h3 id="1b3b7135-d33b-801d-bed6-e19ec69013e5" class="">Add &quot;Remove&quot; Tag</h3><ul id="1b3b7135-d33b-80ac-a166-fc50d7de844d" class="bulleted-list"><li style="list-style-type:disc"><strong>Function:</strong> Removes a field from the request.</li></ul><ul id="1b3b7135-d33b-8024-bd9f-f3a4c6479c6e" class="bulleted-list"><li style="list-style-type:disc"><strong>Configuration Steps:</strong><ul id="1c7b7135-d33b-806f-ac33-c0a461a540f9" class="bulleted-list"><li style="list-style-type:circle">Select <strong>&quot;Remove&quot;</strong> from the dropdown.</li></ul><ul id="1c7b7135-d33b-80d3-96bd-eb090c78fc8a" class="bulleted-list"><li style="list-style-type:circle">Enter the <strong>field name</strong> to delete.</li></ul><ul id="1c7b7135-d33b-80fc-b1f9-f7f3b22199a2" class="bulleted-list"><li style="list-style-type:circle">Select the applicable scope (<strong>Headers, Query String, Body</strong>).</li></ul><ul id="1c7b7135-d33b-802d-bd77-e8ff3267bd8e" class="bulleted-list"><li style="list-style-type:circle">Click <strong>Save</strong> to apply the tag.</li></ul></li></ul><p id="1bcb7135-d33b-8045-a159-deecc078a956" class="">
+</p><figure id="1b3b7135-d33b-806b-819e-d22019f0e873" class="image"><a href="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image.png"><img style="width:709.9306030273438px" src="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image.png"/></a></figure><h3 id="1b3b7135-d33b-8002-86f8-ff426b171e93" class="">Add &quot;Rename&quot; Tag</h3><ul id="1b3b7135-d33b-8041-8cf3-f374e530c726" class="bulleted-list"><li style="list-style-type:disc"><strong>Function:</strong> Renames an <strong>existing</strong> request field while keeping its value unchanged.</li></ul><ul id="1b3b7135-d33b-80f4-82d4-c9027aba47c0" class="bulleted-list"><li style="list-style-type:disc"><strong>Configuration Steps:</strong><ul id="1c7b7135-d33b-8023-8770-e1e2aad2f610" class="bulleted-list"><li style="list-style-type:circle">Select <strong>&quot;Rename&quot;</strong> from the dropdown.</li></ul><ul id="1c7b7135-d33b-80d3-b04b-e1b310053737" class="bulleted-list"><li style="list-style-type:circle">Enter the <strong>current field name</strong> and <strong>new name</strong>.</li></ul><ul id="1c7b7135-d33b-808e-b0b3-eccc13e50ddf" class="bulleted-list"><li style="list-style-type:circle">Select the applicable scope (<strong>Headers, Query String, Body</strong>).</li></ul><ul id="1c7b7135-d33b-80bb-bbbc-c00fc245adcb" class="bulleted-list"><li style="list-style-type:circle">Click <strong>Save</strong> to apply the tag.</li></ul></li></ul><p id="1bcb7135-d33b-8077-8e4e-f22ec17f1c9f" class="">
+</p><figure id="1b3b7135-d33b-809c-a238-e4a91d9971d6" class="image"><a href="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%201.png"><img style="width:709.9479370117188px" src="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%201.png"/></a></figure><h3 id="1b3b7135-d33b-8070-bfc6-f5d7feca1da9" class="">Add &quot;Replace&quot; Tag</h3><ul id="1b3b7135-d33b-8068-a6bd-ef0e445364e2" class="bulleted-list"><li style="list-style-type:disc"><strong>Function:</strong> Changes the value of an existing field using <strong>templates, strings, or functions</strong>.</li></ul><ul id="1b3b7135-d33b-8098-87b7-f3336a2b1844" class="bulleted-list"><li style="list-style-type:disc"><strong>Configuration Steps:</strong><ul id="1c7b7135-d33b-80a8-b8f0-e4815859518a" class="bulleted-list"><li style="list-style-type:circle">Select <strong>&quot;Replace&quot;</strong> from the dropdown.</li></ul><ul id="1c7b7135-d33b-803f-b4fc-c2b3c5e9c627" class="bulleted-list"><li style="list-style-type:circle">Enter the <strong>field name</strong> for replacement.</li></ul><ul id="1c7b7135-d33b-8010-85e4-f0d5c0171862" class="bulleted-list"><li style="list-style-type:circle">Choose the <strong>new value</strong> type (<strong>Template, String, Function</strong>).</li></ul><ul id="1c7b7135-d33b-8087-8e96-fc6f310e73f9" class="bulleted-list"><li style="list-style-type:circle">Enter the <strong>replacement value</strong>.</li></ul><ul id="1c7b7135-d33b-8087-8ee9-e579c86daf2e" class="bulleted-list"><li style="list-style-type:circle">Select the applicable scope (<strong>Headers, Query String, Body</strong>).</li></ul><ul id="1c7b7135-d33b-8038-ad77-ec7f84fe422e" class="bulleted-list"><li style="list-style-type:circle">Click <strong>Save</strong> to apply the tag.</li></ul></li></ul><p id="1bcb7135-d33b-80cf-a0f7-ee14ab0e374b" class="">
+</p><figure id="1b3b7135-d33b-8097-becd-ec8f8439e221" class="image"><a href="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%202.png"><img style="width:709.96533203125px" src="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%202.png"/></a></figure><h3 id="1b3b7135-d33b-8028-a43e-c32b876cc2ee" class="">Add &quot;Add&quot; Tag</h3><ul id="1b3b7135-d33b-80d8-883c-da3c72f5c9e3" class="bulleted-list"><li style="list-style-type:disc"><strong>Function:</strong> Inserts a new field into the request.</li></ul><ul id="1b3b7135-d33b-80c1-9338-c576d5406752" class="bulleted-list"><li style="list-style-type:disc"><strong>Configuration Steps:</strong><ul id="1c7b7135-d33b-8044-be23-f700c4480561" class="bulleted-list"><li style="list-style-type:circle">Select <strong>&quot;Add&quot;</strong> from the dropdown.</li></ul><ul id="1c7b7135-d33b-80f0-9ff4-dbf307fc0a83" class="bulleted-list"><li style="list-style-type:circle">Enter the <strong>field name</strong> and <strong>new value</strong>.</li></ul><ul id="1c7b7135-d33b-8047-9cd9-fff7ebab535a" class="bulleted-list"><li style="list-style-type:circle">Select the <strong>data type</strong>: <strong>Template</strong> – Uses predefined placeholders; <strong>String</strong> – Static text; <strong>Function</strong> – Dynamic logic-based values.</li></ul><ul id="1c7b7135-d33b-806b-8972-dbd7d3688d95" class="bulleted-list"><li style="list-style-type:circle">Choose the applicable scope (<strong>Headers, Query String, Body</strong>).</li></ul><ul id="1c7b7135-d33b-8056-88d3-c179fc9be8d4" class="bulleted-list"><li style="list-style-type:circle">Click <strong>Save</strong> to apply the tag.</li></ul></li></ul><p id="1bcb7135-d33b-8072-b06c-f35ab847ef39" class="">
+</p><figure id="1b3b7135-d33b-80c7-978f-c6af49f9f5db" class="image"><a href="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%203.png"><img style="width:709.96533203125px" src="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%203.png"/></a></figure><h3 id="1b3b7135-d33b-80fe-b71d-d1dd7a39efe4" class="">Add &quot;Append&quot; Tag</h3><ul id="1b3b7135-d33b-800a-a40c-e7480721ce01" class="bulleted-list"><li style="list-style-type:disc"><strong>Function:</strong> Appends additional data to an <strong>existing</strong> field rather than replacing it.</li></ul><ul id="1b3b7135-d33b-8098-90d6-f1dafb4e2062" class="bulleted-list"><li style="list-style-type:disc"><strong>Configuration Steps:</strong><ul id="1c7b7135-d33b-8008-bb9d-f4dbeb0af044" class="bulleted-list"><li style="list-style-type:circle">Select <strong>&quot;Append&quot;</strong> from the dropdown.</li></ul><ul id="1c7b7135-d33b-8046-a1e7-c31f2cfd5cbb" class="bulleted-list"><li style="list-style-type:circle">Enter the <strong>field name</strong> and <strong>data to append</strong>.</li></ul><ul id="1c7b7135-d33b-80cd-b1bd-f576fcb9eb69" class="bulleted-list"><li style="list-style-type:circle">Choose the <strong>data type</strong> (<strong>Template, String, Function</strong>).</li></ul><ul id="1c7b7135-d33b-8043-9d2f-ccde5aff50af" class="bulleted-list"><li style="list-style-type:circle">Select the applicable scope (<strong>Headers, Query String, Body</strong>).</li></ul><ul id="1c7b7135-d33b-8057-b91e-faae023260cc" class="bulleted-list"><li style="list-style-type:circle">Click <strong>Save</strong> to apply the tag.</li></ul></li></ul><p id="1bcb7135-d33b-80f4-a512-f4519db7d4fb" class="">
+</p><figure id="1b3b7135-d33b-8014-a754-d7c0f2b8aa76" class="image"><a href="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%204.png"><img style="width:709.9306030273438px" src="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%204.png"/></a></figure><h3 id="1b3b7135-d33b-8032-9797-e35520ab0ca7" class="">Update Tag</h3><ul id="1b3b7135-d33b-806b-9d48-c5bacca7801c" class="bulleted-list"><li style="list-style-type:disc"><strong>Function:</strong> Allows modification of an existing tag.</li></ul><ul id="1b3b7135-d33b-803d-b58e-f2e83a3fcbed" class="bulleted-list"><li style="list-style-type:disc"><strong>Configuration Steps:</strong><ul id="1c7b7135-d33b-80b1-936e-e18c52ed9c68" class="bulleted-list"><li style="list-style-type:circle">Click on a <strong>tag</strong> in the tag table.</li></ul><ul id="1c7b7135-d33b-80e0-8bd5-eefedb48fda8" class="bulleted-list"><li style="list-style-type:circle">The <strong>update popup</strong> appears with current tag details.</li></ul><ul id="1c7b7135-d33b-8053-9337-fb42266ca76e" class="bulleted-list"><li style="list-style-type:circle">Modify the necessary values (e.g., field name, new value, data type).</li></ul><ul id="1c7b7135-d33b-8056-babe-f076ce977312" class="bulleted-list"><li style="list-style-type:circle">Click <strong>Save</strong> to apply the changes.</li></ul><ul id="1c7b7135-d33b-8005-8001-fae0723b502c" class="bulleted-list"><li style="list-style-type:circle">Redeploy the API to ensure the changes take effect.</li></ul></li></ul><p id="1bcb7135-d33b-8057-86a8-c3e5051fe65a" class="">
+</p><figure id="1b3b7135-d33b-80f9-baac-eeb017d91a6e" class="image"><a href="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%205.png"><img style="width:709.96533203125px" src="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%205.png"/></a></figure><figure id="1b3b7135-d33b-8018-9134-fe2bfbe650d3" class="image"><a href="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%206.png"><img style="width:709.9479370117188px" src="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%206.png"/></a></figure><h3 id="1b3b7135-d33b-80d0-b238-e44eb90b1362" class="">Delete Tag</h3><ul id="1b3b7135-d33b-8051-8259-d61f7666d14e" class="bulleted-list"><li style="list-style-type:disc"><strong>Function:</strong> Removes an existing tag from the policy configuration.</li></ul><ul id="1b3b7135-d33b-802c-8bc4-f0806e3a9516" class="bulleted-list"><li style="list-style-type:disc"><strong>Configuration Steps:</strong><ul id="1c7b7135-d33b-80c9-93fd-c7b302c7908e" class="bulleted-list"><li style="list-style-type:circle">Locate the <strong>tag</strong> in the tag table.</li></ul><ul id="1c7b7135-d33b-80c2-a224-ec7baac07c5e" class="bulleted-list"><li style="list-style-type:circle">Click the <strong>(x) icon</strong> next to the tag name.</li></ul><ul id="1c7b7135-d33b-806b-9839-e485da24eacc" class="bulleted-list"><li style="list-style-type:circle">A <strong>confirmation popup</strong> appears.</li></ul><ul id="1c7b7135-d33b-8005-a5a0-f9618969c960" class="bulleted-list"><li style="list-style-type:circle">Click <strong>Check</strong> to confirm deletion.</li></ul><ul id="1c7b7135-d33b-80fe-9b89-f609d00cf9e5" class="bulleted-list"><li style="list-style-type:circle">Redeploy the API to finalize the deletion.</li></ul></li></ul><p id="1bcb7135-d33b-808c-b791-eefb03e7e491" class="">
+</p><figure id="1b3b7135-d33b-8067-9aac-d2a3fb1b63cd" class="image"><a href="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%207.png"><img style="width:709.9479370117188px" src="Request%20Transformer%20Advanced%201b2b7135d33b809bba21fd508fcfebc4/image%207.png"/></a></figure></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

@@ -1,0 +1,721 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>APIM Developer Portal User Guide</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.highlight-default_background {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.highlight-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.block-color-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-default { background-color: rgba(84, 72, 49, 0.08); }
+.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
+.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
+.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
+.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
+.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
+.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
+.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
+.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
+.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1c0b7135-d33b-802e-916a-c9f4260769b8" class="page sans"><header><h1 class="page-title">APIM Developer Portal User Guide</h1><p class="page-description"></p></header><div class="page-body"><h2 id="1c0b7135-d33b-80ea-8aa4-fa441edd888e" class="">Introduction</h2><p id="1c0b7135-d33b-80fa-a435-e4bc874a6d56" class="">In this guide, there are details about the tasks that user can perform within the APIM Developers Portal.</p><p id="1c0b7135-d33b-80d0-84ab-e4c1674e5d73" class="">
+</p><h2 id="1c0b7135-d33b-8045-a58f-e469d924e758" class="">Creating a My Application</h2><p id="1c0b7135-d33b-80f4-ba7d-d50c29103e48" class="">Firstly, user needs to know how to create an Application.</p><h3 id="1c0b7135-d33b-804f-b68c-c95e56405ef6" class="">What is an Application?</h3><p id="1c0b7135-d33b-800f-b362-da30030009e1" class="">An <strong>Application </strong>represents the user’s service or system for development or operation. Through it, users can issue API Keys, API URLs, request access to APIs, and test APIs via Swagger.</p><p id="1c0b7135-d33b-801b-8818-e67ac7033a37" class="">
+</p><figure id="1c0b7135-d33b-80e5-83ff-daec32f87b5a" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image.png"><img style="width:709.9625244140625px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image.png"/></a></figure><p id="1c0b7135-d33b-8005-be26-c6fb473b286f" class="">
+</p><h3 id="1c0b7135-d33b-80ba-876a-d92a948a6a15" class="">Steps to create an Application</h3><ul id="1c0b7135-d33b-80ab-86a8-cbe5f43b9aba" class="bulleted-list"><li style="list-style-type:disc">Go to Global Menu &gt; Application &gt; My Application</li></ul><p id="1c0b7135-d33b-8009-99c7-e05141d66b7f" class="">
+</p><figure id="1c0b7135-d33b-8064-b0e7-eab5a6381aab" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%201.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%201.png"/></a></figure><p id="1c0b7135-d33b-8070-aaec-cf513a4795dc" class="">
+</p><ul id="1c0b7135-d33b-800d-b0cd-f44da3aa0310" class="bulleted-list"><li style="list-style-type:disc">Click the “Create” button on the My Applications screen.</li></ul><p id="1c0b7135-d33b-8031-893d-fae7f696593e" class="">
+</p><figure id="1c0b7135-d33b-8066-9635-e02392c629d2" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%202.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%202.png"/></a></figure><p id="1c0b7135-d33b-80aa-804d-eae0d4416eaf" class="">
+</p><ul id="1c0b7135-d33b-8067-8338-cb81a521e2a5" class="bulleted-list"><li style="list-style-type:disc">Enter a name for the new Application (Korean, English, and spaces allowed).</li></ul><ul id="1c7b7135-d33b-80d3-99b2-c080e762389d" class="bulleted-list"><li style="list-style-type:disc">Click “Confirm” to create the Application.</li></ul><p id="1c0b7135-d33b-805c-b470-d0676bca0f67" class="">
+</p><h2 id="1c0b7135-d33b-805e-926d-f024f32759b5" class="">My Application</h2><p id="1c0b7135-d33b-8085-96a3-dd3c8a1f2e3c" class="">This is the user’s workspace. You can add members, request API access, test via Swagger, and manage API Keys.</p><p id="1c0b7135-d33b-802b-8256-cc6824d7298f" class="">
+</p><figure id="1c0b7135-d33b-80f9-bc38-fcaafb0025b6" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%203.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%203.png"/></a></figure><p id="1c0b7135-d33b-8056-a067-c69a40c6358a" class="">
+</p><p id="1c0b7135-d33b-8094-abfc-fe4928783fa2" class="">Screen components:</p><ul id="1c0b7135-d33b-80f5-9cc0-e7a460d8bb9f" class="bulleted-list"><li style="list-style-type:disc"><strong>Basic Information</strong>: Set application name and icon; delete unused applications.</li></ul><ul id="1c0b7135-d33b-80aa-880d-c15ceab9ddb5" class="bulleted-list"><li style="list-style-type:disc"><strong>API KEY</strong>: Used for authentication during API calls. Automatically issued at creation; can be reissued by the App. Administrator.</li></ul><ul id="1c0b7135-d33b-8080-8fe1-ec24979d596d" class="bulleted-list"><li style="list-style-type:disc"><strong>API Usage</strong>: Request access to APIs by selecting them and describing usage intent. Once approved, you receive the API URL.</li></ul><ul id="1c0b7135-d33b-8019-874d-f7f325b9acf1" class="bulleted-list"><li style="list-style-type:disc"><strong>Member Management</strong>: Add members and assign App. Administrator permissions.</li></ul><ul id="1c0b7135-d33b-8077-bc01-f2b0359376e3" class="bulleted-list"><li style="list-style-type:disc"><strong>IP/Referer Whitelist</strong>: Restrict API calls to specific IPs or referers whitelisted only, block the others.</li></ul><p id="1c0b7135-d33b-8064-ad2a-de16cafac9a2" class="">
+</p><h3 id="1c0b7135-d33b-8057-ada7-d3e8d1754f5a" class="">My Application - Basic Information</h3><p id="1c0b7135-d33b-80ea-b479-ea7db5dd35bb" class="">Manage application name and icon, and optionally delete the application.</p><p id="1c0b7135-d33b-8086-9bcb-ec836d72e969" class="">
+</p><figure id="1c0b7135-d33b-808d-89ab-d8efd4d30864" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%204.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%204.png"/></a></figure><p id="1c0b7135-d33b-804a-b452-cc044318560b" class="">
+</p><p id="1c0b7135-d33b-808a-bac6-fdd4557c03cd" class="">Key points:</p><ul id="1c0b7135-d33b-802e-9d1d-e9915aa84e2a" class="bulleted-list"><li style="list-style-type:disc">Go to “Basic Information” to view details.</li></ul><ul id="1c7b7135-d33b-80ed-a80b-c36fb2bf1531" class="bulleted-list"><li style="list-style-type:disc">Check Application name, AppID, and creation date.</li></ul><ul id="1c7b7135-d33b-8032-bce9-fb166ad180f7" class="bulleted-list"><li style="list-style-type:disc">Edit Application name.</li></ul><ul id="1c7b7135-d33b-804d-8e8d-ef831d926d61" class="bulleted-list"><li style="list-style-type:disc">Set or change the application icon.</li></ul><ul id="1c7b7135-d33b-80e8-8eb1-eb5f391c33ce" class="bulleted-list"><li style="list-style-type:disc">Save changes. App. Administrators can delete the application.</li></ul><p id="1c0b7135-d33b-805c-aa75-f0d4fa5584a4" class="">
+</p><h3 id="1c0b7135-d33b-802a-933b-ebc6529d428f" class="">My Application - API KEY</h3><p id="1c0b7135-d33b-8029-a80c-d3ba54ca1d2e" class="">This refers to the API KEY for authentication when calling the API. It is automatically issued when creating an application, and the App. Administrator can reissue it.</p><figure class="block-color-red_background callout" style="white-space:pre-wrap;display:flex" id="1c0b7135-d33b-801d-a360-ea0c2a1f2111"><div style="width:100%"><p id="1c0b7135-d33b-80bd-adb2-d96e3fefc678" class="">API KEY must be applied when calling the API. Otherwise, the API call will fail because there is no authentication.</p></div></figure><p id="1c0b7135-d33b-8067-b39a-df171d7c9dd9" class="">
+</p><figure id="1c0b7135-d33b-80f5-8c4d-fd9ae5d602b4" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%205.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%205.png"/></a></figure><p id="1c0b7135-d33b-80ef-b9d3-d5bdb66b119f" class="">
+</p><p id="1c0b7135-d33b-80a9-8759-c7d67cb13420" class="">Key points:</p><ul id="1c0b7135-d33b-8028-a531-cd1999586543" class="bulleted-list"><li style="list-style-type:disc">Access the API KEY menu.</li></ul><ul id="1c0b7135-d33b-8017-883f-c657f8d75622" class="bulleted-list"><li style="list-style-type:disc">View the initial API Key issued at Application creation.</li></ul><ul id="1c0b7135-d33b-8004-8cfa-f4b931adab2b" class="bulleted-list"><li style="list-style-type:disc">When calling APIs, set it in the HTTP request header as:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1c0b7135-d33b-80a8-8c3c-f40b728d5892" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">x-apim-key: &quot;xxxxxxxx&quot;</code></pre><p id="1c0b7135-d33b-8026-9bee-c5d3ea65d162" class="">
+</p><h3 id="1c0b7135-d33b-80bf-9e08-d479b1dedc7c" class="">My Application - API Usage</h3><p id="1c0b7135-d33b-80fb-84ea-c1c6033f58ce" class="">Select the API you want to use, enter the purpose of using the API, and request to use the API. If the request is approved, you will receive an API URL that allows you to call the API.</p><p id="1c0b7135-d33b-80ac-a704-c08a7ce28f9c" class="">
+</p><figure id="1c0b7135-d33b-800d-b067-cd9036c6c7d2" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%206.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%206.png"/></a></figure><p id="1c0b7135-d33b-8014-a061-fa799260c585" class="">
+</p><p id="1c0b7135-d33b-80be-8efb-f51057cbbd16" class="">To use the API, follow the steps below:</p><ul id="1c0b7135-d33b-8064-9c43-f3c1e02158cd" class="bulleted-list"><li style="list-style-type:disc">Go to the “API Usage” screen through the menu.</li></ul><ul id="1c0b7135-d33b-80a3-919f-d2a42f636cc0" class="bulleted-list"><li style="list-style-type:disc">Select which API you want to request to use by clicking the “Add” button.</li></ul><p id="1c0b7135-d33b-8077-97f8-f3f8d6a0e190" class="">
+</p><figure id="1c0b7135-d33b-8053-ad28-ca4f1d0b3168" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%207.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%207.png"/></a></figure><p id="1c0b7135-d33b-8046-9941-f5a0ecb24ca4" class="">
+</p><ul id="1c0b7135-d33b-80bd-8350-e5421658e01a" class="bulleted-list"><li style="list-style-type:disc">In the “Usage Approval Request” pop-up, select the API to use by put a tick on the checkbox. Multiple selections are possible.</li></ul><ul id="1c7b7135-d33b-80d7-bc08-d95a9232431a" class="bulleted-list"><li style="list-style-type:disc">Enter usage purpose/description.</li></ul><ul id="1c7b7135-d33b-8062-a6e2-da6eaa1eab4f" class="bulleted-list"><li style="list-style-type:disc">Click “Confirm” to submit the request (status will be set to “Pending”).</li></ul><p id="1c0b7135-d33b-8097-95b0-c2ae48b315e0" class="">
+</p><figure id="1c0b7135-d33b-80a3-9a98-e8984bfb4f7f" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%208.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%208.png"/></a></figure><p id="1c0b7135-d33b-809e-8de6-ca47057a34b5" class="">
+</p><p id="1c0b7135-d33b-80ba-b8ec-e526f7c06487" class="">Above is the screen after requesting API usage, it shows the “Pending” status for the API usage request. Since the API usage request notification has been delivered to the API manager, it will wait for approval.</p><p id="1c0b7135-d33b-808a-abe5-ff03bda0bbb6" class="">
+</p><figure id="1c0b7135-d33b-8064-a9d1-c3fd3644afbe" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%209.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%209.png"/></a></figure><p id="1c0b7135-d33b-80dc-bcee-c0ad1d792a76" class="">
+</p><p id="1c0b7135-d33b-80b1-84a7-f69505f0fbdb" class="">Once the API manager approves:</p><ul id="1c0b7135-d33b-80e9-974e-f9209563f458" class="bulleted-list"><li style="list-style-type:disc">Status changes to “Approved”.</li></ul><ul id="1c0b7135-d33b-803d-8710-df6f63dbad37" class="bulleted-list"><li style="list-style-type:disc">An API URL that can be used for API calls is issued.</li></ul><ul id="1c0b7135-d33b-8012-bc5d-e1329bea8292" class="bulleted-list"><li style="list-style-type:disc">You can test the API using Swagger.</li></ul><ul id="1c0b7135-d33b-80df-bcc4-e6e314a517cb" class="bulleted-list"><li style="list-style-type:disc">You may cancel the request or delete “Approved” APIs.</li></ul><p id="1c0b7135-d33b-80b5-9ff0-ef3da9ddc56c" class="">
+</p><figure class="block-color-red_background callout" style="white-space:pre-wrap;display:flex" id="1c0b7135-d33b-8055-9de1-cc935b449f7b"><div style="width:100%"><p id="1c0b7135-d33b-8028-a9f2-e5bf66896e9f" class="">If you delete an API, the issued API URL becomes invalid.</p></div></figure><p id="1c0b7135-d33b-80ae-b4d4-e7ab2cad5473" class="">
+</p><h2 id="1c0b7135-d33b-802c-8116-c2232844889c" class="">API Test - Swagger UI</h2><p id="1c0b7135-d33b-8032-9777-d0e190958f4a" class="">API document is provided based on Swagger, and API call tests are performed through Swagger &gt; Try it Out &gt; Execute.</p><p id="1c0b7135-d33b-803f-bdaf-c8dbb63b55ec" class="">
+</p><figure id="1c0b7135-d33b-809a-8d00-c0b2377587a1" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%2010.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%2010.png"/></a></figure><p id="1c0b7135-d33b-8094-99c5-f1bbef6e4372" class="">
+</p><p id="1c0b7135-d33b-80e6-b088-fb726d336c99" class="">Follow the steps below to test APIs:</p><ul id="1c0b7135-d33b-80b1-95cb-d0f4643fb7b3" class="bulleted-list"><li style="list-style-type:disc">Copy your API KEY from the API KEY screen.</li></ul><ul id="1c7b7135-d33b-8009-b244-c2297eb7a7fc" class="bulleted-list"><li style="list-style-type:disc">In Swagger UI, click “Authorize” and enter the API KEY.</li></ul><ul id="1c7b7135-d33b-80ae-af0e-d5d144a04be0" class="bulleted-list"><li style="list-style-type:disc">Select API method and path.</li></ul><ul id="1c7b7135-d33b-80c3-9257-f9180daaee6b" class="bulleted-list"><li style="list-style-type:disc">Click on “Try it Out &gt; Execute”.</li></ul><p id="1c0b7135-d33b-80e7-9ccc-c08ceda7ff71" class="">
+</p><figure class="block-color-red_background callout" style="white-space:pre-wrap;display:flex" id="1c0b7135-d33b-8002-889e-dccc2700f774"><div style="width:100%"><p id="1c0b7135-d33b-8016-8d44-e1fabff4c6a1" class="">API KEY must be applied when calling the API. Otherwise, the API call will fail due to authentication failure.</p></div></figure><p id="1c0b7135-d33b-8046-85aa-e4509f1a161a" class="">
+</p><h2 id="1c0b7135-d33b-80fa-8ce2-c9c59a7a51d7" class="">My Application - Member Management</h2><p id="1c0b7135-d33b-80e7-93f8-c8c7b18bfa55" class="">This function is to add members to the Application and grant App. Administrator permission to the added members. The user who first created the Application is granted App. Administrator permission as default.</p><figure id="1c0b7135-d33b-80fe-9d1b-e9dd3d828082" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%2011.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%2011.png"/></a></figure><p id="1c0b7135-d33b-8014-ae6f-f2a938f4d487" class="">
+</p><p id="1c0b7135-d33b-8058-8587-fdf90bd5736b" class="">Follow the steps below:</p><ul id="1c0b7135-d33b-80b9-a939-edc02c15f1dd" class="bulleted-list"><li style="list-style-type:disc">Go to the “Member Management” menu.</li></ul><ul id="1c7b7135-d33b-8034-85b2-c93b1e78fa20" class="bulleted-list"><li style="list-style-type:disc">The original creator is automatically granted App. Administrator privileges.</li></ul><ul id="1c7b7135-d33b-8052-bf98-dffa0b8ecca1" class="bulleted-list"><li style="list-style-type:disc">Click “Add” to add members.</li></ul><p id="1c0b7135-d33b-803f-a7c0-fa4e959cb1b0" class="">
+</p><figure class="block-color-red_background callout" style="white-space:pre-wrap;display:flex" id="1c0b7135-d33b-80d4-8b58-e4098292c43b"><div style="width:100%"><p id="1c0b7135-d33b-8056-85e9-e44cb3604acb" class="">Only members who have registered on the APIM Developer Portal can be added. Please instruct the users who will be added as members to first register on the APIM Developer Portal.</p></div></figure><p id="1c0b7135-d33b-8041-977c-eea459d95b87" class="">
+</p><figure id="1c0b7135-d33b-800f-a20d-e09a70484042" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%2012.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%2012.png"/></a></figure><p id="1c0b7135-d33b-80fb-8247-e593470deabc" class="">
+</p><p id="1c0b7135-d33b-8099-a6cc-d912e26d2be2" class="">On “Add Member” pop-up, you can follow the steps below:</p><ul id="1c0b7135-d33b-8058-99a1-f344cd0c9a3d" class="bulleted-list"><li style="list-style-type:disc">Select one or more users to add.</li></ul><ul id="1c7b7135-d33b-80ef-81eb-f35e2212e5d9" class="bulleted-list"><li style="list-style-type:disc">Click “Confirm” to complete the process.</li></ul><p id="1c0b7135-d33b-8082-ab73-f8eb8f948f19" class="">
+</p><figure class="block-color-red_background callout" style="white-space:pre-wrap;display:flex" id="1c0b7135-d33b-807a-b7d8-d7d4c505a942"><div style="width:100%"><p id="1c0b7135-d33b-8047-9059-ef374679cb98" class="">Make sure to check the user ID of the member you want to add to avoid adding the wrong user.</p></div></figure><p id="1c0b7135-d33b-80e6-bb7e-c4034fdcd364" class=""><br/></p><figure id="1c0b7135-d33b-80ea-8fe8-c86fd4662c55" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%2013.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%2013.png"/></a></figure><p id="1c0b7135-d33b-8007-93a9-eccaf2078cb4" class="">
+</p><p id="1c0b7135-d33b-8000-b08c-e9a14e2ebc19" class="">After completing adding member, you can see the following components on the screens:</p><ul id="1c0b7135-d33b-80aa-94f6-dd3fea76d5b9" class="bulleted-list"><li style="list-style-type:disc">You can check the added members.</li></ul><ul id="1c0b7135-d33b-803e-b811-e2f8cdcd76b4" class="bulleted-list"><li style="list-style-type:disc">You can grant “App. Administrator” authority to the added members.</li></ul><ul id="1c0b7135-d33b-80d9-8f29-c0eab2c68f36" class="bulleted-list"><li style="list-style-type:disc">You can also exclude the added members from “Member” again.</li></ul><p id="1c0b7135-d33b-80c9-97a1-d541c476665e" class="">
+</p><figure class="block-color-red_background callout" style="white-space:pre-wrap;display:flex" id="1c0b7135-d33b-8022-bf16-e8d1bb2938fb"><div style="width:100%"><p id="1c0b7135-d33b-80ef-a52d-f5d640472960" class="">App. Administrator permissions include:</p><ul id="1c0b7135-d33b-80c9-a0a9-d743f937ebd9" class="bulleted-list"><li style="list-style-type:disc">Modifying app name/icon</li></ul><ul id="1c0b7135-d33b-8002-9c6f-f77fb85d9304" class="bulleted-list"><li style="list-style-type:disc">Deleting the application</li></ul><ul id="1c0b7135-d33b-809d-9ff4-cb28c6875c02" class="bulleted-list"><li style="list-style-type:disc">Reissuing API Keys</li></ul><ul id="1c0b7135-d33b-80cf-b37f-c9c6d342507f" class="bulleted-list"><li style="list-style-type:disc">Requesting or canceling API access</li></ul><ul id="1c0b7135-d33b-80fe-957f-cd0b27c420af" class="bulleted-list"><li style="list-style-type:disc">Managing members and admin roles</li></ul></div></figure><p id="1c0b7135-d33b-8073-8e7e-da4f0287b80d" class="">
+</p><h2 id="1c0b7135-d33b-808b-ae55-dbf6e0f2aed6" class="">My Application - IP/Referer Whitelist</h2><p id="1c0b7135-d33b-809d-b96a-ff122dc4f6f0" class="">API calls are only allowed for IP/Referer Whitelists from limited origins, and other calls are blocked.</p><p id="1c0b7135-d33b-80ee-8327-e61d37ce691b" class="">
+</p><figure id="1c0b7135-d33b-8062-b4fc-c3df3ed844a2" class="image"><a href="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%2014.png"><img style="width:709.9874877929688px" src="APIM%20Developer%20Portal%20User%20Guide%201c0b7135d33b802e916ac9f4260769b8/image%2014.png"/></a></figure><p id="1c0b7135-d33b-80ba-b977-fdaa1baeacdf" class="">
+</p><p id="1c0b7135-d33b-8063-9d13-ea43f9493341" class="">Follow the steps below to whitelist IP/Referer:</p><ul id="1c0b7135-d33b-8063-89ec-ce6d2d458629" class="bulleted-list"><li style="list-style-type:disc">Go to the “IP/Referer Whitelist” menu.</li></ul><ul id="1c7b7135-d33b-8042-bf78-d7adfac8e497" class="bulleted-list"><li style="list-style-type:disc">Click “Add” to insert an entry.</li></ul><ul id="1c7b7135-d33b-8025-bfb1-fbe00d5582b1" class="bulleted-list"><li style="list-style-type:disc">Enter the <strong>IPv4 CIDR</strong> format (e.g., 192.168.0.0/24).</li></ul><ul id="1c7b7135-d33b-8098-a966-c76990cf8873" class="bulleted-list"><li style="list-style-type:disc">Add a description of the entry.</li></ul><ul id="1c7b7135-d33b-80e0-80f7-c03851b7134d" class="bulleted-list"><li style="list-style-type:disc">Check “Active” to enable the rule. Be sure to save changes.</li></ul><ul id="1c7b7135-d33b-80ce-ad25-ecddf78b3e06" class="bulleted-list"><li style="list-style-type:disc">Save the IPv4 CIDR entries. Oly items marked as “Active” will be applied.</li></ul><ul id="1c7b7135-d33b-8095-8796-ed835a39cd7c" class="bulleted-list"><li style="list-style-type:disc">Delete entries as needed. Save after deleting.</li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

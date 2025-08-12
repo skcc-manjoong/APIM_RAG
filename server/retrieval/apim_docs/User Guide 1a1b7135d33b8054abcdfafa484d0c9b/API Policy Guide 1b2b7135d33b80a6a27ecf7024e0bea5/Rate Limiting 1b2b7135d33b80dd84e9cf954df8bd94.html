@@ -1,0 +1,685 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Rate Limiting</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.highlight-default_background {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.highlight-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.block-color-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-default { background-color: rgba(84, 72, 49, 0.08); }
+.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
+.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
+.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
+.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
+.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
+.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
+.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
+.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
+.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1b2b7135-d33b-80dd-84e9-cf954df8bd94" class="page sans"><header><h1 class="page-title"><strong>Rate Limiting</strong></h1><p class="page-description"></p></header><div class="page-body"><h2 id="1b3b7135-d33b-8084-8703-f0f56b12589f" class="">Overview</h2><p id="1b3b7135-d33b-803e-87f2-f36d0b0e3618" class="">The <strong>Rate Limiting</strong> policy is used to control the rate at which requests are sent to an API. This helps prevent abuse, manage traffic loads efficiently, and protect backend services from being overwhelmed by excessive requests. The policy can be configured with different Redis storage options for managing request limits.</p><p id="1b3b7135-d33b-8092-a001-f69d2c4c59cb" class="">By configuring the <strong>Rate Limiting</strong> policy, API providers can effectively manage traffic, ensure fair resource allocation, and protect backend services from excessive load.</p><h2 id="1b3b7135-d33b-80f4-a1cf-cb3a0da4e429" class="">Configuration Details</h2><p id="1b3b7135-d33b-80ca-8b6f-d24012bc9ac0" class="">The following table outlines the key configuration options available for the Rate Limiting policy:</p><table id="1b3b7135-d33b-8058-b445-d1db32385e5f" class="simple-table"><tbody><tr id="1b3b7135-d33b-8055-aa4c-f4cd63554438"><td id=";faU" class="">Field Name</td><td id="Ix=j" class="">Description</td><td id="v?Xc" class="">Example Value</td></tr><tr id="1b3b7135-d33b-80b1-bb1b-f28356c8bdc5"><td id=";faU" class=""><strong>Maximum requests per second</strong></td><td id="Ix=j" class="">Defines the maximum number of requests allowed per second for the API.</td><td id="v?Xc" class="">100</td></tr><tr id="1b3b7135-d33b-80f0-aca3-d9698ceac781"><td id=";faU" class=""><strong>Redis timeout (ms)</strong></td><td id="Ix=j" class="">Sets the timeout value for Redis operations in milliseconds.</td><td id="v?Xc" class="">2000</td></tr><tr id="1b3b7135-d33b-807c-9dfe-fb912efd854e"><td id=";faU" class=""><strong>Redis DB Select</strong></td><td id="Ix=j" class="">Allows selecting a Redis storage type for rate-limiting counters. Options include APIMRedis, CustomRedis, or RedisCluster.</td><td id="v?Xc" class="">APIMRedis</td></tr></tbody></table><p id="1eeb7135-d33b-801c-a276-cf9a548faedb" class="">
+</p><figure id="1eeb7135-d33b-80d1-806e-fafd1cfa07ea" class="image"><a href="Rate%20Limiting%201b2b7135d33b80dd84e9cf954df8bd94/image.png"><img style="width:709.9750366210938px" src="Rate%20Limiting%201b2b7135d33b80dd84e9cf954df8bd94/image.png"/></a><figcaption>Rate-Limiting</figcaption></figure><p id="1bcb7135-d33b-80d2-aa80-ccf0514d47de" class="">
+</p><h3 id="1b3b7135-d33b-80c3-a956-fc316bcc5f8b" class="">Redis Storage Options</h3><p id="1b3b7135-d33b-80e0-a2f7-e564d54d8fc7" class="">Depending on the system&#x27;s requirements, users can choose from the following Redis storage types:</p><ul id="1b3b7135-d33b-8065-92bd-d4c44b811e5d" class="bulleted-list"><li style="list-style-type:disc"><strong>APIMRedis</strong> (Default) - Uses the system’s built-in Redis instance.</li></ul><ul id="1b3b7135-d33b-809e-b9f0-c2b577cab40d" class="bulleted-list"><li style="list-style-type:disc"><strong>CustomRedis</strong> - Allows users to configure their own Redis instance by specifying detailed connection parameters.</li></ul><ul id="1b3b7135-d33b-806a-81d1-c1b28936b45e" class="bulleted-list"><li style="list-style-type:disc"><strong>RedisCluster</strong> - Uses a Redis cluster setup for scalability and fault tolerance.</li></ul><p id="1b3b7135-d33b-8053-aca4-cca65f28d0f7" class=""><strong>APIMRedis</strong> is recommended for standard use cases, while <strong>CustomRedis</strong> and <strong>RedisCluster</strong> should be used for advanced scenarios requiring dedicated Redis configurations.</p><h3 id="1b3b7135-d33b-800b-8bad-c79b9d04bac4" class="">Custom Redis Configuration Fields</h3><p id="1b3b7135-d33b-8069-bfef-ef72a4a648ae" class="">If selecting <strong>CustomRedis</strong>, the following additional fields must be configured:</p><table id="1b3b7135-d33b-805b-ad35-cc6afce6eaf8" class="simple-table"><tbody><tr id="1b3b7135-d33b-805d-b3aa-e57ac699ea34"><td id="x?rj" class="">Field Name</td><td id="oOEK" class="">Description</td><td id="pLhJ" class="">Example Value</td></tr><tr id="1b3b7135-d33b-8001-adb5-f4546bc3cf70"><td id="x?rj" class=""><strong>redisHost</strong></td><td id="oOEK" class="">The hostname of the Redis server.</td><td id="pLhJ" class="">127.0.0.1</td></tr><tr id="1b3b7135-d33b-8054-a759-d0e7a25bb158"><td id="x?rj" class=""><strong>redisPort</strong></td><td id="oOEK" class="">The port used for Redis connections.</td><td id="pLhJ" class="">6379</td></tr><tr id="1b3b7135-d33b-808b-b7ac-ecd0341a8916"><td id="x?rj" class=""><strong>redisPassword</strong></td><td id="oOEK" class="">The password for Redis authentication (if required).</td><td id="pLhJ" class="">password</td></tr><tr id="1b3b7135-d33b-8040-a2e6-fe4c7ae3fe03"><td id="x?rj" class=""><strong>redisDatabase</strong></td><td id="oOEK" class="">Specifies which Redis database to use.</td><td id="pLhJ" class="">1</td></tr><tr id="1b3b7135-d33b-800f-9847-e97fba02d5ad"><td id="x?rj" class=""><strong>redis_pool_size</strong></td><td id="oOEK" class="">Defines the number of Redis connections that can be kept in the pool.</td><td id="pLhJ" class="">1000</td></tr><tr id="1b3b7135-d33b-809b-9eb3-ff6259a9fc1a"><td id="x?rj" class=""><strong>redis_pool_backlog</strong></td><td id="oOEK" class="">Specifies the number of pending requests that can be queued when the pool is full.</td><td id="pLhJ" class="">30</td></tr></tbody></table><p id="1eeb7135-d33b-8016-b5bf-f667e1c0d10e" class="">
+</p><figure id="1eeb7135-d33b-804c-a22d-f979e5434e7e" class="image"><a href="Rate%20Limiting%201b2b7135d33b80dd84e9cf954df8bd94/image%201.png"><img style="width:709.9874877929688px" src="Rate%20Limiting%201b2b7135d33b80dd84e9cf954df8bd94/image%201.png"/></a></figure><p id="1eeb7135-d33b-80a7-b8a8-d9c1a6027735" class="">
+</p><h3 id="1b3b7135-d33b-804d-b123-e1af8501a664" class="">Redis Cluster Configuration Fields</h3><p id="1b3b7135-d33b-800e-8c80-c0d22cda0c2b" class="">If selecting <strong>RedisCluster</strong>, additional fields must be set:</p><table id="1b3b7135-d33b-80b6-a90d-d63a659cc3fc" class="simple-table"><tbody><tr id="1b3b7135-d33b-8009-900d-fee8bab62ab7"><td id="eJoF" class="">Field Name</td><td id=";V;T" class="">Description</td><td id="U_IS" class="">Example Value</td></tr><tr id="1b3b7135-d33b-809f-b8b8-ed0ac806f58a"><td id="eJoF" class=""><strong>redis_cluster_nodes</strong></td><td id=";V;T" class="">The address of the Redis cluster node.</td><td id="U_IS" class="">redis-cluster.apim:6379</td></tr><tr id="1b3b7135-d33b-8063-ad25-c39763a6f46d"><td id="eJoF" class=""><strong>redis_cluster_password</strong></td><td id=";V;T" class="">The password for accessing the Redis cluster (if applicable).</td><td id="U_IS" class="">password</td></tr><tr id="1b3b7135-d33b-8023-a64b-f8f57f4523ea"><td id="eJoF" class=""><strong>redis_cluster_name</strong></td><td id=";V;T" class="">Defines the name of the Redis cluster.</td><td id="U_IS" class="">kong_redis_cluster</td></tr><tr id="1b3b7135-d33b-8008-9382-f5092af721ab"><td id="eJoF" class=""><strong>redis_connect_timeout</strong></td><td id=";V;T" class="">Timeout for establishing Redis connections (in ms).</td><td id="U_IS" class="">1000</td></tr><tr id="1b3b7135-d33b-80a4-ba7f-ddd5ff201059"><td id="eJoF" class=""><strong>redis_read_timeout</strong></td><td id=";V;T" class="">Timeout for reading responses from Redis (in ms).</td><td id="U_IS" class="">1000</td></tr><tr id="1b3b7135-d33b-8002-8e6c-fa19f89d2a09"><td id="eJoF" class=""><strong>redis_send_timeout</strong></td><td id=";V;T" class="">Timeout for sending requests to Redis (in ms).</td><td id="U_IS" class="">1000</td></tr><tr id="1b3b7135-d33b-80f3-88c1-cd68c669ce42"><td id="eJoF" class=""><strong>redis_pool_size</strong></td><td id=";V;T" class="">The maximum number of connections that can be allocated in the Redis pool.</td><td id="U_IS" class="">1000</td></tr><tr id="1b3b7135-d33b-8009-b7d8-e4b22d09de06"><td id="eJoF" class=""><strong>redis_pool_backlog</strong></td><td id=";V;T" class="">The number of queued requests allowed if the pool is full.</td><td id="U_IS" class="">30</td></tr><tr id="1b3b7135-d33b-807c-a1bb-d0e6b1102249"><td id="eJoF" class=""><strong>redis_keepalive_timeout</strong></td><td id=";V;T" class="">Defines how long idle connections should be kept alive (in ms).</td><td id="U_IS" class="">55000</td></tr></tbody></table><p id="1eeb7135-d33b-8098-aff0-d37bded7fd63" class="">
+</p><figure id="1eeb7135-d33b-8090-951c-c7ae0596dcf2" class="image"><a href="Rate%20Limiting%201b2b7135d33b80dd84e9cf954df8bd94/image%202.png"><img style="width:709.984375px" src="Rate%20Limiting%201b2b7135d33b80dd84e9cf954df8bd94/image%202.png"/></a></figure></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

@@ -1,0 +1,729 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Gateway Management</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.highlight-default_background {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.highlight-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.block-color-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-default { background-color: rgba(84, 72, 49, 0.08); }
+.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
+.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
+.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
+.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
+.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
+.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
+.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
+.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
+.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1a1b7135-d33b-804b-8edf-ef4b51306668" class="page sans"><header><h1 class="page-title">Gateway Management</h1><p class="page-description"></p></header><div class="page-body"><h2 id="1acb7135-d33b-8047-b112-f9c852568f35" class="">What is an API Gateway and Gateway Management?</h2><p id="1acb7135-d33b-803f-826b-e88f0ec5e038" class="">An <strong>API Gateway</strong> is the central management point for API traffic. It processes client requests by routing them to the appropriate backend services, transforming requests and responses when necessary, enforcing security policies, monitoring traffic, and ensuring overall API reliability.</p><h2 id="1acb7135-d33b-8024-8546-f37fe1639e07" class="">Key Functions of an API Gateway</h2><ul id="1acb7135-d33b-80d9-90c7-d5bf58a0a0e5" class="bulleted-list"><li style="list-style-type:disc"><strong>Routing:</strong> Directs client requests to the appropriate backend service.</li></ul><ul id="1acb7135-d33b-8095-b27f-c70a4579cb03" class="bulleted-list"><li style="list-style-type:disc"><strong>Transformation:</strong> Converts request or response formats as needed.</li></ul><ul id="1acb7135-d33b-80af-8333-c41b7945d978" class="bulleted-list"><li style="list-style-type:disc"><strong>Authentication &amp; Authorization:</strong> Validates client credentials and grants access permissions.</li></ul><ul id="1acb7135-d33b-80df-a910-f6358ce234d6" class="bulleted-list"><li style="list-style-type:disc"><strong>Traffic Control:</strong> Manages and restricts API traffic to prevent backend overload.</li></ul><ul id="1acb7135-d33b-8070-936d-f0545ad342fb" class="bulleted-list"><li style="list-style-type:disc"><strong>Logging &amp; Monitoring:</strong> Records API usage data for tracking and analysis.</li></ul><ul id="1acb7135-d33b-8000-96ab-c985481416a1" class="bulleted-list"><li style="list-style-type:disc"><strong>Security &amp; Protection:</strong> Blocks malicious attacks and enhances API security.</li></ul><p id="1acb7135-d33b-806f-b304-cbe285b3ffe4" class="">In APIM, the Kong API Gateway is used and provisioned as a Kubernetes (K8s) Deployment.</p><figure id="1c2b7135-d33b-80d2-9172-dc3aec9d6bef" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image.png"><img style="width:709.9874877929688px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image.png"/></a></figure><h2 id="1acb7135-d33b-807d-98c0-fe8288d1c5fa" class="">Gateway Management Menu</h2><p id="1acb7135-d33b-80bf-aea4-e4fab1266b9e" class="">The <strong>Gateway Management</strong> menu in APIM allows users to:</p><ul id="1acb7135-d33b-80e7-a2b5-e2287f789a4b" class="bulleted-list"><li style="list-style-type:disc">View and manage the list of gateways.</li></ul><ul id="1acb7135-d33b-8059-a407-fd2b6fb1cca2" class="bulleted-list"><li style="list-style-type:disc">Monitor the status of individual gateways.</li></ul><ul id="1acb7135-d33b-8003-b272-fbff87630b66" class="bulleted-list"><li style="list-style-type:disc">Query, create, update, and delete gateways per project.</li></ul><ul id="1acb7135-d33b-8071-b9a8-e36bf8c28fc0" class="bulleted-list"><li style="list-style-type:disc">Manage multiple Gateway URLs.</li></ul><ul id="1acb7135-d33b-80eb-8806-e184c46db64c" class="bulleted-list"><li style="list-style-type:disc">Configure node affinity, toleration, and topology settings.</li></ul><ul id="1acb7135-d33b-80e1-8ec2-fc8efe2107f7" class="bulleted-list"><li style="list-style-type:disc">Set up TLS certificates for HTTPS security.</li></ul><ul id="1acb7135-d33b-80cb-b55b-d5ed052c66d0" class="bulleted-list"><li style="list-style-type:disc">Add metadata via annotations/labels (K8s Ingress Annotations/Labels).</li></ul><p id="1acb7135-d33b-806c-8ef2-cc3626910fe8" class="">Each <strong>Gateway URL</strong> represents an endpoint used for API requests.</p><p id="1acb7135-d33b-8053-a997-c14f62041e42" class="">For example, if an API is accessed via <a href="https://api.company.com/path">https://api.company.com/path</a>, then the Gateway URL is <a href="http://api.company.com/">api.company.com</a>.</p><h2 id="1acb7135-d33b-8003-9c83-f1a524d8fec2" class="">Gateway List Screen</h2><p id="1acb7135-d33b-808e-9c0d-d3ca1f08732f" class="">The <strong>Gateway List</strong> screen provides an overview of all gateways within a project, enabling users to:</p><ul id="1acb7135-d33b-809d-bc4d-fe5ba965605f" class="bulleted-list"><li style="list-style-type:disc">View all gateways at a glance.</li></ul><ul id="1acb7135-d33b-80bd-aeb5-df464351c4ba" class="bulleted-list"><li style="list-style-type:disc">Check CPU, Memory, and Replicas configurations.</li></ul><ul id="1acb7135-d33b-808a-844e-f072fae3931e" class="bulleted-list"><li style="list-style-type:disc">Monitor the running or standby status of each gateway.</li></ul><ul id="1acb7135-d33b-8071-8f27-ff467d480d98" class="bulleted-list"><li style="list-style-type:disc">Search for specific gateways or create new ones.</li></ul><p id="1f2b7135-d33b-803b-b136-f88aa1bbd41a" class="">
+</p><figure id="1f2b7135-d33b-80f2-ba29-d7d3db77d438" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%201.png"><img style="width:709.953125px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%201.png"/></a></figure><p id="1f2b7135-d33b-8032-bd01-e2c5fa29c968" class="">
+</p><h2 id="1bdb7135-d33b-8039-9b67-e0ffab4d231b" class="">Creating a Gateway</h2><p id="1acb7135-d33b-800e-8d69-e24a6999059b" class="">To create a new gateway, follow these steps:</p><h3 id="1acb7135-d33b-8045-be22-e017f5468031" class="">Navigate to the Gateway Management menu.</h3><p id="1f2b7135-d33b-80ed-879a-c2c4c2567579" class="">
+</p><figure id="1f2b7135-d33b-809b-bc36-dd73e7db127f" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%202.png"><img style="width:224.9857940673828px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%202.png"/></a></figure><p id="1f2b7135-d33b-8014-b7ae-c0971e781096" class="">
+</p><h3 id="1acb7135-d33b-801a-9378-e598629cc120" class="">Click &quot;Create A Gateway&quot;</h3><p id="1bcb7135-d33b-808d-90f3-dfe4553adcc4" class="">
+</p><figure id="1b4b7135-d33b-8072-9d75-cc2e59f989c2" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%203.png"><img style="width:366.960205078125px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%203.png"/></a><figcaption>Creating a Gateway - “Create A Gateway” Button</figcaption></figure><h3 id="1acb7135-d33b-8093-8f51-d74891dcd8bd" class="">Select a project </h3><p id="1b4b7135-d33b-80d1-b451-ef5d2da6af73" class="">Select a project under which the gateway will be managed. For instruction to create a Project, please refer to <strong>Tenant Manager Console/Create a Project. </strong></p><figure id="1b4b7135-d33b-80f8-9f69-e93418665948" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%204.png"><img style="width:709.9874877929688px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%204.png"/></a><figcaption>Creating a Gateway - Select a project</figcaption></figure><h3 id="1acb7135-d33b-8060-adcf-d2333427fc8b" class="">Configure the gateway settings</h3><p id="1f2b7135-d33b-805b-93f5-f97b2dc49acf" class="">
+</p><figure id="1f2b7135-d33b-80bc-8381-f186b6223dd1" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%205.png"><img style="width:709.984375px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%205.png"/></a><figcaption>Creating a Gateway - Gateway Configuration Screen</figcaption></figure><p id="1bcb7135-d33b-80f2-9b89-eb657a781f0d" class="">
+</p><p id="1acb7135-d33b-80e2-9ceb-e48846703b62" class="">The <strong>Gateway Configuration</strong> section allows detailed customization of a gateway. Below are the key fields:</p><p id="1b4b7135-d33b-8080-8c33-fd899de598a9" class=""><strong>Gateway Type</strong></p><ul id="1b4b7135-d33b-8051-b25c-f04c2a5bf23c" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Defines the API Gateway type.</li></ul><ul id="1b4b7135-d33b-8040-a687-cfcf1a7c106c" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes</li></ul><ul id="1b4b7135-d33b-80d8-ad87-e99ebd23d12e" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Aligns with project’s gateway type. Cannot be changed. </li></ul><p id="1bcb7135-d33b-80d3-9cf5-f4f88179f28d" class="">
+</p><figure id="1b4b7135-d33b-80a5-a5d1-e6d06c0a1434" class="image" style="text-align:left"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%206.png"><img style="width:374.96875px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%206.png"/></a><figcaption>Gateway Type</figcaption></figure><p id="1b4b7135-d33b-807f-8ee6-f0060716f201" class=""><strong>Gateway Name</strong></p><ul id="1b4b7135-d33b-8074-8a2f-e4f7795f32fb" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Unique identifier for the Gateway.</li></ul><ul id="1b4b7135-d33b-800d-a6de-c1dc5eeae827" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes</li></ul><ul id="1b4b7135-d33b-808e-a7a1-d744d83f0096" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Can only use English letters, numbers, <mark class="highlight-red_background">spaces</mark>, hyphen ‘-’, underscores ‘_’, or colon ‘:’. Must start with an English letter. </li></ul><p id="1bcb7135-d33b-809d-bf1b-cd01588f7d95" class="">
+</p><figure id="1b4b7135-d33b-8062-90b4-fdb0a13dc718" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%207.png"><img style="width:709.9375px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%207.png"/></a><figcaption>Gateway Name</figcaption></figure><p id="1b4b7135-d33b-8070-8114-dc7fac1d7eca" class=""><strong>Gateway Instance Name</strong></p><ul id="1b4b7135-d33b-8085-9838-cb9159ce54c2" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Identifies the gateway instance.</li></ul><ul id="1b4b7135-d33b-80ad-a54e-f25a783559fc" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes</li></ul><ul id="1b4b7135-d33b-804e-948b-c35c8819d564" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Automatically populated based on the Gateway Name.</li></ul><p id="1bcb7135-d33b-80a4-ad18-eab0b055bfd3" class="">
+</p><figure id="1b4b7135-d33b-809d-82f8-dddfec8fe570" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%208.png"><img style="width:709.9125366210938px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%208.png"/></a><figcaption>Gateway Instance Name</figcaption></figure><p id="1b4b7135-d33b-80b6-b7d8-c45023b1fb1f" class=""><strong>Gateway Description</strong></p><ul id="1b4b7135-d33b-8006-8910-c8aab91a6430" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Provides additional details about the Gateway.</li></ul><ul id="1b4b7135-d33b-8023-a904-d4db1732805c" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> No</li></ul><ul id="1b4b7135-d33b-8062-9e3b-cfcaceb441a4" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Enter a short description.</li></ul><p id="1bcb7135-d33b-8092-bb78-ea70d8831367" class="">
+</p><figure id="1b4b7135-d33b-807e-9c51-c2c05f47b046" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%209.png"><img style="width:709.9125366210938px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%209.png"/></a><figcaption>Gateway Description</figcaption></figure><p id="1b4b7135-d33b-806d-813d-e316c4773b8c" class=""><strong>Gateway Tags</strong></p><ul id="1b4b7135-d33b-8079-a76f-e5cd2f6cb2cc" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Helps in filtering and searching Gateways.</li></ul><ul id="1b4b7135-d33b-8028-9b86-c411b840e826" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> No</li></ul><ul id="1b4b7135-d33b-809f-bd8a-c2b51c24d98b" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Gateway can have many tags. Input tags separated by pressing Enter<strong>.</strong> </li></ul><p id="1bcb7135-d33b-80ac-9843-de2ecd5a069e" class="">
+</p><figure id="1b4b7135-d33b-803b-8a4e-f4b8f4874075" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2010.png"><img style="width:709.9375px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2010.png"/></a><figcaption>Gateway Tags</figcaption></figure><p id="1b4b7135-d33b-8030-be31-f8137a6edf5a" class=""><strong>Gateway CPU/Memory</strong></p><ul id="1b4b7135-d33b-8068-b193-dd7306e45996" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Allocates resources for the Gateway.</li></ul><ul id="1b4b7135-d33b-80bc-88af-c4d5c01912a8" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes</li></ul><ul id="1b4b7135-d33b-8044-b2fa-c15fbfe8b854" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Adjust using sliders. Value ranges from 500 to 16000 m/mi.</li></ul><p id="1bcb7135-d33b-8033-aa86-e0c1412c2b50" class="">
+</p><figure id="1b4b7135-d33b-80c8-91f9-fc5f94a0901f" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2011.png"><img style="width:709.9500122070312px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2011.png"/></a><figcaption>Gateway CPU/Memory</figcaption></figure><p id="1b4b7135-d33b-806b-8d7a-f8e12ff13315" class=""><strong>DataBase CPU/Memory</strong></p><ul id="1b4b7135-d33b-8099-b818-c1988f15333a" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Allocates resources for the internal database used by the Gateway.</li></ul><ul id="1b4b7135-d33b-80e1-8f54-c49253f1eabc" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes</li></ul><ul id="1b4b7135-d33b-80b7-bac0-c8b00f656cce" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Adjust using sliders. Value ranges from 500 to 16000 m/mi.</li></ul><p id="1bcb7135-d33b-803f-b1fb-d4d0d1a68a94" class="">
+</p><figure id="1b4b7135-d33b-8042-97d8-ca061380ecdd" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2012.png"><img style="width:709.9249877929688px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2012.png"/></a><figcaption>DataBase CPU/Memory</figcaption></figure><p id="1f2b7135-d33b-80e0-bd6b-c6bda048ccef" class=""><strong>Gateway Autoscaling</strong></p><ul id="1f2b7135-d33b-80ba-896c-d0f407048899" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> To auto scale the gateway resource allocation once deployed</li></ul><ul id="1f2b7135-d33b-8036-9831-da34057df206" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes</li></ul><ul id="1f2b7135-d33b-803c-852e-c86930758332" class="bulleted-list"><li style="list-style-type:disc"><strong>Instructions</strong>: Toggle to turn on autoscaling. Once turned on, configure the autoscaling value for Minimum Replicas, Maximum Replicas, CPU usage, Memory usage.</li></ul><figure id="1f2b7135-d33b-8072-8bd0-d10e5f939e07" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2013.png"><img style="width:709.890625px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2013.png"/></a></figure><p id="1b4b7135-d33b-8078-86d0-ce7af8f926ec" class=""><strong>Kong Namespace</strong></p><ul id="1b4b7135-d33b-80a2-a333-e7c9f3b72e0b" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Determines which namespace the Gateway runs in Kubernetes.</li></ul><ul id="1b4b7135-d33b-80d3-a7eb-e217a438e7fa" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes</li></ul><ul id="1b4b7135-d33b-8062-940f-ee1f5ee98656" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Select a Namespace from the dropdown list.</li></ul><figure id="1b4b7135-d33b-80a9-bd27-f30d34514e3f" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2014.png"><img style="width:709.8500366210938px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2014.png"/></a><figcaption>Kong Namespace</figcaption></figure><p id="1b4b7135-d33b-80c5-9115-fd5138b19ce4" class=""><strong>Kong Storage Class</strong></p><ul id="1b4b7135-d33b-80ca-ada1-e75fc6268b93" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Defines how storage is provisioned for the Gateway.</li></ul><ul id="1b4b7135-d33b-8092-9009-dedf2082448f" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes</li></ul><ul id="1b4b7135-d33b-80b8-9a3c-e275e6057fb8" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Select a Kubernetes Storage Class from the dropdown list.</li></ul><p id="1bcb7135-d33b-80bc-b768-e911f95fc4a1" class="">
+</p><figure id="1b4b7135-d33b-80fa-87ff-c9db80fdcbd2" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2015.png"><img style="width:709.9500122070312px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2015.png"/></a><figcaption>Kong Storage Class</figcaption></figure><p id="1b4b7135-d33b-80a8-8ced-ecc8a684ade7" class=""><strong>Storage Capacity</strong></p><ul id="1b4b7135-d33b-80b0-a158-e9562688fed1" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Specifies the storage allocation for the Gateway.</li></ul><ul id="1b4b7135-d33b-809b-8ead-fa9f5b63bb7f" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes</li></ul><ul id="1b4b7135-d33b-802b-bc4b-d9e188522fd4" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Enter a value between 5 and 500 (Gi).</li></ul><p id="1bcb7135-d33b-8012-b5cf-fd307ec36b4f" class="">
+</p><figure id="1b4b7135-d33b-802f-b318-d305a389acdd" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2016.png"><img style="width:709.9500122070312px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2016.png"/></a><figcaption>Storage Capacity</figcaption></figure><p id="1f2b7135-d33b-8067-bc31-e52eae880445" class=""><strong>Kong Proxy Service Type</strong></p><ul id="1f2b7135-d33b-8002-b0f7-c6b3c6c7effa" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Determine the service type for the Kong proxy</li></ul><ul id="1f2b7135-d33b-80e1-a745-d5039af83c59" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes</li></ul><ul id="1f2b7135-d33b-80b8-9ea7-e7540214dc18" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions: </strong>Select one from ClusterIP, NodePort, LoadBalancer. If NodePort or LoadBalancer is selected, requires user to enter Kong Proxy Service NodePort value (between 30000 and 32767)</li></ul><figure id="1f2b7135-d33b-801e-8b16-e84f75824ee3" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2017.png"><img style="width:709.890625px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2017.png"/></a></figure><p id="1f8b7135-d33b-8009-bb03-c241f885c8b3" class=""><strong>Affinity</strong></p><ul id="1f8b7135-d33b-80c9-b1b8-fdc3db033f32" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Affinity is used to control which nodes the gateway pods will be scheduled on, by matching node labels.</li></ul><ul id="1f8b7135-d33b-8049-b4f1-f216e8bbd4d9" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes if toggled ON. </li></ul><ul id="1f8b7135-d33b-80bc-8bcb-f7c1f95ad4f3" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions: </strong>Toggle Affinity to ON to enable it. Then provide the Key and Value for node labels. This translates to a <strong>nodeAffinity</strong> rule in Kubernetes using <strong>requiredDuringSchedulingIgnoredDuringExecution</strong>. For example:</li></ul><figure id="1f8b7135-d33b-8073-9630-d25a9fef7c3a" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2018.png"><img style="width:710px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2018.png"/></a></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1f8b7135-d33b-8062-9b39-c5d6fe01d578"><div style="width:100%"><p id="1f8b7135-d33b-80d3-9bdc-dfdbf7013276" class="">nodeAffinity:<div class="indented"><p id="1f8b7135-d33b-808b-8958-e3d5c53a5cd6" class="">requiredDuringSchedulingIgnoredDuringExecution:<div class="indented"><p id="1f8b7135-d33b-806e-b1f1-edafec3cdcaf" class="">nodeSelectorTerms:</p><p id="1f8b7135-d33b-8095-9aac-da396ff5a95a" class="">- matchExpressions:<div class="indented"><p id="1f8b7135-d33b-8088-9f30-daeea70d8ac1" class="">- key: “affinityKey”<div class="indented"><p id="1f8b7135-d33b-8018-a2fc-e7fb108d9517" class="">operator: In</p><p id="1f8b7135-d33b-80c8-8054-c094550222dc" class="">values:</p><p id="1f8b7135-d33b-80cc-8ab3-d396ef98b2cc" class="">- “affinityValue”</p></div></p></div></p></div></p></div></p></div></figure><p id="1f8b7135-d33b-8013-9115-ef83ad592a12" class=""><strong>Toleration</strong></p><ul id="1f8b7135-d33b-806d-934f-e9e20e66eb86" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Toleration allows gateway pods to be scheduled onto nodes that are marked for specific workloads.</li></ul><ul id="1f8b7135-d33b-80f1-b9bc-d224a2327852" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes if toggled ON. </li></ul><ul id="1f8b7135-d33b-80ad-a177-c02d9a934385" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions: </strong>After toggled ON, input the following: <ul id="1f8b7135-d33b-80c5-99f9-e137e70dcb5d" class="bulleted-list"><li style="list-style-type:circle">Operator: Choose between Equal or Exists. Equal: key and value must match exactly. Exists: only the key needs to exist; value is not required.</li></ul><ul id="1f8b7135-d33b-8026-a4d7-c4d24e313f53" class="bulleted-list"><li style="list-style-type:circle">Key and Value: Provide the taint key and value (value is optional if operator is Exists).</li></ul></li></ul><figure id="1f8b7135-d33b-801d-b99f-f2c9a4ced95c" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2019.png"><img style="width:710px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2019.png"/></a></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1f8b7135-d33b-80cf-ac7d-c927c6a345cf"><div style="width:100%"><p id="1f8b7135-d33b-80ee-97c7-dadf4b5b48ff" class="">tolerations:</p><p id="1f8b7135-d33b-8098-948a-fffaf84f28f9" class="">- effect: NoSchedule<div class="indented"><p id="1f8b7135-d33b-80cf-b470-e45bdce4a7e0" class="">key: &quot;tolerationKey&quot;</p><p id="1f8b7135-d33b-80c9-86e3-da2589d415a0" class="">operator: &quot;Equal&quot; or Exists</p><p id="1f8b7135-d33b-8018-837a-ce258c00758a" class="">value: &quot;tolerationValue&quot;</p></div></p></div></figure><p id="1f8b7135-d33b-80a7-80c6-fab393b9fa5c" class=""><strong>Topology Spread</strong></p><ul id="1f8b7135-d33b-808f-865e-dd356a960d62" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Topology Spread Constraints ensure that gateway pods are distributed evenly across failure domains (like zones or nodes), improving resilience and availability.</li></ul><ul id="1f8b7135-d33b-804a-b9f0-d7412d120820" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes if toggled ON.</li></ul><ul id="1f8b7135-d33b-8083-9016-d6d548623df2" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> After toggled ON, input the following:<ul id="1f8b7135-d33b-800d-845b-de5ebe226257" class="bulleted-list"><li style="list-style-type:circle"><strong>Max Skew</strong>: The maximum allowed difference in the number of gateway pods between topology domains (e.g., if set to 1, the number of pods per zone must not differ by more than 1).</li></ul><ul id="1f8b7135-d33b-802c-8684-d5ed964ba091" class="bulleted-list"><li style="list-style-type:circle"><strong>When Unsatisfiable</strong>: Select one of the following: <strong>ScheduleAnyway</strong> (default): still allows scheduling even if spread constraint can’t be fully satisfied; <strong>DoNotSchedule</strong>: blocks pod scheduling if constraint fails; <strong>DoNotScheduleIfNotSatisfied</strong>: newer strategy that restricts scheduling only if the spread condition is unsatisfied.</li></ul></li></ul><figure id="1f8b7135-d33b-807f-ad24-c1c09c967ba1" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2020.png"><img style="width:710px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2020.png"/></a></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1f8b7135-d33b-8077-967b-d67c24d3f4e5"><div style="width:100%"><p id="1f8b7135-d33b-80ba-bb10-dceeffdaae7a" class="">Example Kubernetes rule this maps to:</p><p id="1f8b7135-d33b-80ac-bee5-eb674cc3a187" class="">topologySpreadConstraints:</p><p id="1f8b7135-d33b-803a-bd68-dc1434e68c88" class="">- maxSkew: 1<div class="indented"><p id="1f8b7135-d33b-8007-874c-c81bbd3ee871" class="">topologyKey: <a href="http://topology.kubernetes.io/zone">topology.kubernetes.io/zone</a></p><p id="1f8b7135-d33b-80c5-bfb2-c5951cf0a792" class="">whenUnsatisfiable: ScheduleAnyway</p><p id="1f8b7135-d33b-801a-bc03-dfae88ab45de" class="">labelSelector:<div class="indented"><p id="1f8b7135-d33b-80f1-9182-d0b6fb566de3" class="">matchLabels:</p><p id="1f8b7135-d33b-801b-9e50-df7203d323e3" class=""><a href="http://app.kubernetes.io/instance:">app.kubernetes.io/instance:</a> test-kong</p></div></p></div></p></div></figure><p id="1b4b7135-d33b-804d-946f-cf5af98f7e12" class=""><strong>Inner Redis</strong></p><ul id="1b4b7135-d33b-80d8-83f2-cba187245aea" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose:</strong> Allows internal Redis instance for caching.</li></ul><ul id="1b4b7135-d33b-80da-be8c-dfc58710542b" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes if toggled</li></ul><ul id="1b4b7135-d33b-800d-9ca3-dd9d1dc4b92d" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Toggle ON/OFF. If ON, the default Redis is installed when the Gateway is deployed. If OFF, user will be informed that APIM Redis does not support policies that use Redis (rate-limiting, jwt blacklist, OIDC). User needs to confirm on prompt to continue switching to OFF.</li></ul><p id="1bcb7135-d33b-8011-94bb-c8c4fe9bdb3d" class="">
+</p><figure id="1b4b7135-d33b-8011-8feb-f8e9bac5bf7c" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2021.png"><img style="width:709.9874877929688px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2021.png"/></a><figcaption>Inner Redis</figcaption></figure><p id="1f8b7135-d33b-80af-b8fc-f88cccc75955" class=""><strong>Fluent Bit</strong></p><ul id="1f8b7135-d33b-8082-8cf7-e43ee1a54c54" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose</strong>: Fluent Bit is a lightweight log processor that collects, filters, and forwards logs from the gateway container.</li></ul><ul id="1f8b7135-d33b-80b3-82fc-d0395d74e281" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory: </strong>No</li></ul><ul id="1f8b7135-d33b-801b-95be-fe5f68103e98" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions: </strong>Once enabled, you can additionally select one of the following options for destination:<ul id="1f8b7135-d33b-80db-adfc-ca342f40a897" class="bulleted-list"><li style="list-style-type:circle"><strong>OpenTelemetry</strong>: Forwards logs and telemetry data using the OpenTelemetry agent.</li></ul><ul id="1f8b7135-d33b-80c2-9ed4-e0bd8aa4c574" class="bulleted-list"><li style="list-style-type:circle"><strong>Elasticsearch</strong>: Forwards logs to an Elasticsearch cluster for indexing and search.</li></ul></li></ul><figure id="1f8b7135-d33b-80a2-a229-e75f89b15ebc" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2022.png"><img style="width:709.8250122070312px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2022.png"/></a></figure><p id="1f8b7135-d33b-80d1-bfe7-c466c8b02047" class="">Note: Only one of these options can be active at a time. If you enable one while the other is already active, a confirmation prompt will appear to disable the currently active one.</p><figure id="1f8b7135-d33b-8065-a093-de7321606e61" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2023.png"><img style="width:709.9625244140625px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2023.png"/></a></figure><p id="1f8b7135-d33b-809d-b74c-ecaf50863822" class=""><strong>Kong Configuration</strong></p><ul id="1f8b7135-d33b-800d-8223-d60fe89301ce" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose</strong>: This field allows you to apply advanced, low-level configurations directly to the Kong Gateway runtime by providing raw configuration in JSON format, in case of needing fine-tuned performance or behavior.</li></ul><ul id="1f8b7135-d33b-807f-833a-cd6bea458fab" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory</strong>: Yes if toggled</li></ul><ul id="1f8b7135-d33b-80cf-b949-cdd13fd9e588" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions</strong>: After toggled, a JSON editor will appear where you can enter custom Kong runtime settings.</li></ul><figure id="1f8b7135-d33b-80c2-9e0a-d06fc8afc34f" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2024.png"><img style="width:710px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2024.png"/></a></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1f8b7135-d33b-8024-a179-f5738222639f"><div style="width:100%"><p id="1f8b7135-d33b-8041-8013-ff7e55987a6d" class="">Example:</p><p id="1f8b7135-d33b-80cd-978c-f5af26cad54d" class="">&quot;upstream_keepalive_idle_timeout&quot;: 60,</p><p id="1f8b7135-d33b-8027-ac61-cdc5e565cd5d" class="">&quot;upstream_keepalive_max_requests&quot;: 100000,</p><p id="1f8b7135-d33b-8010-8502-dde8e8c337fc" class="">&quot;nginx_http_keepalive_requests&quot;: 100000,</p><p id="1f8b7135-d33b-80dc-a755-c93a7f90b664" class="">&quot;upstream_keepalive_pool_size&quot;: 1024</p><p id="1f8b7135-d33b-80f6-9624-f0420d7563cc" class="">Note: Misconfiguration may lead to unstable gateway behavior. Consult Kong documentation or your platform administrator before applying changes.</p></div></figure><p id="1b4b7135-d33b-80a5-b738-dd72f04e2945" class="">Gateway Configurations are summarized in the table below:</p><table id="1a5b7135-d33b-8006-9d2e-f0fedbd5a329" class="simple-table"><tbody><tr id="1a5b7135-d33b-8008-bf01-d9ee8ca8d5eb"><td id="Az_{" class=""><strong>Field Name</strong></td><td id="zoea" class=""><strong>Purpose</strong></td><td id="ztqk" class="" style="width:201.5625px"><strong>Input Notes</strong></td><td id="aLMQ" class="" style="width:113.078125px"><strong>Mandatory</strong></td></tr><tr id="1a5b7135-d33b-80ee-9d4a-fba681dd902c"><td id="Az_{" class="">Gateway Type</td><td id="zoea" class="">Defines the API Gateway type.</td><td id="ztqk" class="" style="width:201.5625px">Aligns with project’s gateway type. Cannot be changed. </td><td id="aLMQ" class="" style="width:113.078125px">Yes. Default is kong.</td></tr><tr id="1a5b7135-d33b-8058-b9d9-ceb66cc83d42"><td id="Az_{" class="">Gateway Name</td><td id="zoea" class="">Unique identifier for the Gateway.</td><td id="ztqk" class="" style="width:201.5625px">Can only use English letters, numbers, hyphen ‘-’, underscores ‘_’, or double commas ‘:’. Must start with an English letter.</td><td id="aLMQ" class="" style="width:113.078125px">Yes</td></tr><tr id="1a5b7135-d33b-80cb-bcd6-fb39091fb8de"><td id="Az_{" class="">Gateway Instance Name</td><td id="zoea" class="">Identifies the gateway instance.</td><td id="ztqk" class="" style="width:201.5625px">Automatically populated based on the Gateway Name. </td><td id="aLMQ" class="" style="width:113.078125px">Yes</td></tr><tr id="1a5b7135-d33b-8095-818d-e3be94d0975e"><td id="Az_{" class="">Gateway Description</td><td id="zoea" class="">Provides additional details about the Gateway.</td><td id="ztqk" class="" style="width:201.5625px">Enter a short description.</td><td id="aLMQ" class="" style="width:113.078125px">No</td></tr><tr id="1a5b7135-d33b-80dc-8d6f-c658bee2ce06"><td id="Az_{" class="">Gateway Tags</td><td id="zoea" class="">Helps in filtering and searching Gateways.</td><td id="ztqk" class="" style="width:201.5625px">Gateway can have many tags. Input tags separated by pressing Enter<strong>.</strong> </td><td id="aLMQ" class="" style="width:113.078125px">No</td></tr><tr id="1a5b7135-d33b-8091-8155-f027135c1507"><td id="Az_{" class="">Gateway CPU/Memory</td><td id="zoea" class="">Allocates resources for the Gateway.</td><td id="ztqk" class="" style="width:201.5625px">Adjust using sliders. Value ranges from 500 to 16000 m/mi.</td><td id="aLMQ" class="" style="width:113.078125px">Yes</td></tr><tr id="1a5b7135-d33b-8039-92fb-f1d60ace326d"><td id="Az_{" class="">DataBase CPU/Memory</td><td id="zoea" class="">Allocates resources for the internal database used by the Gateway.</td><td id="ztqk" class="" style="width:201.5625px">Adjust using sliders. Value ranges from 500 to 16000 m/mi.</td><td id="aLMQ" class="" style="width:113.078125px">Yes</td></tr><tr id="1f8b7135-d33b-8054-87b9-d005a85af43c"><td id="Az_{" class="">Gateway Autoscaling</td><td id="zoea" class="">Enables automatic pod resource scaling after deployed.</td><td id="ztqk" class="" style="width:201.5625px">Toggle ON/OFF. If ON, configure: Min Replicas, Max Replicas, CPU threshold (%), Memory threshold (%)</td><td id="aLMQ" class="" style="width:113.078125px">Yes if toggled</td></tr><tr id="1a5b7135-d33b-8098-8de0-ff3f7d63769b"><td id="Az_{" class="">Kong Namespace</td><td id="zoea" class="">Determines where the Gateway runs in Kubernetes.</td><td id="ztqk" class="" style="width:201.5625px">Select a Namespace from the dropdown list.</td><td id="aLMQ" class="" style="width:113.078125px">Yes</td></tr><tr id="1a5b7135-d33b-80d8-9d8f-d2aafc87047d"><td id="Az_{" class="">Kong Storage Class</td><td id="zoea" class="">Defines how storage is provisioned for the Gateway.</td><td id="ztqk" class="" style="width:201.5625px">Select a Storage Class from the dropdown list.</td><td id="aLMQ" class="" style="width:113.078125px">Yes</td></tr><tr id="1a5b7135-d33b-80c5-a0ad-cb2c669de0a1"><td id="Az_{" class="">Storage Capacity</td><td id="zoea" class="">Specifies the storage allocation for the Gateway.</td><td id="ztqk" class="" style="width:201.5625px">Enter a value between 5 and 500 (Gi).</td><td id="aLMQ" class="" style="width:113.078125px">Yes</td></tr><tr id="1f8b7135-d33b-8021-b16a-cb25a9462dc6"><td id="Az_{" class="">Kong Proxy Service Type</td><td id="zoea" class="">Defines the service type of Kong proxy for external access</td><td id="ztqk" class="" style="width:201.5625px">Choose from: ClusterIP, NodePort, or LoadBalancer. Default is ClusterIP.</td><td id="aLMQ" class="" style="width:113.078125px">Yes</td></tr><tr id="1f8b7135-d33b-80d7-afc5-d32653c94fc8"><td id="Az_{" class="">Affinity</td><td id="zoea" class="">Schedules gateway pods to nodes with matching labels.</td><td id="ztqk" class="" style="width:201.5625px">Toggle ON/OFF. If ON, input Key and Value for node label</td><td id="aLMQ" class="" style="width:113.078125px">Yes if toggled</td></tr><tr id="1f8b7135-d33b-80db-bbee-c0ca74ceb0a7"><td id="Az_{" class="">Toleration</td><td id="zoea" class="">Allows gateway pods to run on tainted nodes.</td><td id="ztqk" class="" style="width:201.5625px">Toggle ON/OFF. If ON, select operator: Equal or Exists. Input Key, optional Value.</td><td id="aLMQ" class="" style="width:113.078125px">Yes if toggled</td></tr><tr id="1f8b7135-d33b-80da-b77a-d04c3909b3b1"><td id="Az_{" class="">Topology Spread</td><td id="zoea" class="">Distributes pods evenly across zones to enhance availability.</td><td id="ztqk" class="" style="width:201.5625px">Toggle ON/OFF. If ON, input: Max Skew (e.g., 1). Select option for When Unsatisfiable: choose from ScheduleAnyway, DoNotSchedule, DoNotScheduleIfNotSatisfied</td><td id="aLMQ" class="" style="width:113.078125px">Yes if toggled</td></tr><tr id="1a5b7135-d33b-805a-8a36-dc7299a5ab9f"><td id="Az_{" class="">Inner Redis</td><td id="zoea" class="">Allows internal Redis instance for caching.</td><td id="ztqk" class="" style="width:201.5625px">Toggle ON/OFF. If ON, the default Redis is installed when the Gateway is deployed.</td><td id="aLMQ" class="" style="width:113.078125px">Yes if toggled</td></tr><tr id="1f8b7135-d33b-8032-b54c-cf8888dce2ab"><td id="Az_{" class="">Fluent Bit</td><td id="zoea" class="">Enables OpenTelemetry agent for metric collection or Elasticsearch for log collection.</td><td id="ztqk" class="" style="width:201.5625px">Can only choose between OpenTelemetry or Elasticsearch</td><td id="aLMQ" class="" style="width:113.078125px">Yes if toggled</td></tr><tr id="1f8b7135-d33b-8024-98bd-c8845388743d"><td id="Az_{" class="">Kong Configuration</td><td id="zoea" class="">Enables manual override of Kong configurations.</td><td id="ztqk" class="" style="width:201.5625px">Toggle ON to enable editor and enter valid JSON.</td><td id="aLMQ" class="" style="width:113.078125px">Yes if toggled</td></tr></tbody></table><h3 id="1b4b7135-d33b-80b1-bf89-f887627f0d8d" class="">Complete creation</h3><p id="1b4b7135-d33b-8040-a817-d875b212614d" class="">Click on CREATE A GATEWAY button to complete the creation and store the gateway configuration.</p><p id="1bcb7135-d33b-80e0-8392-f601120d7522" class="">
+</p><figure id="1b4b7135-d33b-80af-ae23-d216aa31fea3" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2025.png"><img style="width:272.95452880859375px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2025.png"/></a><figcaption>CREATE A GATEWAY button</figcaption></figure><h2 id="1acb7135-d33b-8060-8e69-db9f29baddfc" class="">Adding &amp; Managing Gateway URLs</h2><p id="1acb7135-d33b-80b8-ad36-d29767f5d1f0" class="">The Gateway URL Configuration allows users to define one or multiple public-facing domains for the API Gateway. It also supports TLS certificates for HTTPS, a Global BasePath for API routing, and additional metadata through annotations. Each gateway can have multiple Gateway URLs, defining how the API Gateway is accessed. </p><p id="1acb7135-d33b-80f9-b875-fa04edefe451" class="">To start adding Gateway URLs, user can click on created Gateway listed in Gateway Management Screen to enter the Gateway Modification Screen. </p><figure id="1b4b7135-d33b-8017-a7af-cb54b29b8d63" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/80011679-b1d9-4847-a36b-d02923e6af65.png"><img style="width:665.3061224489795px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/80011679-b1d9-4847-a36b-d02923e6af65.png"/></a><figcaption>Click on created Gateway</figcaption></figure><p id="1f8b7135-d33b-804e-8698-e781f874a5b3" class="">From there, user can find the Gateway URL Configuration section underneath.</p><figure id="1f2b7135-d33b-809f-9ef7-ce58cef0395a" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2026.png"><img style="width:709.984375px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2026.png"/></a><figcaption>Scroll down on configuration screen to find the Gateway URL configuration section</figcaption></figure><p id="1b4b7135-d33b-80ae-ab13-ecca59e9bafd" class="">Below are the steps to create Gateway URLs:</p><h3 id="1b4b7135-d33b-80c6-a3e1-c79357a78dfe" class="">Create a URL </h3><p id="1b4b7135-d33b-80a2-8730-d408d3e8942b" class="">Click ADDITION to create multiple URLs. New block to configure a URL will be created underneath.</p><p id="1bcb7135-d33b-80fe-a0bc-e945d34fd02c" class="">
+</p><figure id="1b4b7135-d33b-80bc-9c08-f176f1234195" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2027.png"><img style="width:291.9317932128906px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2027.png"/></a><figcaption>Gateway URL - Create URL</figcaption></figure><h3 id="1b4b7135-d33b-80b2-b0ef-e957b5225e40" class="">Configure Gateway URL</h3><p id="1b4b7135-d33b-8063-86d7-eaee4ebf8ed8" class="">Below are the key fields to configure for a Gateway URL:</p><p id="1b4b7135-d33b-8036-87f9-e904efa28795" class=""><strong>Gateway URL</strong></p><ul id="1b4b7135-d33b-80a5-86e3-ec64637cf51a" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose: </strong>Defines the public domain(s) where the Gateway is accessible. If user changes the Gateway URL that is being used, the existing API may not be called properly.</li></ul><ul id="1b4b7135-d33b-80d9-a0c7-ca0eff1f7ae0" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes</li></ul><ul id="1b4b7135-d33b-8079-9062-cbe2965ba943" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Enter a valid domain.</li></ul><ul id="1b4b7135-d33b-803e-947d-dc1b3eca049c" class="bulleted-list"><li style="list-style-type:disc"><strong>Example:</strong></li></ul><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1b4b7135-d33b-80a2-9334-c9b500e51850"><div style="width:100%"><p id="1b4b7135-d33b-800b-8171-de26b71effa5" class="">your.domain.com</p><p id="1b4b7135-d33b-8074-8352-c456d9f25562" class="">your.domain.com:8443 </p></div></figure><figure id="1b4b7135-d33b-8028-aff2-cb665c234946" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2028.png"><img style="width:709.9874877929688px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2028.png"/></a><figcaption>Gateway URL</figcaption></figure><p id="1b4b7135-d33b-8002-a11e-dbb4e7d89204" class=""><strong>Global BasePath</strong></p><ul id="1b4b7135-d33b-807d-bca6-f807649e0b7d" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose: </strong>Sets a common prefix for all APIs under this Gateway. If defined, all APIs under this Gateway will inherit this prefix. If Basepath is changed while being used, existing APIs may not be called properly.</li></ul><ul id="1b4b7135-d33b-80f0-af14-cf11f1ebc121" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Yes</li></ul><ul id="1b4b7135-d33b-80a6-8b22-f20c70b05c6c" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Enter a base path. If left /, the root is used. </li></ul><ul id="1b4b7135-d33b-80c8-b67b-d06d44773746" class="bulleted-list"><li style="list-style-type:disc"><strong>Example:</strong></li></ul><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1b4b7135-d33b-8004-8eca-f18e3b1ead88"><div style="width:100%"><p id="1b4b7135-d33b-8002-a4d0-f81f10533840" class="">/<br/>/apim</p></div></figure><figure id="1b4b7135-d33b-80e6-976d-f5a0ee588db9" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2029.png"><img style="width:709.9625244140625px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2029.png"/></a><figcaption>Global BasePath</figcaption></figure><p id="1b4b7135-d33b-80c9-a57b-fbbfe7c3f91f" class=""><strong>HTTPS Only and TLS Certificates</strong></p><ul id="1b4b7135-d33b-8080-bd3e-d9946d568c50" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose: </strong>including tls.crt to enable HTTPS communication by providing the SSL certificate and tls.key file to authenticate the TLS certificate. If a network policy is applied that only allows HTTPS when communicating with the Gateway URL, user needs to toggle on HTTPS onl. If user is registering TLS Certificates with K8s Secret and processing TLS authentication through K8s Ingress, user must enter the tls.crt/tls.key value.</li></ul><ul id="1b4b7135-d33b-8032-8873-cca9cc0818d9" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> Depending</li></ul><ul id="1b4b7135-d33b-80a3-bd74-cfd557e9a6d9" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Paste the certificate content in PEM format. Required for secure HTTPS connections.</li></ul><p id="1f2b7135-d33b-808e-a6d9-dde72a6fcce9" class="">
+</p><figure id="1f2b7135-d33b-80d6-9b7f-e3a67a7ec592" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2030.png"><img style="width:709.984375px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2030.png"/></a></figure><p id="1f8b7135-d33b-80e1-bb7a-dcf09d3e8075" class=""><strong>Ingress Class</strong></p><ul id="1f8b7135-d33b-8029-92b6-d9be67540686" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose</strong>: Specifies which ingress controller to use for this Gateway URL configuration.</li></ul><ul id="1f8b7135-d33b-804f-b001-e34c5dfce216" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory</strong>: Yes</li></ul><ul id="1f8b7135-d33b-80ac-8549-dd9a519b7de0" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions</strong>: Select an ingress class from the dropdown. Available options may include:<ul id="1f8b7135-d33b-8027-b0ec-ef739ef6e85f" class="bulleted-list"><li style="list-style-type:circle">nginx (default)</li></ul><ul id="1f8b7135-d33b-80dc-aa42-d576cf404477" class="bulleted-list"><li style="list-style-type:circle">alb</li></ul><ul id="1f8b7135-d33b-803a-a113-e23532be81a5" class="bulleted-list"><li style="list-style-type:circle">appsec-kong</li></ul></li></ul><p id="1f8b7135-d33b-803f-bdfb-ecca35a2e01b" class="">This setting routes the Gateway URL through the selected ingress controller.</p><figure id="1f8b7135-d33b-8076-a91e-f927eaf2e15d" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2031.png"><img style="width:710px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2031.png"/></a></figure><p id="1f8b7135-d33b-8073-a9e0-ceb5f42ddba0" class=""><strong>Labels</strong></p><ul id="1f8b7135-d33b-8086-a06f-fb42ee14da90" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose</strong>: Adds Kubernetes labels to the ingress resource created for this Gateway URL. Useful for classification or automation purposes.</li></ul><ul id="1f8b7135-d33b-8031-a50b-f900c3a8f59b" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory</strong>: No</li></ul><ul id="1f8b7135-d33b-80a3-9b73-fffbf31fa380" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions</strong>: Input one or more Key-Value pairs. These labels will be applied to the created ingress object. Use the plus button to add multiple entries or the cross button to remove added entries.</li></ul><figure id="1f8b7135-d33b-8027-8b44-d7a6849c1aa4" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2032.png"><img style="width:709.8250122070312px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2032.png"/></a></figure><p id="1f2b7135-d33b-8074-8fb8-eae95d5221c8" class=""><strong>Annotations</strong></p><ul id="1b4b7135-d33b-80bf-a347-c52956bfef8c" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose: </strong>Adds Kubernetes ingress annotations for advanced configuration, such as custom timeouts, header manipulation, or controller-specific options.</li></ul><ul id="1b4b7135-d33b-80d6-b6c5-e6244db572e7" class="bulleted-list"><li style="list-style-type:disc"><strong>Mandatory:</strong> No</li></ul><ul id="1b4b7135-d33b-808f-825f-ed2ff3423e37" class="bulleted-list"><li style="list-style-type:disc"><strong>Input Instructions:</strong> Can enter annotations using two modes:</li></ul><p id="1f8b7135-d33b-8024-8594-c9eb32187d3c" class="">Form Mode (JSON toggle OFF): Input Key and Value manually for each annotation. Some fields may be locked from editing depending on system constraints. Can add multiple annotations by clicking on the plus button, or removed added annotations by clicking on the cross button. Must keep at least one annotation.</p><figure id="1f8b7135-d33b-80fd-97e3-dbf6315591c2" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2033.png"><img style="width:710px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2033.png"/></a></figure><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f8b7135-d33b-80ea-a699-d28abc95be76" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">Example:
+    &quot;key&quot;: &quot;nginx.ingress.kubernetes.io/proxy-connect-timeout&quot;,
+    &quot;value&quot;: &quot;300&quot;</code></pre><p id="1f8b7135-d33b-80e2-86ff-c954e33763af" class="">JSON Mode (JSON toggle ON): Enter annotations as an array of key-value JSON objects in the editor.</p><figure id="1f8b7135-d33b-80b1-833c-efa0e9833977" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2034.png"><img style="width:710px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2034.png"/></a></figure><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1f8b7135-d33b-804b-a49f-f1c9cb443778" class="code code-wrap"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">Example:
+[
+  {
+    &quot;key&quot;: &quot;nginx.ingress.kubernetes.io/configuration-snippet&quot;,
+    &quot;value&quot;: &quot;more_clear_headers \&quot;server\&quot;;more_clear_headers \&quot;via\&quot;;&quot;
+  },
+  {
+    &quot;key&quot;: &quot;nginx.ingress.kubernetes.io/proxy-connect-timeout&quot;,
+    &quot;value&quot;: &quot;300&quot;
+  },
+  {
+    &quot;key&quot;: &quot;nginx.ingress.kubernetes.io/proxy-read-timeout&quot;,
+    &quot;value&quot;: &quot;300&quot;
+  },
+  {
+    &quot;key&quot;: &quot;nginx.ingress.kubernetes.io/proxy-send-timeout&quot;,
+    &quot;value&quot;: &quot;300&quot;
+  }
+]</code></pre><p id="1bbb7135-d33b-8084-a68f-da9313a28ca1" class="">Gateway URL Configurations are summarized in the table below:</p><p id="1bcb7135-d33b-8008-bd0e-f5c572246396" class="">
+</p><table id="1a8b7135-d33b-80a8-923a-ca371eaef8d9" class="simple-table"><tbody><tr id="1a8b7135-d33b-80b6-a033-cc049f1fc17a"><td id="yh;|" class=""><strong>Field Name</strong></td><td id="fo=z" class=""><strong>Purpose</strong></td><td id="^eHz" class=""><strong>Input Notes</strong></td></tr><tr id="1a8b7135-d33b-802a-9206-eb8d7a72170a"><td id="yh;|" class="">Gateway URL</td><td id="fo=z" class="">Defines the public domain(s) where the Gateway is accessible. If user changes the Gateway URL that is being used, the existing API may not be called properly.</td><td id="^eHz" class="">Enter a valid domain (e.g., api.example.com). Required field. </td></tr><tr id="1a8b7135-d33b-80bc-a63b-fc23c479f277"><td id="yh;|" class="">Global BasePath</td><td id="fo=z" class="">Sets a common prefix for all APIs under this Gateway. If defined, all APIs under this Gateway will inherit this prefix.</td><td id="^eHz" class="">Enter a base path (e.g., /api). If left /, the root is used. </td></tr><tr id="1a8b7135-d33b-8063-96a7-c37ae07956b9"><td id="yh;|" class="">TLS Certificates (tls.crt)</td><td id="fo=z" class="">Enables HTTPS communication by providing the SSL certificate.</td><td id="^eHz" class="">Paste the certificate content in PEM format. Required for secure HTTPS connections.<br/>If user is registering TLS Certificates with K8s Secret and processing TLS authentication through K8s Ingress, user must enter the tls.crt/tls.key value.</td></tr><tr id="1a8b7135-d33b-8029-abd8-d29de9923d3c"><td id="yh;|" class="">TLS Private Key (tls.key)</td><td id="fo=z" class="">Used to authenticate the TLS certificate.</td><td id="^eHz" class="">Paste the private key content in PEM format. Must match the certificate provided.</td></tr><tr id="1f8b7135-d33b-80f4-a64a-d4217ee7cb1d"><td id="yh;|" class="">Ingress Class</td><td id="fo=z" class="">Specifies which ingress controller to use for this Gateway URL configuration.</td><td id="^eHz" class="">Select an ingress class from nginx (default), alb or appsec-kong</td></tr><tr id="1f8b7135-d33b-809a-9aef-faa1605fe34a"><td id="yh;|" class="">Labels</td><td id="fo=z" class="">Adds Kubernetes labels to the ingress resource created for this Gateway URL.</td><td id="^eHz" class="">Input one or more Key-Value pairs. Can add or remove pairs.</td></tr><tr id="1a8b7135-d33b-8092-9410-da269cd22449"><td id="yh;|" class="">Annotations</td><td id="fo=z" class="">Adds Kubernetes ingress annotations for advanced configuration.</td><td id="^eHz" class="">Can enter multiple annotations using two modes: Key-Value pairs (JSON mode OFF) or JSON script (JSON mode ON).</td></tr></tbody></table><p id="1acb7135-d33b-80e0-8212-d606e4d14977" class=""><strong>Example:</strong></p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1b4b7135-d33b-80fb-91b1-fca5f0f3591f"><div style="width:100%"><p id="1b4b7135-d33b-80ec-8694-cb6ec54e87ca" class="">If two Gateway URLs (api.example.com and service.example.com) are configured with a BasePath /api, then:</p><p id="1b4b7135-d33b-8065-a123-c0293e4153ae" class="">https://api.example.com/api/{API-Path}</p><p id="1b4b7135-d33b-8079-b394-d4bdc7c09a9d" class="">https://service.example.com/api/{API-Path}</p><p id="1b4b7135-d33b-805e-baa9-e8ea626c8ed9" class="">would be the valid API endpoints.</p></div></figure><h2 id="1a5b7135-d33b-80a8-9887-eb4fd6d83fa4" class="">Modifying a Gateway</h2><p id="1acb7135-d33b-8068-b012-c530fef3394e" class="">Users can modify existing gateways by:</p><ul id="1acb7135-d33b-807e-aa92-db1a96c57001" class="bulleted-list"><li style="list-style-type:disc">Selecting a gateway from the list.</li></ul><figure id="1f2b7135-d33b-80fd-8a65-e57bf02cfb2f" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/80011679-b1d9-4847-a36b-d02923e6af65.png"><img style="width:665.3061224489795px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/80011679-b1d9-4847-a36b-d02923e6af65.png"/></a><figcaption>Click on created Gateway</figcaption></figure><ul id="1acb7135-d33b-8059-bff4-cf92986e9558" class="bulleted-list"><li style="list-style-type:disc">Editing configurable fields and input (Gateway Description, Gateway Tags, Gateway CPU/Memory, Database CPU/Memory, toggles and value,…).</li></ul><p id="1f2b7135-d33b-80ad-8bfb-c2628c318e20" class="">
+</p><figure id="1f2b7135-d33b-8045-a3c7-c4bad25347c3" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2035.png"><img style="width:709.984375px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2035.png"/></a></figure><p id="1bcb7135-d33b-8062-ae38-cf1eb47dabb1" class="">
+</p><ul id="1d2b7135-d33b-802b-a00f-d46b1f3812d7" class="bulleted-list"><li style="list-style-type:disc">Updating <strong>Gateway URLs</strong> as needed.</li></ul><ul id="1acb7135-d33b-8074-b557-f340ecc2cc95" class="bulleted-list"><li style="list-style-type:disc">Saving changes to apply updates.</li></ul><p id="1b4b7135-d33b-80ef-99d2-d4e667e0d414" class="">If user makes changes to Gateway URLs, remember to click on SAVE GATEWAY URL button before clicking on SAVING A GATEWAY button.</p><p id="1f2b7135-d33b-80d4-a109-e6dc3ed5d259" class="">
+</p><figure id="1f2b7135-d33b-8038-95c5-f00385ca005b" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2036.png"><img style="width:340.9801025390625px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2036.png"/></a><figcaption>Save Gateway URL changes before saving other gateway configuration changes.</figcaption></figure><h2 id="1a5b7135-d33b-8000-9fb9-fcbcb76a503b" class="">Delete gateway</h2><p id="1acb7135-d33b-801a-960b-cadd9716b23f" class="">Deleting a gateway will <strong>permanently remove</strong> all related data. This action <strong>cannot be undone</strong>.</p><ul id="1acb7135-d33b-8087-bc82-c4eb4442ef1b" class="bulleted-list"><li style="list-style-type:disc">Navigate to <strong>Gateway Management</strong>.</li></ul><ul id="1acb7135-d33b-8020-8570-d4b789978a61" class="bulleted-list"><li style="list-style-type:disc">Select the gateway to be deleted.</li></ul><p id="1f2b7135-d33b-8057-a3ba-c9c3b135b0ab" class="">
+</p><figure id="1f2b7135-d33b-804f-834d-ef0ffeceea4f" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/80011679-b1d9-4847-a36b-d02923e6af65.png"><img style="width:665.3061224489795px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/80011679-b1d9-4847-a36b-d02923e6af65.png"/></a><figcaption>Click on created Gateway</figcaption></figure><p id="1f2b7135-d33b-8048-b796-d317c3d2c7c4" class="">
+</p><ul id="1acb7135-d33b-801b-ad95-cc17a2d6d016" class="bulleted-list"><li style="list-style-type:disc">Click <strong>&quot;Deleting A Gateway&quot;</strong> and confirm the action.</li></ul><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="1a5b7135-d33b-80d7-b6be-fc2b099ad646"><div style="width:100%"><ul id="1acb7135-d33b-8048-a9f7-c1842dda2107" class="bulleted-list"><li style="list-style-type:disc">APIs relying on this gateway will no longer be accessible.</li></ul><ul id="1acb7135-d33b-8054-81af-c971ce62ea93" class="bulleted-list"><li style="list-style-type:disc">Ensure no active APIs are dependent before deleting.</li></ul></div></figure><p id="1f2b7135-d33b-80d3-ad7e-cb32faa15e6a" class="">
+</p><figure id="1f2b7135-d33b-8054-821a-db7726e152f7" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2037.png"><img style="width:366.9460144042969px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2037.png"/></a></figure><p id="1f2b7135-d33b-80b1-9d9f-da4d7c4e9ae2" class="">
+</p><figure id="1f2b7135-d33b-807d-aa87-d9186396b719" class="image"><a href="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2038.png"><img style="width:710px" src="Gateway%20Management%201a1b7135d33b804b8edfef4b51306668/image%2038.png"/></a></figure><p id="21cb7135-d33b-8038-b0f6-cb67c3af12de" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

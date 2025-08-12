@@ -1,0 +1,699 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>API Management</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.highlight-default_background {
+	color: rgba(50, 48, 44, 1);
+}
+.highlight-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.highlight-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(115, 114, 110, 1);
+	fill: rgba(115, 114, 110, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(205, 60, 58, 1);
+	fill: rgba(205, 60, 58, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(248, 248, 247, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(248, 243, 252, 1);
+}
+.block-color-pink_background {
+	background: rgba(252, 241, 246, 1);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-default { background-color: rgba(84, 72, 49, 0.08); }
+.select-value-color-gray { background-color: rgba(84, 72, 49, 0.15); }
+.select-value-color-brown { background-color: rgba(210, 162, 141, 0.35); }
+.select-value-color-orange { background-color: rgba(224, 124, 57, 0.27); }
+.select-value-color-yellow { background-color: rgba(236, 191, 66, 0.39); }
+.select-value-color-green { background-color: rgba(123, 183, 129, 0.27); }
+.select-value-color-blue { background-color: rgba(93, 165, 206, 0.27); }
+.select-value-color-purple { background-color: rgba(168, 129, 197, 0.27); }
+.select-value-color-pink { background-color: rgba(225, 136, 179, 0.27); }
+.select-value-color-red { background-color: rgba(244, 171, 159, 0.4); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1a1b7135-d33b-8015-9c52-d18086eca67a" class="page sans"><header><h1 class="page-title">API Management</h1><p class="page-description"></p></header><div class="page-body"><h2 id="1bab7135-d33b-80e8-ac1e-cba992d28f5e" class="">Introduction to API Management</h2><p id="1adb7135-d33b-8000-a751-e99a6039f26d" class="">API Management provides functionalities to create, configure, test, deploy, and monitor APIs within the APIM system. It serves as a centralized interface where users can manage APIs efficiently.</p><h2 id="1adb7135-d33b-8014-9da1-cebbf396651b" class="">Key Features</h2><p id="1adb7135-d33b-803f-98ba-fdf95b89b75f" class=""><strong>API Creation &amp; Initial Configuration:</strong> Users can create new APIs with required configurations.</p><p id="1adb7135-d33b-8018-bf95-f98b7ef3932e" class=""><strong>API Post-Creation Configuration:</strong></p><ul id="1bbb7135-d33b-80a9-8804-d07467cb50c1" class="bulleted-list"><li style="list-style-type:disc"><strong>API Policies Applying:</strong> Users can apply policies for authentication, security, and traffic control.</li></ul><ul id="1bbb7135-d33b-8082-be83-fb8b8762445c" class="bulleted-list"><li style="list-style-type:disc"><strong>Canary Config:</strong> allows controlled rollout of API versions.</li></ul><ul id="1bbb7135-d33b-8000-bf39-f235584f7b05" class="bulleted-list"><li style="list-style-type:disc"><strong>API Documentation:</strong> Swagger documentation can be fetched and edited.</li></ul><ul id="1bbb7135-d33b-8036-a095-d16d3e298296" class="bulleted-list"><li style="list-style-type:disc"><strong>API Testing:</strong> Before deployment, APIs can be tested using request methods, headers, and parameters.</li></ul><ul id="1bbb7135-d33b-8031-8303-f648dadc793d" class="bulleted-list"><li style="list-style-type:disc"><strong>API Deployment:</strong> Users can publish APIs, making them accessible externally. After clicking this button, the API is deployed on the Gateway.</li></ul><ul id="1bbb7135-d33b-803f-b73e-d839de013716" class="bulleted-list"><li style="list-style-type:disc"><strong>API Modification and Deletion:</strong> Provides API update and Deletion to manage API Life-cycle.</li></ul><h2 id="1adb7135-d33b-805f-bd96-dca4516edd26" class="">Accessing API Management</h2><p id="1bbb7135-d33b-80de-8917-dbe4aaa3fcfb" class="">Users can navigate to <strong>API Management</strong> from the sidebar menu. </p><figure id="1b4b7135-d33b-80e3-bd72-eeb791556441" class="image" style="text-align:left"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image.png"><img style="width:221px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image.png"/></a><figcaption>API Management Menu</figcaption></figure><p id="1bbb7135-d33b-801e-a878-cef5a148bdae" class="">This screen provides an overview of all APIs, with options to filter, search, and manage APIs.</p><figure id="1b5b7135-d33b-8029-a9b0-f255be9566ec" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%201.png"><img style="width:709.9750366210938px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%201.png"/></a><figcaption>API List Screen</figcaption></figure><h3 id="1bbb7135-d33b-809a-8f51-f6b8d46b626d" class="">Features of API Management Screen</h3><p id="1c7b7135-d33b-80fe-a05a-e31d9cb6c06f" class=""><strong>Project Selection:</strong> Select a project to view its APIs. APIM root administrators can view all projects. Alternatively, users granted project administrator (apim-pjt-admin) permissions for a specific project can only view the projects they belong to.</p><p id="1bbb7135-d33b-80f1-959b-ef4576f7225b" class="">
+</p><figure id="1b5b7135-d33b-803d-81ee-f80e07579e90" class="image" style="text-align:left"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%202.png"><img style="width:387.8625183105469px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%202.png"/></a><figcaption>Project Selection</figcaption></figure><p id="1adb7135-d33b-8038-bccc-ee1174f0a8e4" class=""><strong>API Data Table:</strong> Displays a list of all APIs within the project. Pagination is supported.</p><p id="1bbb7135-d33b-8059-bbc6-e3484297a3fa" class="">
+</p><figure id="1b5b7135-d33b-8055-819b-ce7b6b86b22e" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%203.png"><img style="width:709.9750366210938px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%203.png"/></a><figcaption>API Data Table</figcaption></figure><p id="1adb7135-d33b-80a3-a408-c1d1520a1dff" class=""><strong>Search Bar:</strong> Allows searching for APIs using keywords.</p><p id="1bbb7135-d33b-8070-be98-ffa22c10e5f2" class="">
+</p><figure id="1b5b7135-d33b-809d-9d0c-f2588435a27c" class="image" style="text-align:left"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%204.png"><img style="width:374.51251220703125px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%204.png"/></a><figcaption>Search Bar</figcaption></figure><p id="1adb7135-d33b-80d4-b8c1-e9a29d1e6053" class=""><strong>Create API Button:</strong> Access API creation interface.</p><p id="1f2b7135-d33b-808a-901d-d6d53bb0f5a8" class="">
+</p><figure id="1f2b7135-d33b-8015-9688-c73edb45d8b2" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%205.png"><img style="width:213px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%205.png"/></a><figcaption>Create API Button</figcaption></figure><p id="1bbb7135-d33b-8053-9e08-f001ded95d3b" class="">
+</p><p id="1adb7135-d33b-806e-a45a-f9e72d78ac93" class=""><strong>API and Gateway Tag Filter:</strong> Filter APIs based on either Gateway tags or API tags.</p><p id="1f2b7135-d33b-80a3-94d2-fc1a5efa6e54" class="">
+</p><figure id="1f2b7135-d33b-80d5-a84b-df70d5a91516" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%206.png"><img style="width:270px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%206.png"/></a><figcaption>Tag Filter</figcaption></figure><h2 id="1adb7135-d33b-80a2-bbf8-f910b6133889" class="">API Creation &amp; Initial Configuration</h2><p id="1adb7135-d33b-8087-8dc6-cb7ff7b1bb8c" class="">Users can create a new API by clicking <strong>CREATE AN API</strong> on the API Management screen.</p><h3 id="1adb7135-d33b-80a5-bc2b-cbcbf21bb0f1" class="">Steps:</h3><ul id="1adb7135-d33b-801a-9b42-e608678b7c99" class="bulleted-list"><li style="list-style-type:disc"><strong>Select Project:</strong> Choose a project from the dropdown list.</li></ul><ul id="1adb7135-d33b-8044-871c-f95a051d30b2" class="bulleted-list"><li style="list-style-type:disc"><strong>Configure API Details:</strong> Refer to API Initial Configuration Details below.</li></ul><ul id="1adb7135-d33b-8099-8921-c05d8dd0be8c" class="bulleted-list"><li style="list-style-type:disc"><strong>Save API:</strong> Click <strong>API STORAGE</strong> to finalize creation or <strong>CANCELLATION</strong> to abort.</li></ul><h3 id="1adb7135-d33b-8020-b428-f75235d9195b" class="">API Initial Configuration Details</h3><table id="1a5b7135-d33b-8068-8198-c73cf94509be" class="simple-table"><tbody><tr id="1a5b7135-d33b-80eb-b658-f0e24543835c"><td id="Y{G[" class=""><strong>Field Name</strong></td><td id="^tf@" class=""><strong>Purpose</strong></td><td id="yflT" class=""><strong>Input Notes</strong></td><td id="vwOv" class="" style="width:99.09375px"><strong>Mandatory</strong></td></tr><tr id="1a5b7135-d33b-800c-9276-cfc05d67ff90"><td id="Y{G[" class="">API Name</td><td id="^tf@" class="">Unique API identifier.</td><td id="yflT" class="">English letters, numbers, spaces, underscores ‘_’, or double comma ‘:’.</td><td id="vwOv" class="" style="width:99.09375px">Yes</td></tr><tr id="1a5b7135-d33b-80c5-843d-ec0f6ef8f606"><td id="Y{G[" class="">API Description</td><td id="^tf@" class="">Additional details about the API.</td><td id="yflT" class="">Short description.</td><td id="vwOv" class="" style="width:99.09375px">No</td></tr><tr id="1a5b7135-d33b-8048-8d3c-e07a7543c4d9"><td id="Y{G[" class="">API Tags</td><td id="^tf@" class="">Used for filtering/searching API.</td><td id="yflT" class="">Separate tags with Enter</td><td id="vwOv" class="" style="width:99.09375px">No</td></tr><tr id="1a5b7135-d33b-80d2-84b5-c06a10e86189"><td id="Y{G[" class="">API Type</td><td id="^tf@" class="">Defines the communication type of the API, how the API connects to backends.</td><td id="yflT" class="">Select from: HTTP, WebSocket, AWS Lambda. Refer to Settings for API Types for more detailed instructions.</td><td id="vwOv" class="" style="width:99.09375px">Yes</td></tr><tr id="1a5b7135-d33b-8077-ba6e-cffdbd3f7d03"><td id="Y{G[" class="">Protocol</td><td id="^tf@" class="">Specifies the security protocol for the API.</td><td id="yflT" class="">Choose between HTTP or HTTPS. If HTTPS is selected, an SSL certificate is required.</td><td id="vwOv" class="" style="width:99.09375px">Yes</td></tr><tr id="1a5b7135-d33b-8059-b21b-d41d80e37fbb"><td id="Y{G[" class="">HTTP Method</td><td id="^tf@" class="">Determines the allowed request methods.</td><td id="yflT" class="">Select from: GET, POST, PUT, DELETE, HEAD, PATCH, OPTIONS, TRACE, CONNECT. Multiple methods can be selected.</td><td id="vwOv" class="" style="width:99.09375px">Yes</td></tr><tr id="1a5b7135-d33b-807d-be79-d1c684fb26af"><td id="Y{G[" class="">Gateway</td><td id="^tf@" class="">Specifies the Gateway through which the API is accessed.</td><td id="yflT" class="">Select an existing Gateway. API must be attached to a Gateway.</td><td id="vwOv" class="" style="width:99.09375px">Yes</td></tr><tr id="1a5b7135-d33b-808e-bea5-e49348e63373"><td id="Y{G[" class="">Gateway URL</td><td id="^tf@" class="">The public-facing URL for the API.</td><td id="yflT" class="">Automatically set based on the selected Gateway and cannot be manually edited, based on Gateway URL. For more details, please refer to User Guide/APIM Console/Gateway Management. </td><td id="vwOv" class="" style="width:99.09375px">Yes</td></tr><tr id="1a5b7135-d33b-8061-8a04-efdaaef49079"><td id="Y{G[" class="">Gateway URL Base Path</td><td id="^tf@" class="">Defines the API route for client requests.</td><td id="yflT" class="">Enter the path (e.g., /order). Combined with the Gateway URL to form the full API URL.</td><td id="vwOv" class="" style="width:99.09375px">No</td></tr><tr id="1a5b7135-d33b-80b7-b5bc-fc2a2bbbde40"><td id="Y{G[" class="">Base Path</td><td id="^tf@" class="">Sets the path that will be stripped before forwarding the request to the backend.</td><td id="yflT" class="">Enter a value like /service. Works with Strip Path toggle.</td><td id="vwOv" class="" style="width:99.09375px">Yes</td></tr><tr id="1a5b7135-d33b-80c5-9f85-d127ba49282f"><td id="Y{G[" class="">Strip Path</td><td id="^tf@" class="">Removes the Base Path before forwarding to the backend.</td><td id="yflT" class="">Toggle ON or OFF. If enabled, “Base Path” will be stripped from the request before reaching the backend.</td><td id="vwOv" class="" style="width:99.09375px">Yes</td></tr><tr id="1a5b7135-d33b-806e-b6bd-d121b3c89676"><td id="Y{G[" class="">API URL</td><td id="^tf@" class="">The final client-facing API URL.</td><td id="yflT" class="">Automatically generated by combining Gateway URL and Base Path.</td><td id="vwOv" class="" style="width:99.09375px">Yes</td></tr><tr id="1a5b7135-d33b-8058-83c9-e6b7f3e52952"><td id="Y{G[" class="">Backend URL</td><td id="^tf@" class="">Address of the Backend Service to be proxied by the Gateway.</td><td id="yflT" class="">Enter a full URL. Required field for HTTP-based APIs. Refer to Settings for API Types for more detailed instructions.</td><td id="vwOv" class="" style="width:99.09375px">Yes</td></tr><tr id="1a5b7135-d33b-806a-9dfb-d49746279f3c"><td id="Y{G[" class="">Swagger Fetch Path</td><td id="^tf@" class="">Fetches Swagger JSON documentation from the backend.</td><td id="yflT" class="">Enter a Swagger path (e.g., /v3/api-docs). Automatically appends to the Backend URL.</td><td id="vwOv" class="" style="width:99.09375px">Yes</td></tr><tr id="1a5b7135-d33b-8068-8cd0-f8e7363b2671"><td id="Y{G[" class="">Developers Portal Posting</td><td id="^tf@" class="">Determines if the API should be listed in the Developer Portal.</td><td id="yflT" class="">Checkbox. If checked on, the API will be visible in the Developer Portal and can be configured as a Product in the Developers Portal. <br/>For detailed information on configuring as a Product, please refer to Developer Portal Guides.</td><td id="vwOv" class="" style="width:99.09375px">No</td></tr></tbody></table><p id="1bbb7135-d33b-802b-b0b8-d36e2d4d9176" class="">
+</p><figure id="1a7b7135-d33b-809f-97a1-d0669ae0b710" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%207.png"><img style="width:709.9874877929688px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%207.png"/></a><figcaption>API Creation and Initial Configuration</figcaption></figure><h3 id="1a6b7135-d33b-80cf-a853-d1bd54589df2" class="">Settings for API Types</h3><p id="1a6b7135-d33b-80d0-956c-df61ffc5bd85" class="">When users select API Type as HTTP or WebSocket, they must follow specific URL formats for the Backend URL.</p><p id="1adb7135-d33b-80bb-b0b1-f4606f47c98c" class=""><strong>Allowed Backend URL Formats:</strong></p><ul id="1a6b7135-d33b-8022-bd51-f2d81ce252fe" class="bulleted-list"><li style="list-style-type:disc">http://domain.com/</li></ul><ul id="1a6b7135-d33b-803c-b381-fd365aaa9bd6" class="bulleted-list"><li style="list-style-type:disc">http://domain.com</li></ul><ul id="1a6b7135-d33b-8011-9558-fc10a5310620" class="bulleted-list"><li style="list-style-type:disc">https://domain.com</li></ul><ul id="1a6b7135-d33b-8088-8782-e2611b7eef9b" class="bulleted-list"><li style="list-style-type:disc">http://sub3.sub2.sub1.domain.com</li></ul><ul id="1a6b7135-d33b-80a3-8a53-fe531e1bb3ad" class="bulleted-list"><li style="list-style-type:disc">http://domain.com/path1</li></ul><ul id="1a6b7135-d33b-8030-b07e-f55d166b1d98" class="bulleted-list"><li style="list-style-type:disc">http://domain.com/path1/path2/path3</li></ul><ul id="1a6b7135-d33b-80f0-9cfd-f4edf6160fc4" class="bulleted-list"><li style="list-style-type:disc">http://domain.com:8081</li></ul><ul id="1a6b7135-d33b-80f8-bf13-d39c4989747d" class="bulleted-list"><li style="list-style-type:disc">http://sub.domain.com:8081/path</li></ul><p id="1a6b7135-d33b-8073-86f5-e294e7f00482" class="">If users select API Type as AWS Lambda Function Integration, they must configure AWS Credentials to link the API with AWS Lambda.</p><p id="1adb7135-d33b-80d1-91a2-e0fa0737bb00" class=""><strong>Additional Required Fields for AWS Lambda:</strong></p><ul id="1adb7135-d33b-809a-a49c-e84a80d078b2" class="bulleted-list"><li style="list-style-type:disc"><strong>Lambda Name:</strong> Enter the AWS Lambda function name.</li></ul><ul id="1adb7135-d33b-8060-8835-c556bb0cfdba" class="bulleted-list"><li style="list-style-type:disc"><strong>AWS Region:</strong> Enter the AWS region where the Lambda function is deployed.</li></ul><h3 id="1a6b7135-d33b-80d9-a107-f30a906349ce" class="">Example of API Creation:</h3><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1a6b7135-d33b-80a6-bd67-c2df9622f75b"><div style="width:100%"><p id="1a6b7135-d33b-80cb-a3b8-e6292ee8279f" class="">If an API is set up as:</p><ul id="1a6b7135-d33b-8055-9113-d33efc35d1c6" class="bulleted-list"><li style="list-style-type:disc">API Type: HTTP (using https protocol)</li></ul><ul id="1a6b7135-d33b-8087-a840-fae01299aa6a" class="bulleted-list"><li style="list-style-type:disc">Gateway URL: https://your.domain.com</li></ul><ul id="1a6b7135-d33b-8064-a786-c0280a44c070" class="bulleted-list"><li style="list-style-type:disc">Base Path: /myservice</li></ul><ul id="1a6b7135-d33b-8013-835f-c18c26f3b314" class="bulleted-list"><li style="list-style-type:disc">Backend URL: http://backend.com/backend</li></ul><ul id="1a6b7135-d33b-803f-8374-edbf180d0c7d" class="bulleted-list"><li style="list-style-type:disc">Swagger Fetch Path: /v2/api-docs</li></ul><p id="1a6b7135-d33b-80ab-8397-f29b2dcb55f3" class="">The final API URL for client requests will be: https://your.domain.com/myservice</p><p id="1a6b7135-d33b-800d-88ac-e93ae61798ca" class="">Swagger documentation will be fetched from: http://backend.com/backend/v2/api-docs</p><p id="1a6b7135-d33b-8006-81ab-dd68da058998" class="">For example, if client calls https://your.domain.com/myservice/v1/apis/ it will ultimately be proxied to the path http://backend.com/backend/v1/apis/.</p></div></figure><h2 id="1a5b7135-d33b-80c4-a3ed-db4dc249465e" class="">API Post-Creation Configurations</h2><p id="1adb7135-d33b-80d7-82bc-dbea8ef934b2" class="">Once an API is created, users are directed to the API Details Screen, where they can manage post-creation configurations or delete the API.</p><p id="1adb7135-d33b-80b6-b19a-c26dd60d9415" class=""><strong>Available Configurations:</strong></p><ul id="1adb7135-d33b-803b-871c-f671dbc7b3fa" class="bulleted-list"><li style="list-style-type:disc"><strong>API Policies Applying:</strong> Set inbound and outbound API policies.</li></ul><ul id="1adb7135-d33b-8031-b30a-d724e6839a6b" class="bulleted-list"><li style="list-style-type:disc"><strong>Canary Config:</strong> Configure version-based deployments.</li></ul><ul id="1adb7135-d33b-809e-9e43-e2e9113eab7d" class="bulleted-list"><li style="list-style-type:disc"><strong>API Documentation:</strong> Fetch, edit, or update Swagger documentation.</li></ul><ul id="1adb7135-d33b-8075-b96d-d2ebe54fe476" class="bulleted-list"><li style="list-style-type:disc"><strong>API Testing:</strong> Run API tests before deployment.</li></ul><ul id="1adb7135-d33b-80ac-ae52-c9a5a2a84d10" class="bulleted-list"><li style="list-style-type:disc"><strong>API Deployment:</strong> Deploy API for external access.</li></ul><ul id="1adb7135-d33b-8047-af62-f7ebebab18b4" class="bulleted-list"><li style="list-style-type:disc"><strong>Edit API Frontend &amp; Backend:</strong> Modify API URL, Base Path, and Backend URL.</li></ul><ul id="1adb7135-d33b-801e-8fb3-dea25125eab9" class="bulleted-list"><li style="list-style-type:disc"><strong>API Deletion: </strong>Delete the API.</li></ul><figure id="1a7b7135-d33b-8072-b321-dca64183172c" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%208.png"><img style="width:709.9874877929688px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%208.png"/></a><figcaption>API Details Screen - 1</figcaption></figure><h3 id="1a6b7135-d33b-8042-a961-cd86f6dbd073" class="">API Policies Applying</h3><p id="1adb7135-d33b-80e3-8844-ed1689aa56f1" class="">Users can set policies to control API behavior. Policies are divided into:</p><ul id="1adb7135-d33b-8001-a988-f297ee209cfa" class="bulleted-list"><li style="list-style-type:disc"><strong>Inbound:</strong> Modifies requests before reaching the backend (e.g., header transformations, IP restrictions).</li></ul><ul id="1adb7135-d33b-80a4-ac64-fdc4f35e918b" class="bulleted-list"><li style="list-style-type:disc"><strong>Outbound:</strong> Modifies responses before reaching the client (e.g., logging, adding headers).</li></ul><p id="1adb7135-d33b-80af-aa94-d22ed5a608d8" class="">Users can add or remove policies and configure settings before deployment.</p><p id="1adb7135-d33b-8095-b8f5-d0b7e3dd2cd6" class=""><strong>Steps:</strong></p><ul id="1adb7135-d33b-8017-bb9f-f4f95537d7bb" class="bulleted-list"><li style="list-style-type:disc">Click on <strong>Edit </strong>icon in the policy section<strong> </strong>to access the API Policy Details configuration screen.</li></ul><ul id="1c7b7135-d33b-8015-a13f-cb9d88e58f47" class="bulleted-list"><li style="list-style-type:disc">Add policies from the <strong>Not Applicable</strong> section or remove applied policies.</li></ul><ul id="1c7b7135-d33b-801a-a12a-c8b8abf02732" class="bulleted-list"><li style="list-style-type:disc">Configure policy settings by clicking on policy names. For more details on how to configure for each policy, please refer to User Guide/APIM Console/API Policy.</li></ul><ul id="1c7b7135-d33b-80e1-89c7-cba5388267dd" class="bulleted-list"><li style="list-style-type:disc">Click <strong>STORING</strong> to save changes.</li></ul><p id="1c7b7135-d33b-8070-9476-f30b116a58d4" class="">
+</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1a6b7135-d33b-80b6-8a76-e521e57e05ed"><div style="width:100%"><p id="1a6b7135-d33b-8019-b291-cc9950a53293" class="">Policies must be saved individually and will only take effect after API deployment.</p></div></figure><figure id="1a7b7135-d33b-800d-a2a4-c74d95d1af57" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%209.png"><img style="width:709.9874877929688px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%209.png"/></a><figcaption>API Policy Details Screen</figcaption></figure><h3 id="1a6b7135-d33b-80f0-b3d8-fffa15eaf6f5" class="">Canary Config</h3><p id="1a6b7135-d33b-8075-af1d-cc71b7ddd5d4" class="">Canary Config allows controlled API version rollouts. Users can enable via Canary Config toggle.</p><p id="1adb7135-d33b-80d6-a86d-c5dbdd551842" class=""><strong>Steps:</strong></p><ul id="1adb7135-d33b-800d-83e5-d84f06406a91" class="bulleted-list"><li style="list-style-type:disc">Toggle Canary Config <strong>ON</strong>.</li></ul><ul id="1c7b7135-d33b-80c4-a1d1-fc245c802579" class="bulleted-list"><li style="list-style-type:disc">Canary Config Setting:</li></ul><p id="1bbb7135-d33b-80d4-9912-ff090d8a42c5" class="">
+</p><table id="1a6b7135-d33b-8040-b086-c9d368b365d6" class="simple-table"><tbody><tr id="1a6b7135-d33b-8080-a56c-e4f9dc1b423e"><td id="}TEV" class="" style="width:168px"><strong>Field Name</strong></td><td id="xvME" class="" style="width:458px"><strong>Input Instructions</strong></td></tr><tr id="1a6b7135-d33b-80de-a5d4-e9902b68db1c"><td id="}TEV" class="" style="width:168px">Back-end: URL</td><td id="xvME" class="" style="width:458px">The Backend URL including the (ver) variable. Example: http://backend-url-(ver):8081</td></tr><tr id="1a6b7135-d33b-8032-a674-edebc4ac65fa"><td id="}TEV" class="" style="width:168px">Baseline: Version</td><td id="xvME" class="" style="width:458px">Version of Baseline.</td></tr><tr id="1a6b7135-d33b-8098-b6f3-e49968019317"><td id="}TEV" class="" style="width:168px">Baseline: Link</td><td id="xvME" class="" style="width:458px">Auto update version to the link when user input in the ‘Baseline: Version’ field.</td></tr><tr id="1a6b7135-d33b-801c-97b2-e8dd01b4dd53"><td id="}TEV" class="" style="width:168px">Baseline: Weight (%)</td><td id="xvME" class="" style="width:458px">Input number. The total of the “Baseline: Weight (%)” field and “Canary: Weight (%)” is 100.</td></tr><tr id="1a6b7135-d33b-8085-917c-e73be431b990"><td id="}TEV" class="" style="width:168px">Canary: Version</td><td id="xvME" class="" style="width:458px">Version of Canary</td></tr><tr id="1a6b7135-d33b-80cd-bc9c-e364b43668db"><td id="}TEV" class="" style="width:168px">Canary: Link</td><td id="xvME" class="" style="width:458px">Auto update version to the link when user input in the “Canary: Version” field.</td></tr><tr id="1a6b7135-d33b-805e-acd4-cce3b9a3f03e"><td id="}TEV" class="" style="width:168px">Canary: Weight (%)</td><td id="xvME" class="" style="width:458px">Input number. The total of the “Baseline: Weight (%)” field and “Baseline: Weight (%)” is 100.</td></tr></tbody></table><p id="1bbb7135-d33b-8006-8386-e0885a685618" class="">
+</p><ul id="1adb7135-d33b-8078-9eb7-f302419e960e" class="bulleted-list"><li style="list-style-type:disc">Click <strong>SAVE</strong> to apply changes.</li></ul><p id="1bbb7135-d33b-8000-a33b-ca39f72e9236" class="">
+</p><figure id="1a6b7135-d33b-80fd-8042-da42dbac3cd9" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2010.png"><img style="width:709.984375px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2010.png"/></a><figcaption>API Details Screen - Canary Config</figcaption></figure><p id="1adb7135-d33b-808f-ac2b-cb40ac904972" class="">Users can edit Canary Config later via API Management or API Details Screen.</p><p id="1bbb7135-d33b-80c5-bfa3-c74c0ecede1a" class="">
+</p><figure id="1a6b7135-d33b-80e0-b981-e874d2465ba2" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2011.png"><img style="width:709.984375px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2011.png"/></a><figcaption>API Management Screen - Edit Canary</figcaption></figure><h3 id="1a5b7135-d33b-80c5-99b9-f9544471ea43" class="">API Documentation (Swagger)</h3><p id="1adb7135-d33b-806c-afc7-e5b7a5aa752f" class="">Users can fetch or manually edit Swagger Documentation.</p><p id="1adb7135-d33b-8079-976a-e5e48081c3ce" class=""><strong>Steps:</strong></p><ul id="1adb7135-d33b-804b-a677-e5b4d226a94e" class="bulleted-list"><li style="list-style-type:disc">Set Swagger Retrieval Path (e.g., /v3/api-docs).</li></ul><ul id="1adb7135-d33b-8017-9753-db8782dad455" class="bulleted-list"><li style="list-style-type:disc">Click <strong>GET SWAGGER</strong> to fetch documentation.</li></ul><ul id="1adb7135-d33b-803e-9d69-d860e8db416d" class="bulleted-list"><li style="list-style-type:disc">Edit Swagger JSON in <strong>Swagger Editor</strong> if needed.</li></ul><ul id="1adb7135-d33b-80f6-a664-fd986ba59160" class="bulleted-list"><li style="list-style-type:disc">Click <strong>SAVE SWAGGER</strong> to store changes.</li></ul><p id="1bbb7135-d33b-8015-9ed0-e5b6a9166356" class="">
+</p><figure id="1a7b7135-d33b-8024-ae12-d63768cebf44" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2012.png"><img style="width:709.9874877929688px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2012.png"/></a><figcaption>API Details Screen - API Documentation (Swagger) </figcaption></figure><p id="1adb7135-d33b-8020-b4ab-d4812040ae70" class="">Swagger documentation is deployed with the API and can be accessed under <strong>API Document</strong> in the sidebar.</p><h3 id="1adb7135-d33b-8032-98b1-fb34917a84ad" class="">API Testing</h3><p id="1adb7135-d33b-8057-a027-c86f4eaedab1" class="">Users can test APIs before deployment.</p><p id="1adb7135-d33b-80da-b506-ca4cc6cc3ec7" class=""><strong>Features:</strong></p><ul id="1adb7135-d33b-809e-840b-e583e3cfc50b" class="bulleted-list"><li style="list-style-type:disc"><strong>Supported Methods:</strong> GET, POST, PUT, DELETE, HEAD, OPTIONS, PATCH.</li></ul><ul id="1adb7135-d33b-80aa-b51a-d82aab3f6fe6" class="bulleted-list"><li style="list-style-type:disc"><strong>Request Parameters:</strong> Path (/path/(key1)), Headers, Query parameters, Body.</li></ul><ul id="1adb7135-d33b-808a-8163-fdca74bfaa04" class="bulleted-list"><li style="list-style-type:disc"><strong>Response Analysis:</strong> View status, headers, and response body.</li></ul><p id="1adb7135-d33b-80b2-9351-ed33f4ffdd58" class="">To start testing, click <strong>TEST API REQUESTS</strong>.</p><p id="1bbb7135-d33b-8019-829c-ea00ac45b865" class="">
+</p><figure id="1a7b7135-d33b-8004-aeb1-e545e3410ff4" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2013.png"><img style="width:709.9750366210938px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2013.png"/></a><figcaption>API Details Screen - API Test</figcaption></figure><h3 id="1adb7135-d33b-809d-b874-c51ad7a57738" class="">API Deployment</h3><p id="1adb7135-d33b-8066-8c3c-ca6730d0ac49" class="">APIs must be deployed for external access.</p><p id="1adb7135-d33b-8071-8e6b-f51e0db92680" class=""><strong>Steps:</strong></p><ul id="1adb7135-d33b-80fd-85fc-f8a0be85eb65" class="bulleted-list"><li style="list-style-type:disc">Click <strong>API DEPLOYMENT</strong>.</li></ul><p id="1f2b7135-d33b-8053-9387-cf38c49c44d3" class="">
+</p><figure id="1f2b7135-d33b-8068-8fff-c18f726ce39a" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2014.png"><img style="width:170px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2014.png"/></a></figure><p id="1f2b7135-d33b-808e-92a6-df30ef8cabf1" class="">
+</p><ul id="1adb7135-d33b-80df-84c7-e9c41f035954" class="bulleted-list"><li style="list-style-type:disc">Enter deployment version description.</li></ul><ul id="1adb7135-d33b-80d4-b3a9-e2501d66a6fe" class="bulleted-list"><li style="list-style-type:disc">Click <strong>CONFIRMATION</strong> to deploy.</li></ul><p id="1adb7135-d33b-8089-aab9-d6ea2dcdf695" class="">Only the latest deployed version is accessible externally.</p><p id="1f2b7135-d33b-80ef-ada9-de858e648a7c" class="">
+</p><figure id="1f2b7135-d33b-80e7-b155-f3d6e106dad8" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2015.png"><img style="width:709.984375px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2015.png"/></a></figure><h3 id="1adb7135-d33b-80f0-bf37-e0653f733657" class="">Edit API Frontend &amp; Backend</h3><p id="1adb7135-d33b-80e0-996d-ddf044060bd1" class="">Users can edit API settings on frontend/backend configuration.</p><h3 id="1a7b7135-d33b-80bd-b062-c0662e2ab3e5" class="">API Deletion</h3><p id="1adb7135-d33b-8057-b214-fc84eb7053cc" class="">Users can delete APIs via:</p><ul id="1adb7135-d33b-80c6-b5c3-c7823700ce2c" class="bulleted-list"><li style="list-style-type:disc"><strong>Trash icon</strong> in API Details Screen.</li></ul><ul id="1adb7135-d33b-80fd-bc18-fac912a306d4" class="bulleted-list"><li style="list-style-type:disc"><strong>Cross icon</strong> under <strong>Action</strong> in API Management Screen.</li></ul><p id="1adb7135-d33b-8098-b817-e97028a67c63" class="">Deleted APIs cannot be restored.</p><p id="1bbb7135-d33b-8025-ab6f-c3a1ce0e459d" class="">
+</p><figure id="1a7b7135-d33b-808e-9edb-f5d9f70ce214" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2016.png"><img style="width:709.9750366210938px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2016.png"/></a><figcaption>API Details Screen - Delete API</figcaption></figure><figure id="1a7b7135-d33b-804b-bb93-f6843827b7ec" class="image"><a href="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2017.png"><img style="width:709.875px" src="API%20Management%201a1b7135d33b80159c52d18086eca67a/image%2017.png"/></a><figcaption>API Management Screen - Action Delete</figcaption></figure><p id="1f2b7135-d33b-8016-ad6c-fac2d2d19bde" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
