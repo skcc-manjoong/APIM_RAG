@@ -39,3 +39,7 @@ duckduckgo_search==7.5.4
 
 # --- 시각화 (옵션) ---
 matplotlib==3.10.1
+
+# --- 웹 자동화/스크린샷 ---
+playwright==1.48.0
+pillow==10.4.0

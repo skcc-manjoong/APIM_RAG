@@ -21,8 +21,7 @@ class RAGAgent:
         try:
             # 1. LLM에게 검색 키워드(한 문장)로 변환 요청 (APIM 관리자 역할)
             prompt = (
-                "너는 APIM이라는 서비스의 관리자야. 아래 질문을 APIM 문서 검색에 적합한 영어 키워드 한 문장으로 변환해줘. "
-                "반드시 영어로만 답하고 불필요한 문구는 제외해."
+                "너는 APIM이라는 서비스의 관리자야. 아래 질문을 APIM 문서 검색에 적합한 대답을 해줘."
                 f"\n질문: {question}"
             )
             llm_response = await self.llm.ainvoke(prompt)
