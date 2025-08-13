@@ -6,7 +6,7 @@ from retrieval.vector_db import init_global_vector_db
 
 # from db.database import Base, engine  # DB 초기화 코드(주석처리)
 # from routers import history  # debate 관련 라우터(주석처리)
-from routers import workflow  # 클라우드 조회 워크플로우 라우터
+from routers import workflow  
 
 # Base.metadata.create_all(bind=engine)  # DB 초기화(주석처리)
 
@@ -28,8 +28,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# app.include_router(history.router)  # debate 관련 라우터(주석처리)
-app.include_router(workflow.router)  # 클라우드 조회 워크플로우 라우터
+app.include_router(workflow.router)  
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)

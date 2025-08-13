@@ -1,4 +1,0 @@
-2025-08-12 11:04:53,989 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
-2025-08-12 11:04:57,509 - INFO - Use pytorch device_name: mps
-2025-08-12 11:05:00,241 - INFO - HTTP Request: POST https://ai-core-openai-llm.openai.azure.com/openai/deployments/aicore-gpt4o/chat/completions?api-version=2024-05-01-preview "HTTP/1.1 200 OK"
-2025-08-12 11:05:04,985 - ERROR - Error in search: 'NoneType' object has no attribute 'search'

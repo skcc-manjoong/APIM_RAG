@@ -1,10 +1,6 @@
-import os
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings, ChatOpenAI
-from langchain_mcp_adapters.tools import load_mcp_tools
-from langchain_mcp_adapters.client import MultiServerMCPClient
-from openai import OpenAI
 
 # .env 파일에서 환경 변수 로드
 load_dotenv()

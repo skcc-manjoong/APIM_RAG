@@ -51,7 +51,6 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
-# 말풍선에 사용할 아바타 정의
 AVATARS = {
     "user": "👤",
     "assistant": "🔧",
@@ -68,7 +67,6 @@ def stream_text(text):
         yield word + " "
         time.sleep(0.1)
 
-# 스트리밍 응답 처리 함수
 def process_streaming_response(response, question):
     """스트리밍 응답을 실시간으로 처리하고 UI에 표시합니다."""
     response_received = False
