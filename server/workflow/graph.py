@@ -47,7 +47,6 @@ def create_apim_query_graph():
     return workflow.compile()
 
 if __name__ == "__main__":
-    import asyncio
     logging.basicConfig(level=logging.INFO)
     graph = create_apim_query_graph()
 

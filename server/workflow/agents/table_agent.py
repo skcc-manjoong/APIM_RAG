@@ -1,6 +1,7 @@
 import traceback
 import pandas as pd
 import json
+from utils.prompts import build_table_summary_messages, table_prompt_meta
 
 class TableAgent:
     def __init__(self, llm):
@@ -34,32 +35,19 @@ class TableAgent:
         else:
             context = cloud_result
 
-        # 2. LLM 요약 (컨텍스트 외 추론 금지 + 표 강제)
+        # 2. LLM 요약 (역할/규칙/형식 템플릿)
         evidence_block = "\n".join(evidence_lines)
-        summary_prompt = f"""
-역할: 너는 APIM 관리자다. 아래 컨텍스트만을 근거로 간결한 설명과 표(마크다운)를 생성하라.
-규칙:
-- 컨텍스트에 없는 사실은 쓰지 말 것(추론/상식 금지)
-- 표는 헤더 포함, 최대 10행
-- 답변 마지막에 '근거' 섹션으로 사용한 청크 리스트를 그대로 포함할 것
-
-[사용자 요청]
-{user_request}
-
-[컨텍스트]
-{context}
-
-[근거]
-{evidence_block}
-"""
+        messages = build_table_summary_messages(user_request, context, evidence_block)
         try:
-            summary_response = await self.llm.ainvoke([{"role": "user", "content": summary_prompt}])
+            # 로그: 프롬프트 메타(짧음) - 화면 표시 제거
+            # (state 메시지에는 남기지 않음)
+            summary_response = await self.llm.ainvoke(messages)
             summary = summary_response.content
             
-            # state 객체가 있으면 업데이트, 없으면 summary만 반환
             if state:
-                final_response = f"요약한 결과입니다.\n\n{summary}"
-                state["messages"].append({"role": self.role, "content": summary})
+                header = "• Few-shot(3개) 적용\n• 분석 요약/표 생성"
+                final_response = f"{header}\n\n{summary}"
+                state["messages"].append({"role": self.role, "content": final_response})
                 return {**state, "response": final_response}
             else:
                 return {"summary": summary}
