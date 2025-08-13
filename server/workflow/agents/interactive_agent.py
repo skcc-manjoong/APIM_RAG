@@ -124,7 +124,7 @@ class InteractiveAgent:
         """RAG+LLM을 사용해 다음 액션 결정"""
         from retrieval.vector_db import search_texts
         from utils.config import get_llm_azopai
-        llm = await get_llm_azopai()
+        llm = get_llm_azopai()
         docs = search_texts(f"{question}\n{current_url}", k=5)
         # 요소를 간결 요약
         lines = []
@@ -154,9 +154,15 @@ DOM 요소 요약:
 - goto는 절대/상대 URL 모두 허용.
 JSON만 출력.
 """
-        resp = await llm.ainvoke(system + "\n\n" + prompt)
+        # 비동기 우선, 실패 시 동기 호출 폴백
         try:
-            data = json.loads(resp)
+            resp = await llm.ainvoke(system + "\n\n" + prompt)
+            text = getattr(resp, "content", resp)
+        except Exception:
+            resp_sync = llm.invoke(system + "\n\n" + prompt)
+            text = getattr(resp_sync, "content", resp_sync)
+        try:
+            data = json.loads(text)
             return data
         except Exception:
             return {"action":"stop","reason":"parse_fail","confidence":0.0}

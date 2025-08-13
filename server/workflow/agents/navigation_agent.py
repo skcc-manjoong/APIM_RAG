@@ -344,7 +344,7 @@ class NavigationAgent:
         """RAG+LLM을 활용해 포털(console|developers|tenant)과 초기 path를 결정"""
         from retrieval.vector_db import search_texts
         from utils.config import get_llm_azopai
-        llm = await get_llm_azopai()
+        llm = get_llm_azopai()
         docs = search_texts(question, k=5)
         system = (
             "너는 APIM 포털 네비게이터야. 사용자 질문과 문서 스니펫을 보고, 아래 JSON만 반환해.\n"
@@ -360,9 +360,15 @@ class NavigationAgent:
 JSON만 출력:
 {{"portal":"console","path":"/gateway","reason":"..."}}
 """
-        resp = await llm.ainvoke(system + "\n\n" + prompt)
+        # 비동기 우선, 실패 시 동기 호출로 폴백
         try:
-            data = json.loads(resp)
+            resp = await llm.ainvoke(system + "\n\n" + prompt)
+            text = getattr(resp, "content", resp)
+        except Exception:
+            resp_sync = llm.invoke(system + "\n\n" + prompt)
+            text = getattr(resp_sync, "content", resp_sync)
+        try:
+            data = json.loads(text)
             portal = data.get("portal") or "console"
             path = data.get("path") or "/gateway"
             reason = data.get("reason") or ""
