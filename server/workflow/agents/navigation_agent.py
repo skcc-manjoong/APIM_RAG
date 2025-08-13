@@ -8,6 +8,7 @@ from datetime import datetime
 import json
 import re
 from bs4 import BeautifulSoup
+from utils.config import settings
 
 class NavigationAgent:
 	def __init__(self, llm=None):
@@ -19,8 +20,8 @@ class NavigationAgent:
 			"console": "https://console.skapim.com/",            # 관리자 포털  
 			"tenant": "https://tenant.skapim.com/"               # 사용자 관리 포털
 		}
-		self.login_email = "admin@admin.com"
-		self.login_password = "admin!23$"
+		self.login_email = settings.APIM_LOGIN_EMAIL
+		self.login_password = settings.APIM_LOGIN_PASSWORD
 		
 	async def run(self, state: dict = None, user_question: str = "", rag_result: str = "") -> dict:
 		"""사용자 질문을 분석하여 적절한 포털을 선택하고 로그인 후 redirectUrl 전달"""
@@ -83,12 +84,15 @@ class NavigationAgent:
 		except Exception as e:
 			error_msg = f"❌ Navigation agent 오류: {str(e)}"
 			print(f"[navigation_agent] 오류: {e}")
+			import traceback
 			traceback.print_exc()
+			
+			friendly = "apim 콘솔 페이지 접속이 어려워 접속 기반 정보제공이 어렵습니다. 잠시후 다시 시도해주세요"
 			if state:
-				state["messages"].append({"role": self.role, "content": error_msg})
-				return {**state, "response": error_msg}
+				state["messages"].append({"role": self.role, "content": friendly})
+				return {**state, "response": friendly}
 			else:
-				return {"response": error_msg}
+				return {"response": friendly}
 		
 	def _select_portal(self, user_question: str, rag_result: str) -> str:
 		"""사용자 질문을 분석하여 적절한 포털 선택"""

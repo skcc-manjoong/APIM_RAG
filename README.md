@@ -1,186 +1,155 @@
-# APIM_QUERYBOT 폴더 구조 및 역할 안내
+# APIM QueryBot 개요 및 사용 안내
 
-## 0. Agent 개요
+## 0. 무엇을 하나요?
+APIM 서비스 관련 질문에 대해
+- 문서 기반 RAG 결과와
+- 실제 콘솔(UI) 탐색 기반 결과를
+하나의 스트림에서 단계적으로 제공하는 에이전트입니다.
 
-APIM 서비스 문서를 자연어로 쉽게 조회하고 관리할 수 있는 지능형 Agent를 구현했습니다.
-
-LangGraph를 활용한 RAG기반의 아키텍처를 통해,
-사용자의 자연어 질의를 정확하게 이해하고 APIM 서비스 문서에서 필요한 정보를 검색하여,
-실시간으로 관련 정보를 제공합니다.
-
-특히 HTML 및 PDF 문서 처리를 통해 Notion 기반 문서도 지원하며,
-Agent가 수행한 내역을 표 형태로 요약해 사용자에게 명확한 정보를 전달합니다.
-
-사용자는 직접검색뿐만 아니라 FAQ 버튼을 통해서 자주 사용하는 질문을 쉽게 선택하여 조회할 수 있습니다.
-
-전개도를 통해서 대략적인 아키텍처를 확인할수있고,
-랭그래프를 통해서 내부적인 flow를 확인할수있습니다.
-<!-- 
-- 전개도
-![전개도](전개도.png)
-
-- 랭그래프
-![랭그래프](apim_query_graph.png) -->
+최종적으로는 실제 콘솔 화면 탐색 결과를 표로 정리해 주며, 문서 기반 결과도 별도의 표로 먼저 제공합니다.
 
 ---
 
-## 1. 전체 폴더 구조 (2025.01.23 기준)
+## 1. 핵심 설계 포인트
+- Prompt Engineering: 역할부여, CoT(비공개), Few-shot을 활용한 일관된 프롬프트 템플릿화
+- Multi-Agent with LangGraph: 노드 단위로 역할 분리(문서 검색, 네비게이션, 인터랙션, 표 요약)
+- RAG + Live UI: 문서(Vector DB)와 실제 콘솔 DOM 관찰을 결합한 하이브리드 답변
+- Streaming UX: 단계별 진행 상태/결과를 실시간 전송 및 표시
+- 친화적 오류 처리: 콘솔 접속 불가 등 예외 시 사용자 안내 메시지 출력
 
+---
+
+## 2. 현재 아키텍처(노드 흐름)
+LangGraph 기반으로 다음 순서로 동작합니다.
+
+1) rag: 문서(Vector DB) 검색
+2) table_rag: 문서 기반 요약/표 생성(📚 APIM Document 기반 결과)
+3) ui_intro: "이제 직접 콘솔에 들어가서 확인해 보겠습니다..." 안내
+4) navigation: 콘솔 세션 생성/로그인/시작 URL 확정
+5) interactive: 콘솔에서 DOM 관찰 → 의사결정(JSON) → 행동(click/goto) 루프, 최종 DOM/URL/방문경로 기록
+6) table_ui: 실제 탐색 결과를 단계별 요약/경로 표로 생성(🧭 실제 UI 단계별 설명)
+
+그래프 표기: rag → table_rag → ui_intro → navigation → interactive → table_ui → END
+
+---
+
+## 3. 스트리밍 표시 정책(프론트)
+Streamlit(`app/main.py`)은 서버 스트림을 타입별로 구분해 표시합니다.
+- 📚 APIM Document 기반 결과: table_rag
+- 🧭 콘솔 진입 안내: ui_intro
+- 🧭 네비게이션 진행: navigation
+- 🔄 콘솔 탐색 중...: 진행 상태(progress)
+- ✅ 인터랙션(최종): interactive 본문(필요 시) + table_ui 결과
+- 🧭 실제 UI 단계별 설명: table_ui(최종 표)
+
+참고: rag/table 원본문은 진행 메시지로 축약 표시하고, 최종은 interactive 이후의 table_ui가 중심이 됩니다.
+
+---
+
+## 4. 에이전트 구성
+- RAGAgent (`server/workflow/agents/rag_agent.py`)
+  - 한글 질문 → LLM으로 검색질의 변환 → Vector DB(FAISS) 검색 → 상위 청크 반환
+- TableAgent (`server/workflow/agents/table_agent.py`)
+  - 두 모드 지원
+    - RAG 모드: 📚 APIM Document 기반 요약/표
+    - UI 모드: 🧭 실제 UI 단계별 요약/경로 표(visit_trace + final DOM 기반)
+- NavigationAgent (`server/workflow/agents/navigation_agent.py`)
+  - 콘솔 포털 선택/접속, 로그인 세션 생성(auth_state.json 저장), 시작 URL 확정
+- InteractiveAgent (`server/workflow/agents/interact_agent.py`)
+  - DOM 관찰 → 결정(JSON) → 행동(click/goto) ReAct 루프
+  - 각 이동 전후로 DOM 요약과 방문경로 기록(visit_trace)
+  - 정책/Policy 리스트를 DOM에서 추출 시도해 최종 결과에 반영
+  - 접속 불가/타임아웃/40x 등 예외 시 친절한 안내 메시지 반환
+
+---
+
+## 5. 벡터 DB 및 자료 전처리
+- 위치: `server/retrieval/`
+- 인덱스: FAISS(`apim_faiss_index.bin`), 메타(`apim_vector_data.pkl`)
+- 초기화: 서버 시작 시 `server/main.py`의 lifespan 훅에서 `retrieval/apim_docs`를 자동 인덱싱
+- 조회: `retrieval/vector_db.py`의 `search_texts(query, k)` 헬퍼를 통해 어디서든 간편 검색
+
+---
+
+## 6. 폴더 구조(요약)
 ```
 cloud_bot/
 ├── app/
+│   ├── main.py                      # Streamlit UI(스트리밍 표시/라벨)
 │   ├── components/
-│   │   ├── sidebar.py
-│   │   └── __init__.py
-│   ├── main.py
+│   │   └── sidebar.py
 │   └── __init__.py
 ├── server/
+│   ├── main.py                      # FastAPI 진입점(벡터DB 초기화, TOKENIZERS_PARALLELISM=false)
+│   ├── routers/
+│   │   └── workflow.py              # /api/v1/workflow/stream 스트리밍 엔드포인트
+│   ├── workflow/
+│   │   ├── graph.py                 # rag→table_rag→ui_intro→navigation→interactive→table_ui
+│   │   ├── agents/
+│   │   │   ├── rag_agent.py
+│   │   │   ├── navigation_agent.py
+│   │   │   ├── interact_agent.py
+│   │   │   └── table_agent.py
+│   │   └── __init__.py
 │   ├── retrieval/
-│   │   ├── apim_docs/
-│   │   │   └── (HTML/PDF 문서들)
+│   │   ├── apim_docs/               # APIM 문서(HTML/PDF)
 │   │   ├── vector_db.py
 │   │   ├── apim_vector_data.pkl
 │   │   ├── apim_faiss_index.bin
 │   │   └── __init__.py
-│   ├── routers/
-│   │   ├── workflow.py
-│   │   └── __init__.py
-│   ├── workflow/
-│   │   ├── agents/
-│   │   │   ├── rag_agent.py
-│   │   │   ├── table_agent.py
-│   │   │   └── __init__.py
-│   │   ├── graph.py
-│   │   └── __init__.py
-│   ├── utils/
-│   │   ├── config.py
-│   │   └── __init__.py
-│   ├── main.py
-│   └── __init__.py
+│   └── utils/
+│       ├── config.py                # LLM/Embeddings 설정
+│       └── prompts.py               # 프롬프트 템플릿(역할/CoT/Few-shot)
 ├── requirements.txt
-└── README_CLOUD_QUERYBOT.md
+└── README.md
 ```
 
 ---
 
-## 2. 주요 기술스택
-
-- **Streamlit**: 프론트엔드 UI 및 사용자 인터랙션
-- **FastAPI**: 백엔드 API 서버
-- **LangChain, LangGraph**: LLM 기반 에이전트 워크플로우 및 그래프 관리
-- **FAISS**: 벡터 인덱스 검색 엔진
-- **SentenceTransformers**: 텍스트 임베딩 생성
-- **BeautifulSoup**: HTML 문서 파싱
-- **pypdf**: PDF 문서 파싱
-- **OpenAI API**: LLM 모델 (Azure OpenAI 지원)
-
----
-
-## 3. 폴더/파일별 역할
-
-### [app/]
-- **main.py**: Streamlit 기반 메인 UI, APIM 서비스 문서 조회 요청/결과 표시, API 연동, 세션 관리 등 전체 프론트엔드 로직의 중심.
-  - 실시간 스트리밍 응답 처리 및 표시
-  - 타입별(rag, table) 응답 구분 및 레이블링
-  - 세션 상태 관리 및 에러 처리
-- **components/sidebar.py**: 사이드바 UI, 질문 입력 폼, APIM 관련 FAQ 등 렌더링.
-
-### [server/]
-- **main.py**: FastAPI 서버 진입점, 라우터 등록, 벡터 DB 초기화.
-- **routers/workflow.py**: APIM 서비스 문서 조회 API
-  - 스트리밍 응답 생성 및 전송
-  - 각 에이전트의 응답을 실시간으로 클라이언트에 전달
-- **retrieval/vector_db.py**: APIM 문서의 HTML/PDF 파싱, 벡터 임베딩 생성, FAISS 인덱스 관리.
-- **retrieval/apim_docs/**: APIM 서비스 관련 HTML/PDF 문서 저장소.
-- **workflow/graph.py**: LangGraph 기반 APIM 문서 조회 워크플로우 정의, 각 Agent 노드 연결.
-- **workflow/agents/rag_agent.py**: 자연어 질문을 영어 키워드로 변환하고 벡터 DB에서 관련 문서 검색.
-- **workflow/agents/table_agent.py**: RAG 결과를 표로 가공하고, 결과 요약 및 근거 생성.
-- **utils/config.py**: LLM 설정 및 API 키 관리.
+## 7. 동작 요약(엔드투엔드)
+1) 서버 시작 시: APIM 문서 자동 인덱싱(필요하면 재인덱싱)
+2) 사용자가 질문 입력 → Streamlit이 서버 스트림 구독
+3) 서버 그래프 실행:
+   - rag → table_rag(문서 기반 표)
+   - ui_intro(콘솔 진입 안내)
+   - navigation(로그인/시작 URL)
+   - interactive(ReAct 탐색, visit_trace/DOM 추출)
+   - table_ui(실제 UI 단계별 요약/경로 표)
+4) Streamlit: 이벤트 타입별 라벨로 실시간 표시
 
 ---
 
-## 4. 동작 흐름 요약 (2025.01 기준)
-
-1. **서버 시작 시**: HTML/PDF 문서를 자동으로 벡터 DB에 인덱싱 (startup lifespan)
-2. **사용자**가 Streamlit UI에서 APIM 서비스 관련 질문 입력
-3. **app/main.py**가 FastAPI 서버의 `/api/v1/workflow/stream` 엔드포인트로 스트리밍 요청
-4. **server/routers/workflow.py**가 질문을 받아 LangGraph 워크플로우(`workflow/graph.py`) 실행
-5. **workflow/graph.py**에서 각 Agent를 노드로 연결해 순차 실행:
-    - **rag_agent**: 한글 질문을 영어 키워드로 변환하고 벡터 DB에서 관련 문서 검색
-    - **table_agent**: RAG 결과를 표로 가공하고 요약 및 근거 생성
-6. 각 Agent의 결과를 실시간으로 스트리밍하여 사용자에게 전달:
-    - 문서 검색 결과
-    - 결과 분석 및 표 형태 요약
-    - 사용된 문서 청크들의 근거 제시
-7. 프론트엔드에서 각 타입별 응답을 구분하여 실시간으로 표시
-
----
-
-## 5. 서버 기동 방법
-
-1. **필수 패키지 설치**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-2. **환경 변수 설정**
-    ```bash
-    # .env 파일 생성 후 OpenAI API 키 설정
-    OPENAI_API_KEY=your_api_key_here
-    ```
-
-3. **APIM 문서 준비**
-    ```bash
-    # server/retrieval/apim_docs/ 디렉토리에 HTML/PDF 파일 배치
-    ```
-
-4. **서버 실행**
-    ```bash
-    # FastAPI 서버
-    cd server
-    python main.py
-
-    # Streamlit 프론트엔드 (새 터미널)
-    cd app
-    streamlit run main.py
-    ```
+## 8. 실행 방법
+- 서버
+  ```bash
+  cd server
+  python main.py
+  ```
+- 프론트
+  ```bash
+  cd app
+  streamlit run main.py
+  ```
+- 환경 변수
+  - `.env`에 LLM/Embeddings 관련 키를 설정
+  - 서버는 자동으로 `TOKENIZERS_PARALLELISM=false`를 설정해 토크나이저 경고를 억제
 
 ---
 
-## 6. 벡터 DB 관리
-
-- **자동 인덱싱**: 서버 시작 시 `apim_docs/` 디렉토리의 문서들을 자동으로 벡터화
-- **HTML 우선**: HTML과 PDF가 모두 있으면 HTML을 우선 처리
-- **재인덱싱**: 문서 파일이 변경되면 자동으로 재인덱싱
-- **청크 크기**: 2500자 청크, 300자 오버랩으로 최적화
-- **저장 위치**: 
-  - `apim_vector_data.pkl`: 문서 메타데이터
-  - `apim_faiss_index.bin`: FAISS 벡터 인덱스
+## 9. 오류 처리(중요)
+- 콘솔 접속 타임아웃/40x/네트워크 이슈 발생 시:
+  - 다음 메시지를 사용자에게 안내합니다.
+  - "apim 콘솔 페이지 접속이 어려워 접속 기반 정보제공이 어렵습니다. 잠시후 다시 시도해주세요"
+- 프론트는 진행 상태를 유지하며, 가능하면 문서 기반 결과(table_rag)를 먼저 제공해 사용자 대기 시간을 줄입니다.
 
 ---
 
-## 7. 주요 기능 및 특징
-
-- 실시간 스트리밍 응답 처리 및 표시
-- HTML/PDF 문서 자동 파싱 및 벡터화
-- 한글 질문을 영어 키워드로 변환하여 정확한 검색 지원
-- RAG를 통한 정확한 APIM 문서 검색
-- 표 형태의 결과 요약 및 근거 제시
-- Notion HTML export 지원 (하위 디렉토리 포함)
-- 에러 처리 및 상태 관리
-- APIM 관련 맞춤형 FAQ 제공
+## 10. 특징 요약
+- 문서 기반과 실제 UI 탐색 기반의 이원화 결과 제공
+- 단계별 진행/DOM 관찰/클릭 경로를 최종 표로 깔끔하게 제공
+- 정책/Policy 항목 DOM 추출 시도(가능한 경우 최종 결과에 직접 반영)
+- 프롬프트 템플릿화로 일관 응답 품질 확보
 
 ---
 
-## 8. 향후 개선 방향
-
-- 이미지 캡처 노드 추가 (스크린샷 기능)
-- 다양한 문서 형식 지원 확장 (Word, Markdown 등)
-- RAG 정확도 개선 (청크 크기 최적화, 하이브리드 검색)
-- 실시간 스트리밍 UI/UX 개선
-- 멀티모달 지원 (이미지 + 텍스트)
-- 대화 기록 저장 및 관리
-
----
-
-이 문서는 APIM 서비스 조회봇의 현재 구현 상태와 주요 기능을 설명합니다. 프로젝트의 구조, 동작 방식, 기술 스택을 이해하는데 도움이 될 것입니다. 
+본 문서는 최신 그래프 흐름과 UI 표시 정책을 반영합니다. 필요 시 Docker 배포, 멀티턴 장기 메모리, 하이브리드 검색(lexical+vector) 등 확장도 용이합니다. 

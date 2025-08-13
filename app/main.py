@@ -70,6 +70,7 @@ def stream_text(text):
 def process_streaming_response(response, question):
     """스트리밍 응답을 실시간으로 처리하고 UI에 표시합니다."""
     response_received = False
+    interactive_seen = False
     
     # 현재까지의 모든 응답을 저장할 리스트
     current_responses = []
@@ -89,10 +90,18 @@ def process_streaming_response(response, question):
         full_response = ""
         for resp in current_responses + ([current_response] if current_response["content"].strip() else []):
             agent_label = ""
-            if resp["chunk_type"] == "rag":
-                agent_label = "<small style='color:#666;'>📚 문서 검색 완료</small><br>"
-            elif resp["chunk_type"] == "table":
-                agent_label = "<small style='color:#666;'>📊 결과 분석 완료</small><br>"
+            if resp["chunk_type"] == "table_rag":
+                agent_label = "<small style='color:#666;'>📚 APIM Document 기반 결과</small><br>"
+            elif resp["chunk_type"] == "table_ui":
+                agent_label = "<small style='color:#666;'>🧭 실제 UI 단계별 설명</small><br>"
+            elif resp["chunk_type"] == "ui_intro":
+                agent_label = "<small style='color:#666;'>🧭 콘솔 진입 안내</small><br>"
+            elif resp["chunk_type"] == "navigation":
+                agent_label = "<small style='color:#666;'>🧭 네비게이션 진행</small><br>"
+            elif resp["chunk_type"] == "interactive":
+                agent_label = "<small style='color:#666;'>✅ 인터랙션(최종)</small><br>"
+            elif resp["chunk_type"] == "progress":
+                agent_label = "<small style='color:#666;'>🔄 콘솔 탐색 중...</small><br>"
             elif resp["chunk_type"] == "response":
                 agent_label = "<small style='color:#666;'>✅ 응답 생성 완료</small><br>"
             full_response += f"{agent_label}{resp['content']}<br><br>"
@@ -127,12 +136,31 @@ def process_streaming_response(response, question):
             new_chunk_type = None
             new_chunk_text = None
             
-            if "rag" in event_data and "response" in event_data["rag"]:
-                new_chunk_type = "rag"
-                new_chunk_text = event_data["rag"]["response"]
+            # 우선순위: table_ui > table_rag > ui_intro > interactive > navigation > progress > response
+            if "table_ui" in event_data and isinstance(event_data["table_ui"], dict) and "response" in event_data["table_ui"]:
+                new_chunk_type = "table_ui"
+                new_chunk_text = event_data["table_ui"]["response"]
+            elif "table_rag" in event_data and isinstance(event_data["table_rag"], dict) and "response" in event_data["table_rag"]:
+                new_chunk_type = "table_rag"
+                new_chunk_text = event_data["table_rag"]["response"]
+            elif "ui_intro" in event_data and isinstance(event_data["ui_intro"], dict) and "response" in event_data["ui_intro"]:
+                new_chunk_type = "ui_intro"
+                new_chunk_text = event_data["ui_intro"]["response"]
+            elif "interactive" in event_data and isinstance(event_data["interactive"], dict) and "response" in event_data["interactive"]:
+                new_chunk_type = "interactive"
+                new_chunk_text = event_data["interactive"]["response"]
+                interactive_seen = True
+            elif "navigation" in event_data and isinstance(event_data["navigation"], dict) and "response" in event_data["navigation"]:
+                new_chunk_type = "navigation"
+                new_chunk_text = event_data["navigation"]["response"]
+            elif "rag" in event_data and "response" in event_data["rag"]:
+                # RAG 자체 응답은 숨기고 진행 메시지만 노출
+                new_chunk_type = "progress"
+                new_chunk_text = "문서 검색 중..."
             elif "table" in event_data and "response" in event_data["table"]:
-                new_chunk_type = "table"
-                new_chunk_text = event_data["table"]["response"]
+                # 단일 table 키로 오는 경우는 table_ui로 간주(그래프 최신화 이후)
+                new_chunk_type = "table_ui" if interactive_seen else "progress"
+                new_chunk_text = event_data["table"]["response"] if interactive_seen else "콘솔에 접속하여 관련 페이지를 탐색 중입니다..."
             elif "response" in event_data:
                 new_chunk_type = "response"
                 new_chunk_text = event_data["response"]
@@ -158,7 +186,7 @@ def process_streaming_response(response, question):
                 
                 # 실시간으로 모든 응답 표시
                 update_display()
-            
+        
         except json.JSONDecodeError as e:
             error_msg = f"JSON 파싱 오류: {e}"
             print(f"[ERROR] JSON 파싱 오류: {e}, 원본 데이터: {data_str}")

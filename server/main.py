@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from pathlib import Path
 from retrieval.vector_db import init_global_vector_db
+import os
 
 # from db.database import Base, engine  # DB 초기화 코드(주석처리)
 # from routers import history  # debate 관련 라우터(주석처리)
@@ -12,6 +13,8 @@ from routers import workflow
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # 토크나이저 병렬 경고 비활성화
+    os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
     root = Path(__file__).resolve().parents[0]
     retrieval_dir = root / 'retrieval'
     pdf_dir = retrieval_dir / 'apim_docs'

@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     OPENROUTER_BASE_URL: str 
     OPENROUTER_MODEL: str 
     
-
+    
     # Langfuse 설정
     LANGFUSE_PUBLIC_KEY: str
     LANGFUSE_SECRET_KEY: str
@@ -34,7 +34,11 @@ class Settings(BaseSettings):
     DB_PATH: str = "history.db"
     SQLALCHEMY_DATABASE_URI: str = f"sqlite:///./{DB_PATH}"
 
-    model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
+    # APIM 로그인 크리덴셜(.env)
+    APIM_LOGIN_EMAIL: str | None = None
+    APIM_LOGIN_PASSWORD: str | None = None
+
+    model_config = SettingsConfigDict(env_file=".env", case_sensitive=True, extra="ignore")
 
     def get_llm_azopai(self):
         """Azure OpenAI LLM 인스턴스 반환 (툴 바인딩 없음)"""
