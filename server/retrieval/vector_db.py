@@ -281,6 +281,28 @@ def init_global_vector_db(pdf_dir: str, vector_data_path: str, index_path: str) 
 def get_global_vector_db() -> VectorDB | None:
     return GLOBAL_VECTOR_DB
 
+def search_texts(query: str, k: int = 5) -> list[dict]:
+    """전역 VectorDB에서 간단 검색을 수행하는 헬퍼. 없으면 자동 초기화 시도.
+    반환 형식: VectorDB.search 결과 리스트 그대로 반환
+    """
+    try:
+        vdb = get_global_vector_db()
+        if vdb is None:
+            base_dir = Path(__file__).resolve().parents[2] / "retrieval" / "apim_docs"
+            vec_path = Path(__file__).resolve().parents[2] / "apim_vector_data.pkl"
+            idx_path = Path(__file__).resolve().parents[2] / "apim_faiss_index.bin"
+            try:
+                init_global_vector_db(str(base_dir), str(vec_path), str(idx_path))
+                vdb = get_global_vector_db()
+            except Exception as e:
+                logger.error(f"Global VectorDB init failed: {e}")
+                # 폴백: 빈 인덱스 생성 방지. None 반환
+                return []
+        return vdb.search(query, k=k)
+    except Exception as e:
+        logger.error(f"search_texts error: {e}")
+        return []
+
 def main():
     """
     벡터 DB 생성 및 테스트 (APIM 문서 기반)

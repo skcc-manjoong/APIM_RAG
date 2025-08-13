@@ -71,6 +71,41 @@ def build_table_summary_messages(user_request: str, context: str, evidence_block
     ]
 
 
+def build_final_answer_messages(question: str, dom_text: str, rag_snippets: str) -> List[Dict]:
+    """DOM 요약과 RAG 스니펫을 근거로 최종 답변 생성.
+    - 자세한 한국어 설명(단계별/항목별) + 표(최대 10행) + 근거 섹션
+    - Chain-of-Thought는 내부로만, 출력은 최종 결과만
+    - 레이블 문구(예: '간결한 ...') 출력 금지
+    """
+    system = (
+        "너는 APIM 전문가이자 기술 문서 작성가다.\n"
+        "규칙:\n"
+        "- 내부적으로 충분히 생각하되, 생각 과정은 출력하지 말 것\n"
+        "- 제공된 DOM 요약/문서 스니펫 내에서만 답변할 것(추론/창작 금지)\n"
+        "- 최종 출력 형식:\n"
+        "  1) 한국어 설명(자세히, 단계/항목별. 필요하면 목록 사용)\n"
+        "  2) 마크다운 표(헤더 포함, 최대 10행)\n"
+        "  3) 근거 섹션(사용한 내용 요약)\n"
+        "- 레이블 문구는 출력하지 말고 본문부터 시작할 것\n"
+    )
+    user = f"""
+[사용자 질문]
+{question}
+
+[DOM 요약]
+{dom_text}
+
+[RAG 스니펫]
+{rag_snippets}
+
+위 근거만 활용해 최종 답변을 자세히 작성하라.
+"""
+    return [
+        {"role": "system", "content": system},
+        {"role": "user", "content": user},
+    ]
+
+
 # 로그용 메타 정보 헬퍼
 
 def rag_prompt_meta() -> str:
