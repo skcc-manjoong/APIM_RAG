@@ -1,12 +1,10 @@
 from fastapi import APIRouter
-from fastapi.responses import StreamingResponse, FileResponse
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 import asyncio
 import json
 from workflow.graph import create_apim_query_graph, ApimQueryState
 import logging
-import os
-from pathlib import Path
 
 router = APIRouter(
     prefix="/api/v1/workflow",
@@ -41,16 +39,3 @@ async def stream_apim_query(request: QueryRequest):
         apim_query_streamer(request.question),
         media_type="text/event-stream",
     )
-
-@router.get("/screenshot/{filename}")
-async def get_screenshot(filename: str):
-    """스크린샷 파일을 반환합니다."""
-    screenshot_path = Path("screenshots") / filename
-    if screenshot_path.exists() and screenshot_path.is_file():
-        return FileResponse(
-            path=str(screenshot_path),
-            media_type="image/png",
-            filename=filename
-        )
-    else:
-        return {"error": "Screenshot not found"}

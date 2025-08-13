@@ -95,8 +95,6 @@ def process_streaming_response(response, question):
                 agent_label = "<small style='color:#666;'>📚 문서 검색 완료</small><br>"
             elif resp["chunk_type"] == "table":
                 agent_label = "<small style='color:#666;'>📊 결과 분석 완료</small><br>"
-            elif resp["chunk_type"] == "screenshot":
-                agent_label = "<small style='color:#666;'>📸 스크린샷 캡처 완료</small><br>"
             elif resp["chunk_type"] == "response":
                 agent_label = "<small style='color:#666;'>✅ 응답 생성 완료</small><br>"
             full_response += f"{agent_label}{resp['content']}<br><br>"
@@ -137,9 +135,6 @@ def process_streaming_response(response, question):
             elif "table" in event_data and "response" in event_data["table"]:
                 new_chunk_type = "table"
                 new_chunk_text = event_data["table"]["response"]
-            elif "screenshot" in event_data and "response" in event_data["screenshot"]:
-                new_chunk_type = "screenshot"
-                new_chunk_text = event_data["screenshot"]["response"]
             elif "response" in event_data:
                 new_chunk_type = "response"
                 new_chunk_text = event_data["response"]
@@ -300,8 +295,6 @@ def main():
                     agent_label = "<small style='color:#666;'>📚 문서 검색 완료</small><br>"
                 elif chunk_type == "table":
                     agent_label = "<small style='color:#666;'>📊 결과 분석 완료</small><br>"
-                elif chunk_type == "screenshot":
-                    agent_label = "<small style='color:#666;'>📸 스크린샷 캡처 완료</small><br>"
                 elif chunk_type == "response":
                     agent_label = "<small style='color:#666;'>✅ 응답 생성 완료</small><br>"
                     

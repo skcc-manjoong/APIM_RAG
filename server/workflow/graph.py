@@ -4,7 +4,6 @@ from utils.config import get_llm_azopai
 import asyncio
 from workflow.agents.table_agent import TableAgent
 from workflow.agents.rag_agent import RAGAgent
-from workflow.agents.screenshot_agent import ScreenshotAgent
 import logging
 import json
 
@@ -13,7 +12,6 @@ class ApimQueryState(dict):
     messages: List[Dict]    # [{"role": "user|agent|system", "content": ...}, ...]
     response: str = None    # 각 agent 단계별 내역 및 최종 응답 리스트
     rag_result: dict = None  # ragagent가 찾은 관련 문서들
-    screenshot_result: dict = None  # screenshot_agent가 캡처한 이미지 정보
 
 # Agent 인스턴스 생성
 async def get_llm():
@@ -36,23 +34,14 @@ async def table_node(state: ApimQueryState) -> ApimQueryState:
     print(f"[table_node] table_agent 결과: {result.get('response')}")
     return result
 
-# 4. ScreenshotAgent 노드 (웹페이지 스크린샷 캡처)
-async def screenshot_node(state: ApimQueryState) -> ApimQueryState:
-    screenshot_agent = ScreenshotAgent()
-    result = await screenshot_agent.run(state=state, url="https://developers.skapim.com/")
-    print(f"[screenshot_node] screenshot_agent 결과: {result.get('response')}")
-    return result
-
-# 5. LangGraph 워크플로우 정의
+# 4. LangGraph 워크플로우 정의 (스크린샷 제거)
 def create_apim_query_graph():
     print("[create_apim_query_graph] 워크플로우 생성 시작")
     workflow = StateGraph(ApimQueryState)
     workflow.add_node("rag", rag_node)
     workflow.add_node("table", table_node)
-    workflow.add_node("screenshot", screenshot_node)
     workflow.add_edge("rag", "table")
-    workflow.add_edge("table", "screenshot")
-    workflow.add_edge("screenshot", END)
+    workflow.add_edge("table", END)
     workflow.set_entry_point("rag")
     print("[create_apim_query_graph] 워크플로우 생성 완료")
     return workflow.compile()

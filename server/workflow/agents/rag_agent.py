@@ -42,7 +42,8 @@ class RAGAgent:
             for r in (search_results or [])[:3]:
                 doc = r.get("document", {})
                 top_names.append(doc.get("name", "chunk"))
-            overview = f"RAG retrieved {len(search_results) if search_results else 0} chunks. Top: {', '.join(top_names)}"
+            cnt = len(search_results) if search_results else 0
+            overview = f"RAG를 통해 지식 저장소에서 {cnt}개의 청크를 조회했습니다."
 
             if state:
                 state["rag_result"] = search_results

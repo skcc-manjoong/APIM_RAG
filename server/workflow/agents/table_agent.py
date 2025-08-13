@@ -12,7 +12,6 @@ class TableAgent:
         if state:
             cloud_result = state.get("cloud_result")
             rag_result = state.get("rag_result") or []
-            screenshot_result = state.get("screenshot_result")
             user_request = next((m["content"] for m in reversed(state["messages"]) if m["role"] == "user"), "")
             if not cloud_result and not rag_result:
                 error_msg = "클라우드 결과나 RAG 결과가 없습니다"
@@ -59,11 +58,7 @@ class TableAgent:
             
             # state 객체가 있으면 업데이트, 없으면 summary만 반환
             if state:
-                # 스크린샷 정보가 있으면 응답에 포함
                 final_response = f"요약한 결과입니다.\n\n{summary}"
-                if screenshot_result:
-                    final_response += f"\n\n📸 관련 페이지 스크린샷: {screenshot_result.get('url', '')}"
-                
                 state["messages"].append({"role": self.role, "content": summary})
                 return {**state, "response": final_response}
             else:
