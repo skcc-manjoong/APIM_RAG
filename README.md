@@ -6,7 +6,7 @@ APIM 서비스 관련 질문에 대해
 - 실제 콘솔(UI) 탐색 기반 결과를
 하나의 스트림에서 단계적으로 제공하는 에이전트입니다.
 
-최종적으로는 실제 콘솔 화면 탐색 결과를 표로 정리해 주며, 문서 기반 결과도 별도의 표로 먼저 제공합니다.
+최종적으로는 실제 콘솔 화면 문서 기반 결과/접속 탐색 결과를 각각 표로 제공합니다.
 
 ---
 
@@ -23,13 +23,13 @@ APIM 서비스 관련 질문에 대해
 LangGraph 기반으로 다음 순서로 동작합니다.
 
 1) rag: 문서(Vector DB) 검색
-2) table_rag: 문서 기반 요약/표 생성(📚 APIM Document 기반 결과)
-3) ui_intro: "이제 직접 콘솔에 들어가서 확인해 보겠습니다..." 안내
+2) table_rag: 문서 기반 요약/표 생성(APIM Document 기반 결과)
+3) ui_intro: "UI 접속 전 사용자 안내 프롬프팅"
 4) navigation: 콘솔 세션 생성/로그인/시작 URL 확정
 5) interactive: 콘솔에서 DOM 관찰 → 의사결정(JSON) → 행동(click/goto) 루프, 최종 DOM/URL/방문경로 기록
-6) table_ui: 실제 탐색 결과를 단계별 요약/경로 표로 생성(🧭 실제 UI 단계별 설명)
+6) table_ui: 실제 탐색 결과를 단계별 요약/경로 표로 생성(실제 UI 단계별 설명)
 
-그래프 표기: rag → table_rag → ui_intro → navigation → interactive → table_ui → END
+Multi Agent Langraph 순서: rag → table_rag → ui_intro → navigation → interactive → table_ui → END
 
 ---
 
@@ -133,6 +133,12 @@ cloud_bot/
 - 환경 변수
   - `.env`에 LLM/Embeddings 관련 키를 설정
   - 서버는 자동으로 `TOKENIZERS_PARALLELISM=false`를 설정해 토크나이저 경고를 억제
+  - Playwright 브라우저 설치(최초 1회, 같은 파이썬 환경에서 실행)
+    ```bash
+    python -m playwright install chromium
+    # (리눅스) 시스템 의존성 필요 시
+    python -m playwright install-deps chromium
+    ```
 
 ---
 
@@ -151,5 +157,3 @@ cloud_bot/
 - 프롬프트 템플릿화로 일관 응답 품질 확보
 
 ---
-
-본 문서는 최신 그래프 흐름과 UI 표시 정책을 반영합니다. 필요 시 Docker 배포, 멀티턴 장기 메모리, 하이브리드 검색(lexical+vector) 등 확장도 용이합니다. 

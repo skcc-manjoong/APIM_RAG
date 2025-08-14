@@ -1,0 +1,12 @@
+2025-08-13 18:53:01,071 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-08-13 18:53:04,617 - INFO - Use pytorch device_name: mps
+2025-08-13 18:53:05,347 - INFO - Loaded 105 documents and FAISS index
+2025-08-13 18:53:05,347 - INFO - Global VectorDB initialized
+2025-08-13 18:53:25,122 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-08-13 18:53:27,376 - INFO - Use pytorch device_name: mps
+2025-08-13 18:53:27,915 - INFO - Loaded 105 documents and FAISS index
+2025-08-13 18:53:27,916 - INFO - Global VectorDB initialized
+2025-08-13 18:53:46,124 - INFO - Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+2025-08-13 18:53:48,297 - INFO - Use pytorch device_name: mps
+2025-08-13 18:53:48,787 - INFO - Loaded 105 documents and FAISS index
+2025-08-13 18:53:48,787 - INFO - Global VectorDB initialized
